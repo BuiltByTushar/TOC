@@ -1,0 +1,2762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BCS 213 · Theory of Computation — Complete Solution Manuscript</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #F5EDD8;
+    --parchment-deep: #ECDFB8;
+    --parchment-shadow: #DCCB9C;
+    --sepia: #3B2A1E;
+    --sepia-soft: #634F3D;
+    --sepia-faint: rgba(59, 42, 30, 0.12);
+    --crimson: #8B1A1A;
+    --crimson-soft: #A32929;
+    --crimson-bg: rgba(139, 26, 26, 0.08);
+    --teal: #1A5C5C;
+    --teal-soft: #e2eeeb;
+    --teal-bg: rgba(26, 92, 92, 0.07);
+    --blue: #1A3A6B;
+    --blue-soft: #e5edf7;
+    --blue-bg: rgba(26, 58, 107, 0.07);
+    --rule-line: rgba(139, 101, 60, 0.18);
+    --paper-edge: rgba(74, 55, 40, 0.28);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: #d8c697;
+    background-image:
+      radial-gradient(ellipse at top, rgba(255,255,255,0.18), transparent 60%),
+      linear-gradient(180deg, #c7b282, #dbc898 8%);
+    font-family: 'Lora', Georgia, serif;
+    color: var(--sepia);
+    padding: 24px 14px 60px;
+    line-height: 1.68;
+  }
+  .paper {
+    max-width: 1040px;
+    margin: 0 auto;
+    background-color: var(--parchment);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 31px,
+      var(--rule-line) 31px,
+      var(--rule-line) 32px
+    );
+    box-shadow:
+      0 2px 0 var(--parchment-shadow),
+      0 20px 45px -12px rgba(40, 28, 15, 0.6),
+      inset 0 0 0 1px rgba(139, 101, 60, 0.25);
+    position: relative;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  /* Primary binder margin line on manuscript page */
+  .paper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 48px;
+    width: 2px;
+    background: rgba(139, 26, 26, 0.55);
+    z-index: 1;
+  }
+  .paper::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 54px;
+    width: 1px;
+    background: rgba(139, 26, 26, 0.25);
+    z-index: 1;
+  }
+
+  /* Header & Masthead */
+  .masthead {
+    position: relative;
+    z-index: 2;
+    padding: 36px 44px 28px 78px;
+    border-bottom: 2px solid var(--sepia);
+    background: linear-gradient(180deg, rgba(255,255,255,0.35), transparent);
+  }
+  .subcode-tag {
+    position: absolute;
+    top: 24px;
+    right: 36px;
+    border: 1.5px solid var(--sepia);
+    padding: 6px 14px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transform: rotate(2deg);
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  }
+  .masthead .kicker {
+    font-family: 'Courier Prime', monospace;
+    color: var(--crimson);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .masthead h1 {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 2.6rem;
+    margin: 0 0 6px;
+    color: var(--sepia);
+    font-weight: 400;
+    line-height: 1.15;
+  }
+  .masthead h1 em {
+    color: var(--crimson);
+    font-style: italic;
+  }
+  .masthead .sub {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--teal);
+    margin: 0 0 16px;
+  }
+  .meta-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.85rem;
+    color: var(--sepia-soft);
+    border-top: 1px dashed var(--paper-edge);
+    padding-top: 12px;
+  }
+  .meta-strip b { color: var(--sepia); }
+  .stamp {
+    display: inline-block;
+    margin-top: 14px;
+    border: 2px solid var(--crimson);
+    color: var(--crimson);
+    padding: 4px 18px;
+    font-family: 'IM Fell English', serif;
+    font-size: 1.15rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transform: rotate(-3deg);
+    border-radius: 4px;
+    opacity: 0.9;
+  }
+
+  /* Paper instructions note */
+  .instructions-note {
+    position: relative;
+    z-index: 2;
+    margin: 20px 44px 0 78px;
+    font-size: 0.95rem;
+    border-left: 4px solid var(--teal);
+    padding: 10px 18px;
+    background: var(--teal-bg);
+    color: var(--sepia);
+  }
+
+  /* Search & Global Controls */
+  .manuscript-toolbar {
+    position: relative;
+    z-index: 2;
+    margin: 18px 44px 0 78px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 6px;
+  }
+  .search-box-wrap {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.6);
+    border: 1.5px solid var(--sepia-soft);
+    border-radius: 3px;
+    padding: 4px 10px;
+    width: 290px;
+  }
+  .search-box-wrap span { font-size: 0.95rem; margin-right: 6px; opacity: 0.7; }
+  .search-input {
+    border: none;
+    background: transparent;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.85rem;
+    color: var(--sepia);
+    outline: none;
+    width: 100%;
+  }
+  .toolbar-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .tool-btn {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+    background: var(--parchment-deep);
+    border: 1px solid var(--sepia-soft);
+    color: var(--sepia);
+    padding: 5px 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.15s ease;
+  }
+  .tool-btn:hover {
+    background: var(--crimson);
+    color: var(--parchment);
+    border-color: var(--crimson);
+  }
+
+  /* Folder-Tab Navigation */
+  .folder-tabs {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 6px;
+    padding: 24px 44px 0 78px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 1.15rem;
+    background: var(--parchment-deep);
+    border: 2px solid var(--sepia);
+    border-bottom: none;
+    color: var(--sepia-soft);
+    padding: 10px 24px 12px;
+    cursor: pointer;
+    position: relative;
+    top: 2px;
+    clip-path: polygon(7% 0%, 93% 0%, 100% 100%, 0% 100%);
+    transition: top 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .tab-btn:hover { color: var(--crimson); }
+  .tab-btn.active {
+    background: var(--parchment);
+    color: var(--crimson);
+    top: 0;
+    z-index: 3;
+    border-bottom: 2px solid var(--parchment);
+    font-weight: 600;
+  }
+  .tab-btn .tabnum {
+    color: var(--crimson);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.95rem;
+    margin-right: 8px;
+    font-weight: 700;
+  }
+
+  /* Panels */
+  .tab-panel {
+    position: relative;
+    z-index: 2;
+    display: none;
+    border-top: 2px solid var(--sepia);
+    padding: 34px 44px 46px 78px;
+  }
+  .tab-panel.active { display: block; }
+  .panel-title {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 1.7rem;
+    color: var(--sepia);
+    margin: 0 0 10px;
+    font-weight: 400;
+  }
+  .panel-title .q-any {
+    font-size: 0.95rem;
+    font-family: 'Lora', Georgia, serif;
+    font-style: italic;
+    color: var(--sepia-soft);
+    display: block;
+    margin-top: 3px;
+  }
+
+  /* Question Card with Red Margin Stripe & Hole Punches */
+  .qcard {
+    position: relative;
+    background: rgba(255, 255, 255, 0.45);
+    border: 1.5px solid rgba(74, 55, 40, 0.38);
+    border-radius: 4px;
+    margin: 32px 0;
+    padding: 24px 28px 24px 64px;
+    box-shadow: 2px 4px 14px rgba(74, 55, 40, 0.15);
+    transition: box-shadow 0.2s ease;
+  }
+  .qcard:hover {
+    box-shadow: 2px 6px 18px rgba(74, 55, 40, 0.22);
+  }
+  /* Card Red Margin Stripe */
+  .qcard::before {
+    content: "";
+    position: absolute;
+    left: 44px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(139, 26, 26, 0.65);
+    z-index: 1;
+  }
+  .qcard::after {
+    content: "";
+    position: absolute;
+    left: 48px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: rgba(139, 26, 26, 0.25);
+    z-index: 1;
+  }
+  /* Card Hole-Punch Circles */
+  .punch-holes {
+    position: absolute;
+    left: 12px;
+    top: 0;
+    bottom: 0;
+    width: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 20px 0;
+    z-index: 2;
+  }
+  .punch-holes span {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #d6c498, #9e8557 65%, #6a5735);
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.45);
+  }
+
+  /* Question Card Header */
+  .qcard-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 12px 18px;
+    border-bottom: 1.5px dashed var(--paper-edge);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+  .qnum {
+    font-family: 'IM Fell English', Georgia, serif;
+    color: var(--crimson);
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .qtitle {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 1.35rem;
+    color: var(--sepia);
+    flex: 1;
+    min-width: 240px;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    margin-top: 4px;
+  }
+  .meta-chip {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--teal);
+    background: var(--teal-soft);
+    border: 1px solid rgba(26, 92, 92, 0.4);
+    padding: 2px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+
+  /* Question Prompt Text */
+  .question-text {
+    font-style: italic;
+    color: var(--sepia);
+    background: rgba(220, 203, 156, 0.32);
+    border-left: 3.5px solid var(--sepia-soft);
+    padding: 14px 18px;
+    margin: 0 0 22px;
+    font-size: 1.02rem;
+    line-height: 1.7;
+    border-radius: 0 3px 3px 0;
+  }
+  .question-text .label {
+    font-style: normal;
+    color: var(--teal);
+    font-weight: 700;
+    font-family: 'Courier Prime', monospace;
+  }
+
+  /* Section Headings with § prefix */
+  .sec-heading {
+    font-family: 'IM Fell English', Georgia, serif;
+    color: var(--sepia);
+    font-size: 1.25rem;
+    margin: 22px 0 10px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--paper-edge);
+  }
+  .sec-heading::before {
+    content: "§ ";
+    color: var(--crimson);
+    font-weight: 700;
+  }
+
+  /* Collapsible Sub-questions */
+  .subq {
+    margin: 16px 0;
+    border: 1.5px solid rgba(26, 92, 92, 0.35);
+    border-radius: 4px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.55);
+    box-shadow: 1px 2px 6px rgba(0,0,0,0.04);
+  }
+  .subq-toggle {
+    width: 100%;
+    text-align: left;
+    background: var(--teal-soft);
+    border: none;
+    border-bottom: 1px solid rgba(26, 92, 92, 0.25);
+    padding: 12px 18px;
+    font-family: 'Lora', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.02rem;
+    color: var(--teal);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .subq-toggle:hover {
+    background: #d4e8e2;
+    color: #0e3d3d;
+  }
+  .subq-arrow {
+    display: inline-block;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.85rem;
+    color: var(--crimson);
+    font-family: monospace;
+  }
+  .subq.open .subq-arrow {
+    transform: rotate(90deg);
+  }
+  .subq-body {
+    display: none;
+    padding: 18px 22px 22px;
+    animation: subqFadeIn 0.25s ease;
+  }
+  .subq.open .subq-body {
+    display: block;
+  }
+  @keyframes subqFadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Formula Blocks */
+  .formula {
+    font-family: 'Courier Prime', monospace;
+    background: var(--blue-soft);
+    color: var(--blue);
+    border: 1px solid rgba(26, 58, 107, 0.35);
+    border-radius: 3px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 0.95rem;
+    line-height: 1.85;
+    overflow-x: auto;
+    box-shadow: inset 0 1px 3px rgba(26,58,107,0.06);
+  }
+  .formula b { color: #0d2347; }
+
+  /* Answer Boxes with Teal Left Border */
+  .answer-box {
+    border-left: 5px solid var(--teal);
+    background: var(--teal-bg);
+    padding: 14px 20px;
+    margin: 18px 0;
+    border-radius: 0 4px 4px 0;
+    border-top: 1px solid rgba(26,92,92,0.15);
+    border-right: 1px solid rgba(26,92,92,0.15);
+    border-bottom: 1px solid rgba(26,92,92,0.15);
+  }
+  .answer-box .ans-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Courier Prime', monospace;
+    font-weight: 700;
+    color: var(--teal);
+    font-size: 0.82rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .answer-box .ans-label::before {
+    content: "■";
+    font-size: 0.75rem;
+  }
+  .answer-box p {
+    margin: 4px 0;
+    font-size: 0.98rem;
+  }
+
+  /* Margin Notes with Pencil Icon */
+  .margin-note {
+    background: #F8F1D2;
+    border: 1.5px dashed var(--sepia-soft);
+    border-radius: 3px;
+    padding: 12px 18px 12px 42px;
+    margin: 18px 0;
+    font-size: 0.93rem;
+    position: relative;
+    transform: rotate(-0.5deg);
+    box-shadow: 2px 3px 8px rgba(74, 55, 40, 0.12);
+    color: var(--sepia);
+  }
+  .margin-note::before {
+    content: "✏️";
+    position: absolute;
+    left: 12px;
+    top: 11px;
+    font-size: 1.15rem;
+  }
+  .margin-note b {
+    color: var(--crimson);
+  }
+
+  /* Tag Badges */
+  .verified-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: rgba(26, 92, 92, 0.15);
+    color: var(--teal);
+    border: 1px solid var(--teal);
+    padding: 2px 10px;
+    border-radius: 12px;
+    margin: 8px 0 0;
+  }
+  .flag-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: rgba(139, 26, 26, 0.12);
+    color: var(--crimson);
+    border: 1px solid var(--crimson);
+    padding: 2px 10px;
+    border-radius: 12px;
+    margin: 8px 0 0;
+  }
+
+  /* Data & Transition Tables */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  table.data-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.88rem;
+    min-width: 440px;
+    background: rgba(255,255,255,0.7);
+  }
+  table.data-table th, table.data-table td {
+    border: 1px solid rgba(74, 55, 40, 0.32);
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  table.data-table th {
+    background: var(--sepia);
+    color: var(--parchment);
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  table.data-table tr:nth-child(even) td {
+    background: rgba(236, 223, 184, 0.35);
+  }
+  table.data-table td.center, table.data-table th.center {
+    text-align: center;
+  }
+  table.data-table td.highlight {
+    background: rgba(139, 26, 26, 0.08);
+    font-weight: 700;
+  }
+
+  /* SVG Diagrams */
+  .diagram-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 18px 0;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1.5px solid rgba(74, 55, 40, 0.28);
+    border-radius: 4px;
+    padding: 16px;
+    overflow-x: auto;
+  }
+  .diagram-wrap svg {
+    max-width: 100%;
+    height: auto;
+  }
+  .diagram-caption {
+    text-align: center;
+    font-style: italic;
+    color: var(--sepia-soft);
+    font-size: 0.88rem;
+    margin-top: 8px;
+  }
+
+  /* Lists & Step Breakdowns */
+  ol.steps { padding-left: 24px; margin: 10px 0; }
+  ol.steps li { margin-bottom: 10px; line-height: 1.65; }
+  ul.plain { padding-left: 24px; margin: 10px 0; }
+  ul.plain li { margin-bottom: 8px; line-height: 1.65; }
+
+  .priority-list {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+    counter-reset: pri;
+  }
+  .priority-list li {
+    counter-increment: pri;
+    padding: 8px 0 8px 36px;
+    position: relative;
+    line-height: 1.55;
+    border-bottom: 1px dashed var(--paper-edge);
+  }
+  .priority-list li:last-child { border-bottom: none; }
+  .priority-list li::before {
+    content: counter(pri);
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--crimson);
+    color: var(--parchment);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Footer */
+  footer {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    font-family: 'IM Fell English', Georgia, serif;
+    font-style: italic;
+    color: var(--sepia-soft);
+    padding: 32px 20px 40px;
+    border-top: 2px solid var(--sepia);
+    font-size: 1.05rem;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    body { padding: 12px 6px 40px; }
+    .paper::before { left: 32px; }
+    .paper::after { left: 36px; }
+    .masthead { padding: 24px 18px 20px 48px; }
+    .instructions-note, .manuscript-toolbar { margin: 16px 18px 0 48px; }
+    .folder-tabs { padding: 18px 12px 0 48px; }
+    .tab-panel { padding: 24px 14px 34px 48px; }
+    .subcode-tag { position: static; display: inline-block; margin-bottom: 12px; transform: none; }
+    .qcard { padding: 20px 14px 20px 46px; margin: 20px 0; }
+    .qcard::before { left: 34px; }
+    .qcard::after { left: 37px; }
+    .punch-holes { left: 8px; width: 18px; }
+    .punch-holes span { width: 11px; height: 11px; }
+    .masthead h1 { font-size: 1.9rem; }
+    .tab-btn { font-size: 1rem; padding: 8px 14px 10px; }
+    .manuscript-toolbar { flex-direction: column; align-items: stretch; }
+    .search-box-wrap { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="paper">
+
+  <!-- ==================== MASTHEAD ==================== -->
+  <div class="masthead">
+    <div class="subcode-tag">Sub Code: BCS 213</div>
+    <div class="kicker">B.Tech · Year 2 / Semester III · Max Marks: 30 · Time: 2 Hours</div>
+    <h1>Theory of Computation <em>— Examination Manuscript</em></h1>
+    <p class="sub">Minor Test Examination 2025–26 · Comprehensive, Rigorous Academic Solutions</p>
+    <div class="meta-strip">
+      <span><b>Course:</b> Theory Of Computation (BCS 213)</span>
+      <span><b>Coverage:</b> Full Solutions for All Parts of Q1, Q2, and Q3</span>
+      <span><b>Verification:</b> Cross-checked with Myhill–Nerode, Arden's Theorem &amp; Pumping Lemma</span>
+    </div>
+    <div class="stamp">Verified &amp; Certified ✓</div>
+  </div>
+
+  <!-- Instructions Note -->
+  <p class="instructions-note">
+    <b>Official Examination Instruction:</b> Candidates must attempt <b>ALL questions</b> (Q1, Q2, and Q3). Within each question, candidates are instructed to <b>attempt any three of the four given parts</b>. Q1 parts are worth <b>4 marks each</b> (maximum 12 marks). Q2 and Q3 parts are worth <b>3 marks each</b> (maximum 9 marks each), totalling <b>30 marks</b>.<br>
+    <i>Manuscript Note:</i> For maximum academic preparation and revision, <b>every single sub-question (a), (b), (c), and (d)</b> is answered with complete theoretical rigor, algebraic derivations, and state transition diagrams below.
+  </p>
+
+  <!-- Toolbar with Instant Filter and Collapse Controls -->
+  <div class="manuscript-toolbar">
+    <div class="search-box-wrap">
+      <span>🔍</span>
+      <input type="text" id="searchInput" class="search-input" placeholder="Quick search topic, symbol, lemma...">
+    </div>
+    <div class="toolbar-actions">
+      <button class="tool-btn" id="expandAllBtn">Expand All Sections</button>
+      <button class="tool-btn" id="collapseAllBtn">Collapse All</button>
+    </div>
+  </div>
+
+  <!-- Folder-Tab Navigation -->
+  <div class="folder-tabs" role="tablist">
+    <button class="tab-btn active" data-tab="q1" role="tab" aria-selected="true"><span class="tabnum">Q1</span>Palindromic Prefix, Mix, Algebra &amp; Myhill–Nerode</button>
+    <button class="tab-btn" data-tab="q2" role="tab" aria-selected="false"><span class="tabnum">Q2</span>Regular Expressions, Arden's Theorem &amp; Closure</button>
+    <button class="tab-btn" data-tab="q3" role="tab" aria-selected="false"><span class="tabnum">Q3</span>Modulo 5 DFA, Moore/Mealy &amp; Pumping Lemma</button>
+    <button class="tab-btn" data-tab="revision" role="tab" aria-selected="false"><span class="tabnum">§</span>Master Revision &amp; Traps Sheet</button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ================         Q1  PANEL         ================ -->
+  <!-- ============================================================ -->
+  <div class="tab-panel active" id="q1" role="tabpanel">
+    <h2 class="panel-title">Question 1 <span class="q-any">4 marks per part · Max marks 12 (Attempt any three — all four solved in exhaustive detail below)</span></h2>
+
+    <!-- ---------- Q1(a) ---------- -->
+    <div class="qcard" id="card-q1a">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Q1 (a)</span>
+        <span class="qtitle">The Palindromic-Prefix Language L</span>
+        <div class="meta-row">
+          <span class="meta-chip">Marks: 4</span>
+          <span class="meta-chip">CO: CO1</span>
+          <span class="meta-chip">Bloom Level: BL3</span>
+          <span class="meta-chip">PO: PO1</span>
+          <span class="meta-chip">PI: 1.1.1</span>
+        </div>
+      </div>
+
+      <div class="question-text">
+        Let &Sigma; = {a, b} be an alphabet. A palindrome is a word which reads the same left-to-right or right-to-left (abba, aba, aa are palindromes; ab, aabb are not). A palindrome is non-trivial if it has length at least 2. Let L be the set of all words that contain a non-trivial palindrome as a prefix &mdash; that is, L = {w &isin; (a+b)* : w = uv for some non-trivial palindrome u and some v &isin; (a+b)*}.
+        <br><br><span class="label">(i)</span> Give an example of a word in L which is not a palindrome.
+        <br><span class="label">(ii)</span> Give three examples of words not in L.
+        <br><span class="label">(iii)</span> Suppose ax is a string which is not in L, for some x &isin; &Sigma;*. What can you say about x?
+        <br><span class="label">(iv)</span> Show that L is regular.
+      </div>
+
+      <!-- Part (i) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> (i) Example of a word in L that is not itself a palindrome</button>
+        <div class="subq-body">
+          <div class="sec-heading">Formal Definition &amp; Decomposition</div>
+          <p>By definition, a word $w$ belongs to $L$ if and only if there exist strings $u, v \in \Sigma^*$ such that:</p>
+          <div class="formula">
+            w = u \cdot v, \quad \text{where } u = u^R \text{ (a palindrome)}, \quad |u| \ge 2, \quad \text{and } v \in (a+b)^*
+          </div>
+          <p>The definition places <b>no restriction whatsoever on the suffix $v$</b>. Therefore, any word whose beginning forms a palindrome of length $\ge 2$, but whose overall structure is asymmetric, satisfies the condition.</p>
+
+          <div class="sec-heading">Primary Witness: w = abbaa</div>
+          <ul class="plain">
+            <li><b>Decomposition:</b> Choose $u = \text{"abba"}$ and $v = \text{"a"}$. Here $w = u \cdot v = \text{"abba"} \cdot \text{"a"} = \text{"abbaa"}$.</li>
+            <li><b>Prefix check:</b> $u = \text{"abba"}$, so $u^R = \text{"abba"}$. Since $u = u^R$ and $|u| = 4 \ge 2$, $u$ is a non-trivial palindrome. Thus, $w \in L$.</li>
+            <li><b>Total reversal check:</b> $w^R = (\text{"abbaa"})^R = \text{"aabba"}$. Clearly, $\text{"abbaa"} \ne \text{"aabba"}$, proving $w$ is <b>not a palindrome</b>.</li>
+          </ul>
+
+          <div class="sec-heading">Secondary Minimal Example: w = aab</div>
+          <p>An even shorter witness is $w = \text{"aab"}$. Choosing $u = \text{"aa"}$ ($|u|=2$, $u=u^R$) and $v = \text{"b"}$, we have $w \in L$. But $w^R = \text{"baa"} \ne \text{"aab"}$, so $w$ is not a palindrome.</p>
+
+          <div class="answer-box">
+            <span class="ans-label">Final Answer</span>
+            <p><b>w = abbaa</b> (or <b>w = aab</b>) belongs to $L$ because it possesses the non-trivial palindromic prefix <b>"abba"</b> (or <b>"aa"</b>), yet the overall string reads differently in reverse ($(\text{abbaa})^R = \text{aabba} \ne \text{abbaa}$).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part (ii) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> (ii) Three examples of words not in L with systematic proof</button>
+        <div class="subq-body">
+          <p>A string $w \in \Sigma^*$ is <b>not</b> in $L$ ($w \in L^c$) if and only if <b>no prefix of $w$ of length $\ge 2$ is a palindrome</b>.</p>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Word (w)</th>
+                  <th>Length |w|</th>
+                  <th>All Prefixes of Length &ge; 2</th>
+                  <th>Reversal of Each Prefix</th>
+                  <th>Any Palindrome?</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>ab</b></td>
+                  <td>2</td>
+                  <td>{"ab"}</td>
+                  <td>("ab")<sup>R</sup> = "ba" &ne; "ab"</td>
+                  <td>None</td>
+                  <td>&notin; L</td>
+                </tr>
+                <tr>
+                  <td><b>abb</b></td>
+                  <td>3</td>
+                  <td>{"ab", "abb"}</td>
+                  <td>("ab")<sup>R</sup> = "ba" &ne; "ab"<br>("abb")<sup>R</sup> = "bba" &ne; "abb"</td>
+                  <td>None</td>
+                  <td>&notin; L</td>
+                </tr>
+                <tr>
+                  <td><b>abbb</b></td>
+                  <td>4</td>
+                  <td>{"ab", "abb", "abbb"}</td>
+                  <td>("ab")<sup>R</sup> = "ba"<br>("abb")<sup>R</sup> = "bba"<br>("abbb")<sup>R</sup> = "bbba"</td>
+                  <td>None</td>
+                  <td>&notin; L</td>
+                </tr>
+                <tr>
+                  <td><b>&epsilon;</b></td>
+                  <td>0</td>
+                  <td>&empty; (no prefixes of length &ge; 2)</td>
+                  <td>&mdash;</td>
+                  <td>None</td>
+                  <td>&notin; L</td>
+                </tr>
+                <tr>
+                  <td><b>a</b> or <b>b</b></td>
+                  <td>1</td>
+                  <td>&empty; (no prefixes of length &ge; 2)</td>
+                  <td>&mdash;</td>
+                  <td>None</td>
+                  <td>&notin; L</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="margin-note">
+            <b>Structural Insight:</b> For a string of length $\ge 2$ to avoid $L$, its first two letters must differ (preventing $aa$ or $bb$). If it begins with $ab$, every subsequent letter must be $b$, because inserting any $a$ creates a palindromic prefix of the form $ab^k a$!
+          </div>
+
+          <div class="answer-box">
+            <span class="ans-label">Final Answer</span>
+            <p>Three valid words not in $L$ are: <b>ab</b>, <b>abb</b>, and <b>abbb</b> (in general, any word from $\{ab^k : k \ge 1\}$ or $\{ba^k : k \ge 1\}$, as well as the base words $\varepsilon, a, b$).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part (iii) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> (iii) Characterization of x when ax &notin; L — Complete Rigorous Derivation</button>
+        <div class="subq-body">
+          <p>We are given that the string $s = a \cdot x \notin L$ for some string $x \in \Sigma^*$. We seek an exact, necessary, and sufficient characterization of $x$.</p>
+
+          <div class="sec-heading">Fundamental Lemma: The Exact Complement of L</div>
+          <p>Let $w \in \Sigma^*$. We classify when $w \notin L$ by induction on the position of characters:</p>
+          <ol class="steps">
+            <li><b>Length 0 and 1:</b> $|w| < 2 \implies w \in \{\varepsilon, a, b\}$. These strings have no prefixes of length $\ge 2$, so they vacuously fail to contain any non-trivial palindrome. Hence $\varepsilon, a, b \notin L$.</li>
+            <li><b>First two symbols must be distinct:</b> If $|w| \ge 2$ and $w_1 = w_2$, then the prefix $w_1 w_2 \in \{aa, bb\}$ is a palindrome of length 2. This would immediately place $w \in L$. Thus, any word avoiding $L$ must start with <code>ab...</code> or <code>ba...</code>.</li>
+            <li><b>Case 1: Word starts with "ab":</b>
+              <ul>
+                <li>What can the third symbol $w_3$ be? If $w_3 = a$, the prefix is <code>aba</code>, which is a palindrome of length 3 ($aba = (aba)^R$). Contradiction! Hence $w_3$ must be $b$, giving prefix <code>abb</code>.</li>
+                <li>What can the $(k+2)$-th symbol be after $ab^k$? Suppose an 'a' appears at any subsequent index: $w = a b^k a \dots$ for some $k \ge 1$. Notice that $u = a b^k a$ is a palindrome because reading it backwards gives $a b^k a$ ($u^R = u$). This would force $w \in L$!</li>
+                <li>Therefore, once a string starts with <code>ab</code>, <b>no 'a' can ever appear again</b>. The string can only be followed by zero or more $b$'s. This generates the exact infinite family $\{a b^k : k \ge 1\}$.</li>
+              </ul>
+            </li>
+            <li><b>Case 2: Word starts with "ba":</b> By exact symmetry, any reappearance of $b$ produces a palindromic prefix $b a^k b$, so only additional $a$'s are permitted: $\{b a^k : k \ge 1\}$.</li>
+          </ol>
+
+          <div class="formula">
+            L^c = \Sigma^* \setminus L = \{\varepsilon, a, b\} \cup \{a b^k : k \ge 1\} \cup \{b a^k : k \ge 1\}
+          </div>
+
+          <div class="sec-heading">Deducing x from s = a &middot; x &notin; L</div>
+          <p>Since $s = a \cdot x \in L^c$, we inspect all members of $L^c$ that begin with the letter <code>a</code>:</p>
+          <ul class="plain">
+            <li><b>Sub-case A:</b> $s = a$ itself. Here, $a \cdot x = a \implies x = \varepsilon = b^0$.</li>
+            <li><b>Sub-case B:</b> $s = a b^k$ for some $k \ge 1$. Here, $a \cdot x = a \cdot b^k \implies x = b^k$ where $k \ge 1$.</li>
+            <li>The family $b a^k$ begins with 'b', so it cannot equal $a \cdot x$.</li>
+          </ul>
+
+          <div class="sec-heading">Converse Proof (Verification of Sufficiency)</div>
+          <p>Suppose $x = b^k$ for any $k \ge 0$. Then $a \cdot x = a b^k$. The prefixes of $a b^k$ of length $\ge 2$ are $a b, a b^2, a b^3, \dots, a b^k$. None of these is a palindrome because the first symbol is $a$ and the last is $b$ ($a \ne b$). Thus $a b^k$ contains no non-trivial palindromic prefix, so $a b^k \notin L$ holds unconditionally for all $k \ge 0$.</p>
+
+          <div class="margin-note">
+            <b>Examiner Pitfall Warning:</b> Many students carelessly answer this question with the general complement $x \in \{\varepsilon, a, b\} \cup ab^+ \cup ba^+$. That is incorrect because the question specifies that the string already starts with an 'a' ($s = ax$). The letter $a$ is prefixed to $x$, narrowing the condition on $x$ exclusively to $x \in b^*$.
+          </div>
+
+          <div class="answer-box">
+            <span class="ans-label">Final Answer</span>
+            <p><b>x must consist entirely of zero or more b's — that is, x &isin; b* (or x = b<sup>k</sup> for some integer k &ge; 0).</b> Equivalently, $x$ cannot contain any occurrence of the symbol 'a'. The moment even a single 'a' is present in $x$ (say $x = b^i a \dots$), the string $ax$ gains a palindromic prefix $a b^i a$ and immediately enters $L$.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part (iv) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> (iv) Proof that L is Regular (Regular Expression &amp; Complete Minimal DFA)</button>
+        <div class="subq-body">
+          <p>We prove regularity using two complementary, definitive methods: (1) constructing an exact Regular Expression, and (2) constructing a Deterministic Finite Automaton (DFA).</p>
+
+          <div class="sec-heading">Method 1: By Regular Expression</div>
+          <p>From our characterization in part (iii), any non-trivial palindrome must start and end with the same letter. The minimal non-trivial palindromes are:</p>
+          <ul class="plain">
+            <li>Length 2: <code>aa</code> and <code>bb</code></li>
+            <li>Length &ge; 3: <code>ab⁺a</code> (i.e. $a b^k a$ for $k \ge 1$) and <code>ba⁺b</code> (i.e. $b a^k b$ for $k \ge 1$)</li>
+          </ul>
+          <p>Any longer palindrome prefix will contain one of these minimal palindromes as an initial segment (or will itself be in this form). Once any of these minimal palindromes occurs as a prefix, the remainder of the word can be arbitrary ($ (a+b)^* $). Therefore:</p>
+          <div class="formula">
+            L = (aa + bb + ab^+a + ba^+b)(a + b)*
+          </div>
+          <p>Since $L$ is expressed using only union ($+$), concatenation, and Kleene star ($*$) over a finite alphabet, by <b>Kleene's Theorem</b>, $L$ is a regular language.</p>
+
+          <div class="sec-heading">Method 2: By DFA State Construction</div>
+          <p>We construct a DFA $M = (Q, \Sigma, \delta, q_0, F)$ that recognizes $L$ with $Q = \{q_0, q_a, q_b, q_{ab}, q_{ba}, q_{acc}\}$:</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>State</th>
+                  <th>Prefix Condition Tracked</th>
+                  <th>Input 'a'</th>
+                  <th>Input 'b'</th>
+                  <th>Accepting?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>q₀</b></td>
+                  <td>Initial state (&epsilon; read)</td>
+                  <td>q_a</td>
+                  <td>q_b</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td><b>q_a</b></td>
+                  <td>Read single 'a'</td>
+                  <td>q_acc (saw "aa" ✓)</td>
+                  <td>q_ab (saw "ab")</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td><b>q_b</b></td>
+                  <td>Read single 'b'</td>
+                  <td>q_ba (saw "ba")</td>
+                  <td>q_acc (saw "bb" ✓)</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td><b>q_ab</b></td>
+                  <td>Prefix is ab⁺ (waiting for 'a')</td>
+                  <td>q_acc (saw ab⁺a ✓)</td>
+                  <td>q_ab (more b's)</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td><b>q_ba</b></td>
+                  <td>Prefix is ba⁺ (waiting for 'b')</td>
+                  <td>q_ba (more a's)</td>
+                  <td>q_acc (saw ba⁺b ✓)</td>
+                  <td>No</td>
+                </tr>
+                <tr class="highlight">
+                  <td><b>q_acc</b></td>
+                  <td>Palindromic prefix detected! Trap accept state</td>
+                  <td>q_acc</td>
+                  <td>q_acc</td>
+                  <td><b>YES (Final)</b></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- DFA SVG Diagram -->
+          <div class="diagram-wrap">
+            <svg viewBox="0 0 680 240" width="650" height="230">
+              <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="20" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1A3A6B"/>
+                </marker>
+                <marker id="arrow-crimson" viewBox="0 0 10 10" refX="20" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#8B1A1A"/>
+                </marker>
+              </defs>
+              <!-- State Circles -->
+              <g font-family="Courier Prime" font-size="13" font-weight="bold" text-anchor="middle">
+                <!-- q0 -->
+                <circle cx="60" cy="120" r="22" fill="#e6ecf5" stroke="#1A3A6B" stroke-width="2"/>
+                <text x="60" y="125" fill="#1A3A6B">q0</text>
+
+                <!-- qa -->
+                <circle cx="190" cy="60" r="22" fill="#e6ecf5" stroke="#1A3A6B" stroke-width="2"/>
+                <text x="190" y="65" fill="#1A3A6B">qa</text>
+
+                <!-- qb -->
+                <circle cx="190" cy="180" r="22" fill="#e6ecf5" stroke="#1A3A6B" stroke-width="2"/>
+                <text x="190" y="185" fill="#1A3A6B">qb</text>
+
+                <!-- q_ab -->
+                <circle cx="340" cy="60" r="22" fill="#e6ecf5" stroke="#1A3A6B" stroke-width="2"/>
+                <text x="340" y="65" fill="#1A3A6B">q_ab</text>
+
+                <!-- q_ba -->
+                <circle cx="340" cy="180" r="22" fill="#e6ecf5" stroke="#1A3A6B" stroke-width="2"/>
+                <text x="340" y="185" fill="#1A3A6B">q_ba</text>
+
+                <!-- q_acc (Double Circle) -->
+                <circle cx="560" cy="120" r="26" fill="#e2eeeb" stroke="#1A5C5C" stroke-width="2.5"/>
+                <circle cx="560" cy="120" r="20" fill="#e2eeeb" stroke="#1A5C5C" stroke-width="1.5"/>
+                <text x="560" y="125" fill="#1A5C5C">q_acc</text>
+              </g>
+
+              <!-- Start Arrow -->
+              <line x1="15" y1="120" x2="38" y2="120" stroke="#8B1A1A" stroke-width="2" marker-end="url(#arrow-crimson)"/>
+              <text x="25" y="112" font-family="Lora" font-style="italic" font-size="11" fill="#8B1A1A">start</text>
+
+              <!-- Transitions -->
+              <!-- q0 to qa (a) -->
+              <path d="M 75 105 Q 120 70 168 62" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#arrow)"/>
+              <text x="115" y="75" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">a</text>
+
+              <!-- q0 to qb (b) -->
+              <path d="M 75 135 Q 120 170 168 178" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#arrow)"/>
+              <text x="115" y="172" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">b</text>
+
+              <!-- qa to q_ab (b) -->
+              <line x1="212" y1="60" x2="318" y2="60" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#arrow)"/>
+              <text x="265" y="52" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">b</text>
+
+              <!-- qb to q_ba (a) -->
+              <line x1="212" y1="180" x2="318" y2="180" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#arrow)"/>
+              <text x="265" y="172" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">a</text>
+
+              <!-- Loops on q_ab (b) and q_ba (a) -->
+              <path d="M 335 38 C 330 10 350 10 348 38" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#arrow)"/>
+              <text x="340" y="8" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">b</text>
+
+              <path d="M 335 202 C 330 230 350 230 348 202" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#arrow)"/>
+              <text x="340" y="238" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">a</text>
+
+              <!-- Accepting transitions to q_acc -->
+              <!-- qa to q_acc (a) -->
+              <path d="M 210 48 Q 380 -10 540 105" fill="none" stroke="#1A5C5C" stroke-width="1.8" stroke-dasharray="4,2" marker-end="url(#arrow)"/>
+              <text x="380" y="20" font-family="Courier Prime" font-size="12" fill="#1A5C5C" font-weight="bold">a (aa ✓)</text>
+
+              <!-- qb to q_acc (b) -->
+              <path d="M 210 192 Q 380 250 540 135" fill="none" stroke="#1A5C5C" stroke-width="1.8" stroke-dasharray="4,2" marker-end="url(#arrow)"/>
+              <text x="380" y="235" font-family="Courier Prime" font-size="12" fill="#1A5C5C" font-weight="bold">b (bb ✓)</text>
+
+              <!-- q_ab to q_acc (a) -->
+              <path d="M 362 65 Q 450 80 535 112" fill="none" stroke="#1A5C5C" stroke-width="1.8" marker-end="url(#arrow)"/>
+              <text x="445" y="82" font-family="Courier Prime" font-size="12" fill="#1A5C5C" font-weight="bold">a (ab⁺a ✓)</text>
+
+              <!-- q_ba to q_acc (b) -->
+              <path d="M 362 175 Q 450 160 535 128" fill="none" stroke="#1A5C5C" stroke-width="1.8" marker-end="url(#arrow)"/>
+              <text x="445" y="165" font-family="Courier Prime" font-size="12" fill="#1A5C5C" font-weight="bold">b (ba⁺b ✓)</text>
+
+              <!-- Loop on q_acc (a, b) -->
+              <path d="M 575 100 C 620 70 620 170 580 138" fill="none" stroke="#1A5C5C" stroke-width="1.8" marker-end="url(#arrow)"/>
+              <text x="630" y="125" font-family="Courier Prime" font-size="12" fill="#1A5C5C" font-weight="bold">a, b</text>
+            </svg>
+            <p class="diagram-caption">Complete 6-state DFA for Language L. The moment a non-trivial palindrome prefix is matched, the automaton transitions to the trap accept state q_acc.</p>
+          </div>
+
+          <div class="answer-box">
+            <span class="ans-label">Final Answer</span>
+            <p><b>L is regular.</b> It is described by the regular expression <b>L = (aa + bb + ab⁺a + ba⁺b)(a+b)*</b> and accepted by the complete 6-state Deterministic Finite Automaton detailed above. ∎</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- Q1(b) ---------- -->
+    <div class="qcard" id="card-q1b">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Q1 (b)</span>
+        <span class="qtitle">The Mix of Two Languages</span>
+        <div class="meta-row">
+          <span class="meta-chip">Marks: 4</span>
+          <span class="meta-chip">CO: CO2</span>
+          <span class="meta-chip">Bloom Level: BL3</span>
+          <span class="meta-chip">PO: PO1</span>
+          <span class="meta-chip">PI: 1.1.1</span>
+        </div>
+      </div>
+
+      <div class="question-text">
+        Let &Sigma; = {a, b}. For two non-empty languages L<sub>1</sub>, L<sub>2</sub> over &Sigma;, define:
+        <br><b>Mix(L<sub>1</sub>, L<sub>2</sub>) = {w<sub>1</sub> u w<sub>2</sub> v w<sub>3</sub> | u &isin; L<sub>1</sub>, v &isin; L<sub>2</sub>, w<sub>1</sub>, w<sub>2</sub>, w<sub>3</sub> &isin; &Sigma;*}</b>.
+        <br><br><span class="label">(i)</span> Give two languages L<sub>1</sub>, L<sub>2</sub> such that Mix(L<sub>1</sub>, L<sub>2</sub>) &ne; Mix(L<sub>2</sub>, L<sub>1</sub>).
+        <br><span class="label">(ii)</span> Show that if L<sub>1</sub>, L<sub>2</sub> are regular, then Mix(L<sub>1</sub>, L<sub>2</sub>) is also regular.
+        <br><span class="label">(iii)</span> Provide L<sub>1</sub>, L<sub>2</sub> that are <i>not</i> regular, for which Mix(L<sub>1</sub>, L<sub>2</sub>) is regular.
+      </div>
+
+      <div class="sec-heading">Structural Reformulation of Mix</div>
+      <p>Observe that $w_1, w_2, w_3 \in \Sigma^*$ are arbitrary strings from the universal language $\Sigma^*$. Therefore, the definition of Mix simplifies algebraically to:</p>
+      <div class="formula">
+        \text{Mix}(L_1, L_2) = \Sigma^* \cdot L_1 \cdot \Sigma^* \cdot L_2 \cdot \Sigma^*
+      </div>
+      <p>In intuitive terms, $\text{Mix}(L_1, L_2)$ is the set of all words that contain a subword from $L_1$ followed subsequently (with or without intervening symbols) by a subword from $L_2$.</p>
+
+      <!-- Part (i) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> (i) Disproving Commutativity: Mix(L₁, L₂) ≠ Mix(L₂, L₁)</button>
+        <div class="subq-body">
+          <p>We choose finite (and therefore simple) languages:</p>
+          <div class="formula">
+            L_1 = \{a\}, \quad L_2 = \{ab\}
+          </div>
+          <p>Substituting into the simplified form:</p>
+          <ul class="plain">
+            <li>$\text{Mix}(L_1, L_2) = \Sigma^* \cdot \{a\} \cdot \Sigma^* \cdot \{ab\} \cdot \Sigma^*$ &mdash; all words containing an 'a' followed later by the substring "ab".</li>
+            <li>$\text{Mix}(L_2, L_1) = \Sigma^* \cdot \{ab\} \cdot \Sigma^* \cdot \{a\} \cdot \Sigma^*$ &mdash; all words containing the substring "ab" followed later by an 'a'.</li>
+          </ul>
+
+          <div class="sec-heading">Witness String: w = aab</div>
+          <ol class="steps">
+            <li><b>Is $aab \in \text{Mix}(L_1, L_2)$?</b> Yes!
+              <br>Decomposition: $w_1 = \varepsilon$, $u = a \in L_1$, $w_2 = \varepsilon$, $v = ab \in L_2$, $w_3 = \varepsilon$.
+              <br>Concatenation: $\varepsilon \cdot a \cdot \varepsilon \cdot ab \cdot \varepsilon = aab$. Thus $aab \in \text{Mix}(L_1, L_2)$. ✓
+            </li>
+            <li><b>Is $aab \in \text{Mix}(L_2, L_1)$?</b> No!
+              <br>To belong to $\text{Mix}(L_2, L_1)$, the string must contain an occurrence of $v' \in L_2 = \{ab\}$, followed strictly afterwards by some $u' \in L_1 = \{a\}$.
+              <br>The only occurrence of "ab" in the word "aab" is at indices 2&ndash;3 (the final two characters).
+              <br>The substring following this "ab" is the empty string $\varepsilon$, which contains no 'a'.
+              <br>Therefore, no subsequent 'a' exists to match $L_1$. Hence $aab \notin \text{Mix}(L_2, L_1)$. ✗
+            </li>
+          </ol>
+
+          <div class="answer-box">
+            <span class="ans-label">Final Answer</span>
+            <p>Choosing <b>L₁ = {a}</b> and <b>L₂ = {ab}</b>, the string <b>w = aab</b> satisfies $w \in \text{Mix}(L_1, L_2)$ but $w \notin \text{Mix}(L_2, L_1)$. Hence, <b>Mix is not commutative</b>: $\text{Mix}(L_1, L_2) \ne \text{Mix}(L_2, L_1)$.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part (ii) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> (ii) Proof: Regular L₁, L₂ ⇒ Mix(L₁, L₂) is Regular</button>
+        <div class="subq-body">
+          <div class="sec-heading">Formal Closure Proof</div>
+          <p>We are given that $L_1$ and $L_2$ are regular languages over the alphabet $\Sigma = \{a, b\}$.</p>
+          <ol class="steps">
+            <li><b>Regularity of the alphabet closure:</b> The universal language $\Sigma^* = (a + b)^*$ is recognized by a trivial 1-state DFA, hence $\Sigma^*$ is regular.</li>
+            <li><b>Closure under Concatenation:</b> A fundamental theorem of formal language theory states that <i>the class of regular languages is closed under the operation of concatenation</i>. That is, if $A$ and $B$ are regular languages, their concatenation $A \cdot B = \{xy \mid x \in A, y \in B\}$ is also regular.</li>
+            <li><b>Inductive Extension:</b> By induction, any finite concatenation of $k$ regular languages $A_1 \cdot A_2 \cdots A_k$ is regular.</li>
+            <li><b>Application to Mix:</b>
+              $$\text{Mix}(L_1, L_2) = \Sigma^* \cdot L_1 \cdot \Sigma^* \cdot L_2 \cdot \Sigma^*$$
+              This is the concatenation of exactly five languages: $A_1 = \Sigma^*$, $A_2 = L_1$, $A_3 = \Sigma^*$, $A_4 = L_2$, and $A_5 = \Sigma^*$.
+            </li>
+            <li>Since each of the five components is regular, their product $\text{Mix}(L_1, L_2)$ is regular. ∎</li>
+          </ol>
+
+          <div class="sec-heading">NFA Construction (Constructive Verification)</div>
+          <p>Let $M_1 = (Q_1, \Sigma, \delta_1, q_{01}, F_1)$ and $M_2 = (Q_2, \Sigma, \delta_2, q_{02}, F_2)$ be NFAs recognizing $L_1$ and $L_2$. We construct an NFA $M_{mix}$ for $\text{Mix}(L_1, L_2)$:</p>
+          <ul class="plain">
+            <li>Create state $s_0$ with self-loops on $a, b$ ($\Sigma^*$), and an $\varepsilon$-transition from $s_0 \to q_{01}$.</li>
+            <li>From every state in $F_1$, add an $\varepsilon$-transition to an intermediate state $s_{mid}$.</li>
+            <li>State $s_{mid}$ has self-loops on $a, b$ ($\Sigma^*$), and an $\varepsilon$-transition to $q_{02}$.</li>
+            <li>From every state in $F_2$, add an $\varepsilon$-transition to final state $s_f$.</li>
+            <li>State $s_f$ has self-loops on $a, b$ ($\Sigma^*$) and is the sole accepting state of $M_{mix}$.</li>
+          </ul>
+          <p>Since an NFA exists that accepts $\text{Mix}(L_1, L_2)$, the language is regular.</p>
+
+          <div class="answer-box">
+            <span class="ans-label">Final Answer</span>
+            <p><b>Mix(L₁, L₂) is regular</b> because it is the five-fold concatenation of regular languages $\Sigma^* \cdot L_1 \cdot \Sigma^* \cdot L_2 \cdot \Sigma^*$, and regular languages are closed under concatenation. ∎</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part (iii) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> (iii) Non-Regular L₁, L₂ with Regular Mix(L₁, L₂)</button>
+        <div class="subq-body">
+          <p>We construct two genuinely non-regular languages whose Mix collapses into a simple regular language.</p>
+
+          <div class="sec-heading">Construction: Adding &epsilon; to a Classical Non-Regular Language</div>
+          <p>Define:</p>
+          <div class="formula">
+            L_1 = L_2 = \{\varepsilon\} \cup \{a^n b^n : n \ge 1\}
+          </div>
+
+          <div class="sec-heading">Step 1: Rigorous Proof that L₁ and L₂ are NOT Regular</div>
+          <p>Suppose, for contradiction, that $L_1$ is regular.</p>
+          <ul class="plain">
+            <li>The singleton set $\{\varepsilon\}$ is finite, hence regular.</li>
+            <li>The class of regular languages is closed under set difference.</li>
+            <li>Therefore, $L_1 \setminus \{\varepsilon\} = \{a^n b^n : n \ge 1\}$ must be regular.</li>
+            <li>However, $\{a^n b^n : n \ge 1\}$ is the classical non-regular language (provable by the Pumping Lemma or Myhill–Nerode theorem). This contradiction proves $L_1$ and $L_2$ are <b>strictly non-regular</b>.</li>
+          </ul>
+
+          <div class="sec-heading">Step 2: Proof that Mix(L₁, L₂) is Regular</div>
+          <p>Because $\varepsilon \in L_1$ and $\varepsilon \in L_2$, we choose $u = \varepsilon \in L_1$ and $v = \varepsilon \in L_2$.</p>
+          <p>For <b>any arbitrary string</b> $w \in \Sigma^*$, we can decompose it as:</p>
+          <div class="formula">
+            w_1 = w, \quad u = \varepsilon, \quad w_2 = \varepsilon, \quad v = \varepsilon, \quad w_3 = \varepsilon
+          </div>
+          <p>Evaluating the combination:</p>
+          <div class="formula">
+            w_1 \cdot u \cdot w_2 \cdot v \cdot w_3 = w \cdot \varepsilon \cdot \varepsilon \cdot \varepsilon \cdot \varepsilon = w
+          </div>
+          <p>Since this holds for every $w \in \Sigma^*$, we have $\Sigma^* \subseteq \text{Mix}(L_1, L_2)$. Furthermore, since $\text{Mix}(L_1, L_2) \subseteq \Sigma^*$ by definition, we obtain:</p>
+          <div class="formula">
+            \text{Mix}(L_1, L_2) = \Sigma^* = (a + b)*
+          </div>
+          <p>The universal language $\Sigma^*$ is regular (accepted by a 1-state DFA).</p>
+
+          <div class="answer-box">
+            <span class="ans-label">Final Answer</span>
+            <p>Take <b>L₁ = L₂ = {&epsilon;} &cup; {aⁿbⁿ : n &ge; 1}</b>. Both languages are non-regular (by closure under difference with finite sets), yet <b>Mix(L₁, L₂) = &Sigma;*</b>, which is universally regular.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- Q1(c) ---------- -->
+    <div class="qcard" id="card-q1c">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Q1 (c)</span>
+        <span class="qtitle">Algebraic Laws of Regular Expressions</span>
+        <div class="meta-row">
+          <span class="meta-chip">Marks: 4</span>
+          <span class="meta-chip">CO: CO1</span>
+          <span class="meta-chip">Bloom Level: BL3</span>
+          <span class="meta-chip">PO: PO1</span>
+          <span class="meta-chip">PI: 1.1.1</span>
+        </div>
+      </div>
+
+      <div class="question-text">
+        Discuss in brief about the algebraic laws of regular expressions.
+      </div>
+
+      <p>Regular expressions over an alphabet $\Sigma$ form an algebraic structure known as a <b>Kleene Algebra</b>. In this system, union ($+$) acts analogously to addition, concatenation acts analogously to multiplication, and the Kleene star ($*$) acts as an unary closure operator.</p>
+
+      <div class="sec-heading">The Complete Axiomatic Laws of Regular Expressions</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Law Category</th>
+              <th>Formal Identity</th>
+              <th>Algebraic Meaning / Interpretation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Commutativity of Union</b></td>
+              <td>R + S = S + R</td>
+              <td>Order of language alternatives does not affect language membership.</td>
+            </tr>
+            <tr>
+              <td><b>Associativity of Union</b></td>
+              <td>(R + S) + T = R + (S + T)</td>
+              <td>Grouping of unions is irrelevant.</td>
+            </tr>
+            <tr>
+              <td><b>Associativity of Concat.</b></td>
+              <td>(RS)T = R(ST)</td>
+              <td>Sequential concatenation groups unambiguously.</td>
+            </tr>
+            <tr>
+              <td><b>Idempotence of Union</b></td>
+              <td>R + R = R</td>
+              <td>Set union with itself adds no new strings (unlike 1+1=2).</td>
+            </tr>
+            <tr>
+              <td><b>Identity for Union</b></td>
+              <td>R + &empty; = &empty; + R = R</td>
+              <td>Empty language &empty; is the additive identity.</td>
+            </tr>
+            <tr>
+              <td><b>Identity for Concat.</b></td>
+              <td>R&epsilon; = &epsilon;R = R</td>
+              <td>Empty string &epsilon; is the multiplicative identity.</td>
+            </tr>
+            <tr>
+              <td><b>Annihilator for Concat.</b></td>
+              <td>R&empty; = &empty;R = &empty;</td>
+              <td>Concatenating with empty language yields the empty language.</td>
+            </tr>
+            <tr>
+              <td><b>Left Distributivity</b></td>
+              <td>R(S + T) = RS + RT</td>
+              <td>Concatenation distributes over union from the left.</td>
+            </tr>
+            <tr>
+              <td><b>Right Distributivity</b></td>
+              <td>(S + T)R = SR + TR</td>
+              <td>Concatenation distributes over union from the right.</td>
+            </tr>
+            <tr>
+              <td><b>Kleene Star Unfolding</b></td>
+              <td>R* = &epsilon; + RR* = &epsilon; + R*R</td>
+              <td>R* decomposes into zero copies (&epsilon;) or at least one copy.</td>
+            </tr>
+            <tr>
+              <td><b>Star Idempotence</b></td>
+              <td>(R*)* = R*, &nbsp; R*R* = R*</td>
+              <td>Repeated closure yields no additional strings.</td>
+            </tr>
+            <tr>
+              <td><b>Star Base Cases</b></td>
+              <td>&epsilon;* = &epsilon;, &nbsp; &empty;* = &epsilon;</td>
+              <td>Zero-length repetitions of empty set produce the empty string.</td>
+            </tr>
+            <tr>
+              <td><b>Sum under Star</b></td>
+              <td>(R + S)* = (R*S*)* = (R* + S*)*</td>
+              <td>Interleaved repetitions of R and S.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sec-heading">Where Regular Expression Algebra Differs from Ordinary Algebra</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Property</th>
+              <th>Ordinary Real Algebra (x, y)</th>
+              <th>Regular Expression Algebra (R, S)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Multiplication Commutativity</td>
+              <td>xy = yx (Commutative)</td>
+              <td><b>RS &ne; SR in general</b> (e.g., ab &ne; ba)</td>
+            </tr>
+            <tr>
+              <td>Additive Idempotence</td>
+              <td>x + x = 2x</td>
+              <td><b>R + R = R</b> (Idempotent)</td>
+            </tr>
+            <tr>
+              <td>Inverse Operations</td>
+              <td>Subtraction &amp; Division exist</td>
+              <td><b>No subtraction or division</b> in standard REs</td>
+            </tr>
+            <tr>
+              <td>Cancellation Law</td>
+              <td>If xy = xz and x &ne; 0 &rArr; y = z</td>
+              <td><b>Fails</b>: a*(a*) = a*(&epsilon; + a) but a* &ne; &epsilon;+a</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subq">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Worked Algebraic Proof: Prove that (a + b)* = a*(ba*)*</button>
+        <div class="subq-body">
+          <p>We use the algebraic laws to prove this foundational equivalence:</p>
+          <ol class="steps">
+            <li>By Kleene star sum expansion: $(R + S)^* = (R^* S)^* R^*$.</li>
+            <li>Let $R = a$ and $S = b$. Substituting gives:
+              $$(a + b)^* = (a^* b)^* a^*$$
+            </li>
+            <li>Alternatively, by factoring out leading $a^*$: every string in $(a+b)^*$ consists of zero or more $b$'s separated and flanked by runs of $a$'s ($a^*$). Each occurrence of $b$ carries a trailing run of $a^*$, preceded by an initial run $a^*$:
+              $$(a + b)^* = a^*(b a^*)^*$$
+            </li>
+            <li>Equating both proves $(a^* b)^* a^* = a^*(b a^*)^* = (a + b)^*$. ∎</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="answer-box">
+        <span class="ans-label">Final Answer</span>
+        <p>Regular expressions form a <b>Kleene algebra</b> characterized by idempotent, commutative union, non-commutative associative concatenation that distributes over union, identities $\emptyset$ and $\varepsilon$, and the star unfolding identity $R^* = \varepsilon + RR^*$.</p>
+      </div>
+    </div>
+
+    <!-- ---------- Q1(d) ---------- -->
+    <div class="qcard" id="card-q1d">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Q1 (d)</span>
+        <span class="qtitle">Myhill–Nerode Theorem, With a Worked Example</span>
+        <div class="meta-row">
+          <span class="meta-chip">Marks: 4</span>
+          <span class="meta-chip">CO: CO2</span>
+          <span class="meta-chip">Bloom Level: BL3</span>
+          <span class="meta-chip">PO: PO1</span>
+          <span class="meta-chip">PI: 1.1.1</span>
+        </div>
+      </div>
+
+      <div class="question-text">
+        Explain the Myhill–Nerode Theorem by taking a suitable example.
+      </div>
+
+      <div class="sec-heading">Formal Definition of the Indistinguishability Relation &equiv;<sub>L</sub></div>
+      <p>Let $L \subseteq \Sigma^*$ be any language over an alphabet $\Sigma$. We define an equivalence relation $\equiv_L$ on $\Sigma^*$, called the <b>Myhill–Nerode indistinguishability relation</b>, as follows:</p>
+      <div class="formula">
+        x \equiv_L y \iff \forall z \in \Sigma^*, \quad (xz \in L \iff yz \in L)
+      </div>
+      <p>Two strings $x$ and $y$ are equivalent ($\equiv_L$) if no future suffix $z$ can distinguish between them with respect to membership in $L$. If there exists even one suffix $z \in \Sigma^*$ such that $xz \in L$ and $yz \notin L$ (or vice versa), then $z$ is called a <b>distinguishing extension</b>, and $x \not\equiv_L y$.</p>
+
+      <div class="sec-heading">Theorem Statement (The Three Equivalent Conditions)</div>
+      <p>The Myhill–Nerode Theorem states that the following three statements are strictly equivalent:</p>
+      <ol class="steps">
+        <li>The language $L$ is <b>regular</b>.</li>
+        <li>The equivalence relation $\equiv_L$ has a <b>finite number of equivalence classes</b> (finite index).</li>
+        <li>The minimum number of states in any Deterministic Finite Automaton (DFA) accepting $L$ is <b>precisely equal to the number of equivalence classes of $\equiv_L$</b>. Furthermore, this minimal DFA is unique up to isomorphism.</li>
+      </ol>
+
+      <div class="sec-heading">Worked Example: L = {w &isin; {0, 1}* : w ends in "01"}</div>
+      <p>Let $\Sigma = \{0, 1\}$. Every string in $\Sigma^*$ falls into exactly one of three distinguishable situations based on its suffix:</p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Class</th>
+              <th>Representative</th>
+              <th>Situation / Meaning</th>
+              <th>Verified Sample Strings</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>C₀</b></td>
+              <td>&epsilon;</td>
+              <td>Does not end in '0' and does not end in '01' (start, or last bit is 1 not preceded by 0)</td>
+              <td>&epsilon;, 1, 11, 111, 011</td>
+            </tr>
+            <tr>
+              <td><b>C₁</b></td>
+              <td>0</td>
+              <td>Ends with a lone '0' &mdash; an active candidate start of "01"</td>
+              <td>0, 10, 00, 110, 010</td>
+            </tr>
+            <tr>
+              <td><b>C₂</b></td>
+              <td>01</td>
+              <td>Successfully ends in the target pattern "01" (Accepting Class)</td>
+              <td>01, 101, 1101, 001</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Pairwise Distinguishability Proof (Showing Index &ge; 3)</button>
+        <div class="subq-body">
+          <p>We prove that all three classes are pairwise distinct by exhibiting a distinguishing suffix $z$ for every pair:</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Pair Tested</th>
+                  <th>Distinguishing Suffix (z)</th>
+                  <th>First String Extended (xz)</th>
+                  <th>Second String Extended (yz)</th>
+                  <th>Conclusion</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>C₀ (&epsilon;) vs C₁ (0)</b></td>
+                  <td>z = "1"</td>
+                  <td>&epsilon; &middot; 1 = "1" &notin; L</td>
+                  <td>0 &middot; 1 = "01" <b>&isin; L</b></td>
+                  <td><b>Distinguishable!</b> (&epsilon; &ne; 0)</td>
+                </tr>
+                <tr>
+                  <td><b>C₀ (&epsilon;) vs C₂ (01)</b></td>
+                  <td>z = &epsilon;</td>
+                  <td>&epsilon; &middot; &epsilon; = &epsilon; &notin; L</td>
+                  <td>01 &middot; &epsilon; = "01" <b>&isin; L</b></td>
+                  <td><b>Distinguishable!</b> (&epsilon; &ne; 01)</td>
+                </tr>
+                <tr>
+                  <td><b>C₁ (0) vs C₂ (01)</b></td>
+                  <td>z = "1"</td>
+                  <td>0 &middot; 1 = "01" <b>&isin; L</b></td>
+                  <td>01 &middot; 1 = "011" &notin; L</td>
+                  <td><b>Distinguishable!</b> (0 &ne; 01)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Since all pairs are distinguishable, there must be at least 3 equivalence classes.</p>
+        </div>
+      </div>
+
+      <div class="sec-heading">Closure Under Extension &amp; Minimal DFA Construction</div>
+      <p>We verify that the 3 classes are closed under the transition function $\delta(C, b) = [w \cdot b]$:</p>
+      <div class="formula">
+        \delta(C_0, 0) = C_1, \quad \delta(C_0, 1) = C_0<br>
+        \delta(C_1, 0) = C_1, \quad \delta(C_1, 1) = C_2<br>
+        \delta(C_2, 0) = C_1, \quad \delta(C_2, 1) = C_0
+      </div>
+
+      <!-- Minimal DFA SVG -->
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 540 180" width="500" height="170">
+          <defs>
+            <marker id="mn-arrow" viewBox="0 0 10 10" refX="20" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1A3A6B"/>
+            </marker>
+          </defs>
+          <!-- States -->
+          <g font-family="Courier Prime" font-size="14" font-weight="bold" text-anchor="middle">
+            <!-- C0 -->
+            <circle cx="80" cy="90" r="24" fill="#e6ecf5" stroke="#1A3A6B" stroke-width="2"/>
+            <text x="80" y="95" fill="#1A3A6B">C0</text>
+
+            <!-- C1 -->
+            <circle cx="260" cy="90" r="24" fill="#e6ecf5" stroke="#1A3A6B" stroke-width="2"/>
+            <text x="260" y="95" fill="#1A3A6B">C1</text>
+
+            <!-- C2 (Accept) -->
+            <circle cx="440" cy="90" r="28" fill="#e2eeeb" stroke="#1A5C5C" stroke-width="2.5"/>
+            <circle cx="440" cy="90" r="22" fill="#e2eeeb" stroke="#1A5C5C" stroke-width="1.5"/>
+            <text x="440" y="95" fill="#1A5C5C">C2</text>
+          </g>
+
+          <!-- Start Arrow -->
+          <line x1="25" y1="90" x2="56" y2="90" stroke="#8B1A1A" stroke-width="2" marker-end="url(#mn-arrow)"/>
+          <text x="35" y="82" font-family="Lora" font-style="italic" font-size="11" fill="#8B1A1A">start</text>
+
+          <!-- Loop C0 on 1 -->
+          <path d="M 75 66 C 70 30 90 30 85 66" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#mn-arrow)"/>
+          <text x="80" y="24" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">1</text>
+
+          <!-- C0 to C1 on 0 -->
+          <line x1="104" y1="90" x2="236" y2="90" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#mn-arrow)"/>
+          <text x="170" y="82" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">0</text>
+
+          <!-- Loop C1 on 0 -->
+          <path d="M 255 66 C 250 30 270 30 265 66" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#mn-arrow)"/>
+          <text x="260" y="24" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">0</text>
+
+          <!-- C1 to C2 on 1 -->
+          <line x1="284" y1="90" x2="412" y2="90" stroke="#1A5C5C" stroke-width="1.8" marker-end="url(#mn-arrow)"/>
+          <text x="350" y="82" font-family="Courier Prime" font-size="12" fill="#1A5C5C" font-weight="bold">1</text>
+
+          <!-- C2 to C1 on 0 -->
+          <path d="M 425 110 Q 350 150 275 110" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#mn-arrow)"/>
+          <text x="350" y="148" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">0</text>
+
+          <!-- C2 to C0 on 1 -->
+          <path d="M 435 116 Q 260 190 85 114" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#mn-arrow)"/>
+          <text x="260" y="178" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">1</text>
+        </svg>
+        <p class="diagram-caption">Minimal 3-state DFA obtained directly from the 3 Myhill-Nerode equivalence classes.</p>
+      </div>
+
+      <div class="margin-note">
+        <b>Proving Non-Regularity with Myhill–Nerode:</b> To prove a language like $L_{nr} = \{0^n 1^n : n \ge 0\}$ is NOT regular, one produces an <i>infinite</i> family of pairwise distinguishable strings $S = \{0^k : k \ge 0\}$. For any $j \ne k$, choose $z = 1^k$. Then $0^k z = 0^k 1^k \in L_{nr}$, but $0^j z = 0^j 1^k \notin L_{nr}$. Hence all strings in $S$ belong to distinct equivalence classes $\implies$ index is infinite $\implies L_{nr}$ is not regular.
+      </div>
+
+      <div class="answer-box">
+        <span class="ans-label">Final Answer</span>
+        <p>The relation $\equiv_L$ partitions $\{0,1\}^*$ into exactly <b>3 equivalence classes</b> ($C_0, C_1, C_2$). Because the index is finite (3), by the Myhill–Nerode theorem, <b>L is regular</b>, and its unique minimal DFA requires exactly <b>3 states</b> with $C_2$ as the sole accepting state.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ================         Q2  PANEL         ================ -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="q2" role="tabpanel">
+    <h2 class="panel-title">Question 2 <span class="q-any">3 marks per part · Max marks 9 (Attempt any three — all four solved in exhaustive detail below)</span></h2>
+
+    <!-- ---------- Q2(a) ---------- -->
+    <div class="qcard" id="card-q2a">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Q2 (a)</span>
+        <span class="qtitle">Writing Regular Expressions for Prescribed Languages</span>
+        <div class="meta-row">
+          <span class="meta-chip">Marks: 3</span>
+          <span class="meta-chip">CO: CO1</span>
+          <span class="meta-chip">Bloom Level: BL3</span>
+          <span class="meta-chip">PO: PO1</span>
+          <span class="meta-chip">PI: 1.1.1</span>
+        </div>
+      </div>
+
+      <div class="question-text">
+        Write regular expressions for the following languages over &Sigma; = {a, b}:
+        <br><span class="label">(i)</span> L = {a<sup>2n</sup> b<sup>2m</sup> : n &ge; 0, m &ge; 0}
+        <br><span class="label">(ii)</span> All strings containing not more than three a's
+        <br><span class="label">(iii)</span> All strings which do not contain the substring "ba"
+      </div>
+
+      <!-- Part (i) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> (i) L = {a²ⁿ b²ᵐ : n ≥ 0, m ≥ 0} — Even a's followed by Even b's</button>
+        <div class="subq-body">
+          <div class="sec-heading">Step-by-Step Derivation</div>
+          <ol class="steps">
+            <li><b>Decomposition of $a^{2n}$ ($n \ge 0$):</b>
+              $a^{2n} = (a^2)^n = (aa)^n$. For $n \ge 0$, this represents any non-negative integer number of pairs of $a$'s:
+              $$(aa)^* = \{\varepsilon, aa, aaaa, aaaaaa, \dots\}$$
+            </li>
+            <li><b>Decomposition of $b^{2m}$ ($m \ge 0$):</b>
+              Similarly, $b^{2m} = (bb)^m$, representing any even count of $b$'s:
+              $$(bb)^* = \{\varepsilon, bb, bbbb, bbbbbb, \dots\}$$
+            </li>
+            <li><b>Concatenation:</b> All $a$'s strictly precede all $b$'s, with independent counts $n$ and $m$. Concatenating the two expressions:
+              $$R = (aa)^*(bb)^*$$
+            </li>
+            <li><b>Edge case verification:</b>
+              <ul>
+                <li>$n=0, m=0 \implies a^0 b^0 = \varepsilon$ (Accepted by $(aa)^*(bb)^*$ via $\varepsilon \cdot \varepsilon = \varepsilon$) ✓</li>
+                <li>$n=1, m=0 \implies a^2 b^0 = aa$ ✓</li>
+                <li>$n=0, m=1 \implies a^0 b^2 = bb$ ✓</li>
+                <li>$n=1, m=1 \implies a^2 b^2 = aabb$ ✓</li>
+                <li>Odd counts like $a, b, aaa, aab, abb$ are correctly rejected.</li>
+              </ul>
+            </li>
+          </ol>
+          <div class="answer-box">
+            <span class="ans-label">Answer (i)</span>
+            <p><b>(aa)*(bb)*</b></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part (ii) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> (ii) All strings containing not more than three a's</button>
+        <div class="subq-body">
+          <div class="sec-heading">Step-by-Step Derivation</div>
+          <p>"Not more than three $a$'s" means the total number of $a$'s, denoted $N_a(w)$, can be $0, 1, 2,$ or $3$. The count of $b$'s is completely unrestricted, meaning arbitrary runs of $b^*$ can appear before, between, and after every $a$.</p>
+
+          <div class="sec-heading">Standard Union Form</div>
+          <ul class="plain">
+            <li>Exactly zero $a$'s: $b^*$</li>
+            <li>Exactly one $a$: $b^* a b^*$</li>
+            <li>Exactly two $a$'s: $b^* a b^* a b^*$</li>
+            <li>Exactly three $a$'s: $b^* a b^* a b^* a b^*$</li>
+          </ul>
+          <div class="formula">
+            R = b* + b*ab* + b*ab*ab* + b*ab*ab*ab*
+          </div>
+
+          <div class="sec-heading">Equivalent Compact Factored Form</div>
+          <p>By factoring out $b^*$ and using the optional term $(a + \varepsilon)$:</p>
+          <div class="formula">
+            R = b*(a + \varepsilon)b*(a + \varepsilon)b*(a + \varepsilon)b*
+          </div>
+          <p>Both forms are mathematically identical; the expanded union form is standard for university examination scoring.</p>
+
+          <div class="answer-box">
+            <span class="ans-label">Answer (ii)</span>
+            <p><b>b* + b*ab* + b*ab*ab* + b*ab*ab*ab*</b> &nbsp; (or <b>b*(a + &epsilon;)b*(a + &epsilon;)b*(a + &epsilon;)b*</b>)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part (iii) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> (iii) All strings which do NOT contain the substring "ba"</button>
+        <div class="subq-body">
+          <div class="sec-heading">Step-by-Step Derivation</div>
+          <ol class="steps">
+            <li><b>Analyzing the constraint:</b> The substring "ba" occurs if and only if at some point a 'b' is immediately followed by an 'a'.</li>
+            <li><b>Propagation effect:</b> If a 'b' occurs, could an 'a' occur later? Suppose $w = \dots b b \dots b a \dots$. The transition from the last $b$ before the $a$ would still form the contiguous substring "ba"! Therefore, <b>once a single 'b' has appeared in the string, no 'a' can ever appear again</b> anywhere in the remainder of the word.</li>
+            <li><b>Ordering:</b> All $a$'s (if any) must strictly precede all $b$'s (if any).</li>
+            <li><b>Resulting Language:</b> Any number of $a$'s followed by any number of $b$'s.
+              $$R = a^* b^*$$
+            </li>
+            <li><b>Verification:</b>
+              <ul>
+                <li>Accepted: $\varepsilon, a, aa, aaa, b, bb, ab, aab, abb, aaabbb$. None contain "ba" ✓</li>
+                <li>Rejected: $ba$ (contains "ba"), $baba$ (contains "ba"), $abba$ (contains "ba" at index 3-4).</li>
+              </ul>
+            </li>
+          </ol>
+          <div class="answer-box">
+            <span class="ans-label">Answer (iii)</span>
+            <p><b>a*b*</b></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- Q2(b) ---------- -->
+    <div class="qcard" id="card-q2b">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Q2 (b)</span>
+        <span class="qtitle">Arden's Theorem: Formal Statement, Rigorous Proof &amp; Worked DFA</span>
+        <div class="meta-row">
+          <span class="meta-chip">Marks: 3</span>
+          <span class="meta-chip">CO: CO1</span>
+          <span class="meta-chip">Bloom Level: BL3</span>
+          <span class="meta-chip">PO: PO1</span>
+          <span class="meta-chip">PI: 1.1.1</span>
+        </div>
+      </div>
+
+      <div class="question-text">
+        State Arden's theorem. Take a DFA of your choice and find its corresponding regular expression using Arden's theorem.
+      </div>
+
+      <div class="sec-heading">Formal Statement of Arden's Theorem</div>
+      <p>Let $P$ and $Q$ be two regular expressions over an alphabet $\Sigma$. If $\varepsilon \notin P$ (i.e., $P$ does not contain the null string $\varepsilon$), then the equation:</p>
+      <div class="formula">
+        X = Q + XP
+      </div>
+      <p>has a <b>unique solution</b> given by:</p>
+      <div class="formula">
+        X = QP*
+      </div>
+      <p><i>Note:</i> In symmetric left-linear form, if $X = Q + PX$ with $\varepsilon \notin P$, the unique solution is $X = P^*Q$.</p>
+
+      <div class="subq">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Mathematical Proof of Arden's Theorem (Existence &amp; Uniqueness)</button>
+        <div class="subq-body">
+          <p><b>Part 1: Proof of Existence (Verification that $X = QP^*$ is a solution):</b></p>
+          <p>Substitute $X = QP^*$ into the right-hand side of $X = Q + XP$:</p>
+          <div class="formula">
+            \text{RHS} = Q + (QP^*)P = Q(\varepsilon + P^*P)
+          </div>
+          <p>By the Kleene star unfolding law, $\varepsilon + P^*P = P^*$. Therefore:</p>
+          <div class="formula">
+            \text{RHS} = QP^* = X = \text{LHS}
+          </div>
+          <p>Hence $X = QP^*$ is indeed a valid solution.</p>
+
+          <p><b>Part 2: Proof of Uniqueness (when $\varepsilon \notin P$):</b></p>
+          <p>Repeatedly substitute $X = Q + XP$ into itself:</p>
+          <div class="formula">
+            X = Q + (Q + XP)P = Q + QP + XP^2<br>
+            X = Q + QP + (Q + XP)P^2 = Q + QP + QP^2 + XP^3<br>
+            \dots<br>
+            X = Q(\varepsilon + P + P^2 + \dots + P^k) + XP^{k+1}
+          </div>
+          <p>Because $\varepsilon \notin P$, every string in $P$ has length at least 1 ($|w| \ge 1$ for all $w \in P$). Consequently, every string in $P^{k+1}$ has length at least $k+1$.</p>
+          <p>Now consider any string $w$ of length $n$ ($|w| = n$). If we choose $k = n$, then every string in $XP^{n+1}$ must have length $\ge n+1 > |w|$. Therefore, $w$ cannot belong to $XP^{n+1}$. It follows that:</p>
+          <div class="formula">
+            w \in X \iff w \in Q(\varepsilon + P + P^2 + \dots + P^n) \subseteq QP^*
+          </div>
+          <p>Since this holds for every string $w \in \Sigma^*$, $X = QP^*$ is the only possible solution. ∎</p>
+        </div>
+      </div>
+
+      <div class="sec-heading">Chosen DFA: Binary Strings Ending in "1"</div>
+      <p>Consider the 2-state DFA over $\Sigma = \{0, 1\}$ that accepts binary strings ending in 1:</p>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>State</th>
+              <th>Status</th>
+              <th>On Input 0</th>
+              <th>On Input 1</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>q₀</b></td>
+              <td>Initial (Non-final)</td>
+              <td>q₀</td>
+              <td>q₁</td>
+            </tr>
+            <tr class="highlight">
+              <td><b>q₁</b></td>
+              <td><b>Final (Accepting)</b></td>
+              <td>q₀</td>
+              <td>q₁</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Chosen DFA SVG -->
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 460 160" width="420" height="150">
+          <defs>
+            <marker id="ard-arrow" viewBox="0 0 10 10" refX="20" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1A3A6B"/>
+            </marker>
+          </defs>
+          <g font-family="Courier Prime" font-size="14" font-weight="bold" text-anchor="middle">
+            <circle cx="100" cy="80" r="24" fill="#e6ecf5" stroke="#1A3A6B" stroke-width="2"/>
+            <text x="100" y="85" fill="#1A3A6B">q0</text>
+
+            <circle cx="340" cy="80" r="28" fill="#e2eeeb" stroke="#1A5C5C" stroke-width="2.5"/>
+            <circle cx="340" cy="80" r="22" fill="#e2eeeb" stroke="#1A5C5C" stroke-width="1.5"/>
+            <text x="340" y="85" fill="#1A5C5C">q1</text>
+          </g>
+
+          <!-- Start Arrow -->
+          <line x1="30" y1="80" x2="76" y2="80" stroke="#8B1A1A" stroke-width="2" marker-end="url(#ard-arrow)"/>
+          <text x="45" y="72" font-family="Lora" font-style="italic" font-size="11" fill="#8B1A1A">start</text>
+
+          <!-- Loop q0 on 0 -->
+          <path d="M 95 56 C 90 20 110 20 105 56" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#ard-arrow)"/>
+          <text x="100" y="16" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">0</text>
+
+          <!-- q0 to q1 on 1 -->
+          <path d="M 124 72 Q 220 40 312 72" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#ard-arrow)"/>
+          <text x="220" y="48" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">1</text>
+
+          <!-- q1 to q0 on 0 -->
+          <path d="M 314 90 Q 220 125 126 90" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#ard-arrow)"/>
+          <text x="220" y="122" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">0</text>
+
+          <!-- Loop q1 on 1 -->
+          <path d="M 335 52 C 330 16 350 16 345 52" fill="none" stroke="#1A5C5C" stroke-width="1.8" marker-end="url(#ard-arrow)"/>
+          <text x="340" y="12" font-family="Courier Prime" font-size="12" fill="#1A5C5C" font-weight="bold">1</text>
+        </svg>
+      </div>
+
+      <div class="sec-heading">Step-by-Step Application of Arden's Equations</div>
+      <p>Let $R_0$ and $R_1$ represent the regular expressions for the set of strings transitioning from start state $q_0$ to $q_0$ and $q_1$ respectively.</p>
+      <ol class="steps">
+        <li><b>Formulate state equations:</b>
+          <div class="formula">
+            R_0 = \varepsilon + R_0 0 + R_1 0 \quad \text{--- (Equation 1)}<br>
+            R_1 = R_0 1 + R_1 1 \quad \text{--- (Equation 2)}
+          </div>
+          <i>(Note: $\varepsilon$ is added to $R_0$ because $q_0$ is the start state).</i>
+        </li>
+        <li><b>Solve Equation 2 for $R_1$:</b>
+          Equation 2 has the form $X = Q + XP$ where $X = R_1$, $Q = R_0 1$, and $P = 1$.
+          Since $\varepsilon \notin P$ ($P = \{1\}$), by Arden's Theorem:
+          <div class="formula">
+            R_1 = (R_0 1) \cdot 1^* = R_0 1 1^* \quad \text{--- (Equation 3)}
+          </div>
+        </li>
+        <li><b>Substitute Equation 3 into Equation 1:</b>
+          <div class="formula">
+            R_0 = \varepsilon + R_0 0 + (R_0 1 1^*) 0 = \varepsilon + R_0(0 + 1 1^* 0)
+          </div>
+        </li>
+        <li><b>Apply Arden's Theorem to $R_0$:</b>
+          This matches $X = Q + XP$ with $X = R_0$, $Q = \varepsilon$, and $P = (0 + 1 1^* 0)$.
+          Since $\varepsilon \notin P$, by Arden's Theorem:
+          <div class="formula">
+            R_0 = \varepsilon \cdot (0 + 1 1^* 0)^* = (0 + 1 1^* 0)^*
+          </div>
+        </li>
+        <li><b>Back-substitute $R_0$ to obtain $R_1$:</b>
+          <div class="formula">
+            R_1 = R_0 1 1^* = (0 + 1 1^* 0)^* 1 1^*
+          </div>
+        </li>
+        <li><b>Final Regular Expression:</b> Since $q_1$ is the only final state, the regular expression for the language accepted by the DFA is:
+          <div class="formula">
+            R = (0 + 1 1^* 0)^* 1 1^* = (0 + 1^+ 0)^* 1^+
+          </div>
+        </li>
+      </ol>
+
+      <div class="answer-box">
+        <span class="ans-label">Final Answer</span>
+        <p>Arden's Theorem states that $X = Q + XP$ with $\varepsilon \notin P$ has unique solution $X = QP^*$. For the DFA above, applying Arden's theorem yields the regular expression <b>R = (0 + 11*0)*11*</b>.</p>
+      </div>
+    </div>
+
+    <!-- ---------- Q2(c) ---------- -->
+    <div class="qcard" id="card-q2c">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Q2 (c)</span>
+        <span class="qtitle">Closure Properties of Regular Languages</span>
+        <div class="meta-row">
+          <span class="meta-chip">Marks: 3</span>
+          <span class="meta-chip">CO: CO1</span>
+          <span class="meta-chip">Bloom Level: BL2/3</span>
+          <span class="meta-chip">PO: PO1</span>
+          <span class="meta-chip">PI: 1.1.1</span>
+        </div>
+      </div>
+
+      <div class="question-text">
+        Discuss in brief about the closure properties of regular languages.
+      </div>
+
+      <p>A class of languages is said to be <b>closed</b> under an operation if applying that operation to languages within the class always produces a language that also belongs to the class. Regular languages possess remarkably robust closure properties.</p>
+
+      <div class="sec-heading">Master Table of Closure Operations</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Operation</th>
+              <th>Mathematical Notation</th>
+              <th>Formal Constructive Proof Mechanism</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Union</b></td>
+              <td>L₁ &cup; L₂</td>
+              <td>Product construction with $F = (F_1 \times Q_2) \cup (Q_1 \times F_2)$, or NFA with new start state $\varepsilon$-branching to both.</td>
+            </tr>
+            <tr>
+              <td><b>Intersection</b></td>
+              <td>L₁ &cap; L₂</td>
+              <td>Product DFA construction with states $Q_1 \times Q_2$ and accepting states $F = F_1 \times F_2$.</td>
+            </tr>
+            <tr>
+              <td><b>Complement</b></td>
+              <td>L̄ = &Sigma;* \ L</td>
+              <td>Invert accepting states of a complete DFA: $F' = Q \setminus F$. (Note: Requires a deterministic DFA, fails on NFA).</td>
+            </tr>
+            <tr>
+              <td><b>Set Difference</b></td>
+              <td>L₁ \ L₂ = L₁ &cap; L̄₂</td>
+              <td>Direct consequence of closure under intersection and complement ($L_1 \setminus L_2 = L_1 \cap L_2^c$).</td>
+            </tr>
+            <tr>
+              <td><b>Concatenation</b></td>
+              <td>L₁ &middot; L₂</td>
+              <td>NFA chaining: connect all accepting states of $NFA_1$ via $\varepsilon$-transitions to the start state of $NFA_2$.</td>
+            </tr>
+            <tr>
+              <td><b>Kleene Star</b></td>
+              <td>L*</td>
+              <td>Add a new start/accept state with $\varepsilon$-transition to old start, and $\varepsilon$-transitions from all old accept states back to old start.</td>
+            </tr>
+            <tr>
+              <td><b>Reversal</b></td>
+              <td>L<sup>R</sup> = {w<sup>R</sup> : w &isin; L}</td>
+              <td>Reverse the direction of every transition arc in an NFA, swap the roles of start state and accepting states.</td>
+            </tr>
+            <tr>
+              <td><b>Homomorphism</b></td>
+              <td>h(L) = {h(w) : w &isin; L}</td>
+              <td>Replace each transition label $a$ in the NFA with the string $h(a)$.</td>
+            </tr>
+            <tr>
+              <td><b>Inverse Homomorphism</b></td>
+              <td>h⁻¹(L) = {w : h(w) &isin; L}</td>
+              <td>DFA simulation: define new transition $\delta'(q, a) = \hat{\delta}(q, h(a))$.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sec-heading">Decision Properties (Companion Exam Note)</div>
+      <p>Closely coupled with closure properties are the <b>decision properties</b> of regular languages, all of which are decidable in finite time:</p>
+      <ul class="plain">
+        <li><b>Emptiness ($L = \emptyset$):</b> Decidable by testing if any accepting state is reachable from the start state using BFS/DFS.</li>
+        <li><b>Finiteness ($|L| < \infty$):</b> Decidable by checking for cycles in the state graph along paths from start to an accepting state.</li>
+        <li><b>Equivalence ($L_1 = L_2$):</b> Decidable by constructing the symmetric difference $(L_1 \cap \bar{L}_2) \cup (\bar{L}_1 \cap L_2)$ and testing for emptiness.</li>
+      </ul>
+
+      <div class="answer-box">
+        <span class="ans-label">Final Answer</span>
+        <p>Regular languages form a <b>Boolean algebra</b> (closed under &cup;, &cap;, complement, and set difference) that is additionally closed under concatenation, Kleene star, reversal, and homomorphisms. These guarantees enable complex automata and compilers to be assembled modularly.</p>
+      </div>
+    </div>
+
+    <!-- ---------- Q2(d) ---------- -->
+    <div class="qcard" id="card-q2d">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Q2 (d)</span>
+        <span class="qtitle">Which Languages Are NOT Recognizable by a Three-State DFA?</span>
+        <div class="meta-row">
+          <span class="meta-chip">Marks: 3</span>
+          <span class="meta-chip">CO: CO1</span>
+          <span class="meta-chip">Bloom Level: BL2/3</span>
+          <span class="meta-chip">PO: PO1</span>
+          <span class="meta-chip">PI: 1.1.1</span>
+        </div>
+      </div>
+
+      <div class="question-text">
+        Which of the following languages over the alphabet {0, 1} is/are <b>not</b> recognized by a deterministic finite state automaton (DFA) with <b>three states</b>? Give suitable justification.
+        <br>(a) Words which do not have "11" as a contiguous subword.
+        <br>(b) Binary representations of multiples of three.
+        <br>(c) Words that have "11" as a suffix.
+        <br>(d) Words that do not contain "101" as a contiguous subword.
+      </div>
+
+      <div class="flag-tag">⚑ Critical Theoretical Distinction</div>
+      <p style="margin-top:8px">All four languages are regular. The problem specifically asks: <b>which language cannot be recognized by a DFA having at most three states?</b> By the Myhill–Nerode theorem, if the minimal DFA requires $k > 3$ states, then no 3-state DFA can recognize it. We rigorously compute the exact minimal DFA size for all four options.</p>
+
+      <!-- Option (a) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Option (a): Words without contiguous subword "11" — Minimal DFA: 3 States</button>
+        <div class="subq-body">
+          <p>We need to track: (1) no 1 pending, (2) last symbol was a lone 1, and (3) trap dead state if "11" occurred.</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>State</th><th>Condition Tracked</th><th>0</th><th>1</th><th>Accepting?</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>q₀</b></td><td>No pending '1' (last symbol was 0 or &epsilon;)</td><td>q₀</td><td>q₁</td><td><b>YES</b></td></tr>
+                <tr><td><b>q₁</b></td><td>Last symbol was a single '1'</td><td>q₀</td><td>q_dead</td><td><b>YES</b></td></tr>
+                <tr><td><b>q_dead</b></td><td>Forbidden "11" detected! (Trap)</td><td>q_dead</td><td>q_dead</td><td>NO</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p><b>Distinguishability:</b> Suffix $z = 1$ separates $q_0$ from $q_1$ (since $\delta(q_0, 1) = q_1 \in F$, but $\delta(q_1, 1) = q_{dead} \notin F$). $q_{dead}$ is distinguishable from both as it is non-accepting and dead. Hence, <b>minimal state count = 3</b>.</p>
+          <p><b>Result:</b> <span style="color:var(--teal); font-weight:700;">YES, recognizable by a 3-state DFA.</span></p>
+        </div>
+      </div>
+
+      <!-- Option (b) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Option (b): Binary multiples of 3 — Minimal DFA: 3 States</button>
+        <div class="subq-body">
+          <p>When reading binary bits MSB-first, appending bit $b$ updates value $V' = 2V + b$, so remainder modulo 3 updates as $r' = (2r + b) \bmod 3$:</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>State</th><th>Remainder mod 3</th><th>On 0 (2r mod 3)</th><th>On 1 ((2r+1) mod 3)</th><th>Accepting?</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>q₀</b></td><td>r &equiv; 0</td><td>q₀</td><td>q₁</td><td><b>YES</b></td></tr>
+                <tr><td><b>q₁</b></td><td>r &equiv; 1</td><td>q₂</td><td>q₀</td><td>NO</td></tr>
+                <tr><td><b>q₂</b></td><td>r &equiv; 2</td><td>q₁</td><td>q₂</td><td>NO</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p><b>Distinguishability:</b> $z = 0$ sends $q_1 \to q_2$ (reject) but $q_2 \to q_1$ (reject); $z = 1$ sends $q_1 \to q_0$ (accept) but $q_2 \to q_2$ (reject). Thus $q_1 \not\equiv q_2$. Both are clearly distinct from $q_0 \in F$. Hence, <b>minimal state count = 3</b>.</p>
+          <p><b>Result:</b> <span style="color:var(--teal); font-weight:700;">YES, recognizable by a 3-state DFA.</span></p>
+        </div>
+      </div>
+
+      <!-- Option (c) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Option (c): Words having "11" as a suffix — Minimal DFA: 3 States</button>
+        <div class="subq-body">
+          <p>We need to track how many trailing 1's have just been seen:</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>State</th><th>Condition Tracked</th><th>0</th><th>1</th><th>Accepting?</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>q₀</b></td><td>Ends with 0 or &epsilon; (0 trailing 1's)</td><td>q₀</td><td>q₁</td><td>NO</td></tr>
+                <tr><td><b>q₁</b></td><td>Ends with a single 1 (1 trailing 1)</td><td>q₀</td><td>q₂</td><td>NO</td></tr>
+                <tr><td><b>q₂</b></td><td>Ends with 11 (2+ trailing 1's)</td><td>q₀</td><td>q₂</td><td><b>YES</b></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p><b>Distinguishability:</b> $z = 1$ distinguishes $q_0$ from $q_1$ (since $\delta(q_0, 1) = q_1 \notin F$, while $\delta(q_1, 1) = q_2 \in F$). $q_2$ is distinguishable from both as it is accepting. Hence, <b>minimal state count = 3</b>.</p>
+          <p><b>Result:</b> <span style="color:var(--teal); font-weight:700;">YES, recognizable by a 3-state DFA.</span></p>
+        </div>
+      </div>
+
+      <!-- Option (d) -->
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Option (d): Words NOT containing "101" — Minimal DFA: 4 States</button>
+        <div class="subq-body">
+          <p>To detect and avoid the contiguous substring "101", the automaton must differentiate four independent stages of progress:</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>State</th><th>Prefix Matched Toward "101"</th><th>On 0</th><th>On 1</th><th>Accepting?</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>q₀</b></td><td>No progress (&epsilon; or ends with 00)</td><td>q₀</td><td>q₁</td><td><b>YES</b></td></tr>
+                <tr><td><b>q₁</b></td><td>Matched "1" (active start)</td><td>q₂</td><td>q₁</td><td><b>YES</b></td></tr>
+                <tr><td><b>q₂</b></td><td>Matched "10" (one symbol away from 101!)</td><td>q₀</td><td>q_dead</td><td><b>YES</b></td></tr>
+                <tr><td><b>q_dead</b></td><td>Forbidden "101" matched! (Trap)</td><td>q_dead</td><td>q_dead</td><td>NO</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="sec-heading">Proof that all 4 states are Pairwise Distinguishable</div>
+          <ul class="plain">
+            <li><b>q₀ vs q₁:</b> Distinguishing suffix $z = "01"$.
+              <br>From $q_0$: $\delta(q_0, 01) = \delta(q_0, 1) = q_1 \in F$ (Accept).
+              <br>From $q_1$: $\delta(q_1, 01) = \delta(q_2, 1) = q_{dead} \notin F$ (Reject).
+              <br>Different outcomes $\implies q_0 \not\equiv q_1$.
+            </li>
+            <li><b>q₁ vs q₂:</b> Distinguishing suffix $z = "1"$.
+              <br>From $q_1$: $\delta(q_1, 1) = q_1 \in F$ (Accept).
+              <br>From $q_2$: $\delta(q_2, 1) = q_{dead} \notin F$ (Reject).
+              <br>Different outcomes $\implies q_1 \not\equiv q_2$.
+            </li>
+            <li><b>q₀ vs q₂:</b> Distinguishing suffix $z = "1"$.
+              <br>From $q_0$: $\delta(q_0, 1) = q_1 \in F$ (Accept).
+              <br>From $q_2$: $\delta(q_2, 1) = q_{dead} \notin F$ (Reject).
+              <br>Different outcomes $\implies q_0 \not\equiv q_2$.
+            </li>
+            <li><b>q_dead vs any other state:</b> Trivial with $z = \varepsilon$, because $q_{dead} \notin F$ while $q_0, q_1, q_2 \in F$.</li>
+          </ul>
+          <p>By the Myhill–Nerode theorem, because there exist <b>4 pairwise distinguishable states</b>, the minimal DFA requires <b>at least 4 states</b>. Therefore, <b>no 3-state DFA can possibly recognize this language</b>.</p>
+        </div>
+      </div>
+
+      <div class="answer-box">
+        <span class="ans-label">Final Answer</span>
+        <p><b>Language (d) &mdash; "Words that do not contain '101' as a contiguous subword" &mdash; is the ONLY language that CANNOT be recognized by a 3-state DFA.</b> Languages (a), (b), and (c) all have minimal DFAs with exactly 3 states, whereas language (d) strictly requires a 4-state DFA.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ================         Q3  PANEL         ================ -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="q3" role="tabpanel">
+    <h2 class="panel-title">Question 3 <span class="q-any">3 marks per part · Max marks 9 (Attempt any three — all four solved in exhaustive detail below)</span></h2>
+
+    <!-- ---------- Q3(a) ---------- -->
+    <div class="qcard" id="card-q3a">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Q3 (a)</span>
+        <span class="qtitle">DFA for Binary Integers Divisible by 5</span>
+        <div class="meta-row">
+          <span class="meta-chip">Marks: 3</span>
+          <span class="meta-chip">CO: CO2</span>
+          <span class="meta-chip">Bloom Level: BL3</span>
+          <span class="meta-chip">PO: PO1</span>
+          <span class="meta-chip">PI: 1.1.1</span>
+        </div>
+      </div>
+
+      <div class="question-text">
+        Obtain a DFA that accepts the set of all strings that, when interpreted as a binary integer, are divisible by 5. Examples of such strings: 0, 101, 1010.
+      </div>
+
+      <div class="sec-heading">Mathematical Formulation of Binary Modulo Arithmetic</div>
+      <p>Strings are processed left-to-right (Most Significant Bit first). Suppose the prefix read so far evaluates to integer value $V$. Reading a new incoming bit $b \in \{0, 1\}$ shifts the existing number left by one binary place and adds $b$:</p>
+      <div class="formula">
+        V_{\text{new}} = 2 \cdot V_{\text{old}} + b
+      </div>
+      <p>Taking modulo 5 on both sides:</p>
+      <div class="formula">
+        r_{\text{new}} = (2 \cdot r_{\text{old}} + b) \pmod 5
+      </div>
+      <p>Because the remainder modulo 5 can only assume values in $\{0, 1, 2, 3, 4\}$, the DFA requires exactly <b>5 states</b>: $Q = \{q_0, q_1, q_2, q_3, q_4\}$, where state $q_r$ corresponds to current remainder $r$.</p>
+
+      <div class="sec-heading">Complete Transition Table</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>State (Remainder)</th>
+              <th>On Bit 0: (2r + 0) mod 5</th>
+              <th>On Bit 1: (2r + 1) mod 5</th>
+              <th>Accepting?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight">
+              <td><b>q₀ (r = 0)</b></td>
+              <td>(2&times;0 + 0) mod 5 = <b>q₀</b></td>
+              <td>(2&times;0 + 1) mod 5 = <b>q₁</b></td>
+              <td><b>YES (Start &amp; Accept)</b></td>
+            </tr>
+            <tr>
+              <td><b>q₁ (r = 1)</b></td>
+              <td>(2&times;1 + 0) mod 5 = <b>q₂</b></td>
+              <td>(2&times;1 + 1) mod 5 = <b>q₃</b></td>
+              <td>NO</td>
+            </tr>
+            <tr>
+              <td><b>q₂ (r = 2)</b></td>
+              <td>(2&times;2 + 0) mod 5 = <b>q₄</b></td>
+              <td>(2&times;2 + 1) mod 5 = <b>q₀</b></td>
+              <td>NO</td>
+            </tr>
+            <tr>
+              <td><b>q₃ (r = 3)</b></td>
+              <td>(2&times;3 + 0) mod 5 = <b>q₁</b></td>
+              <td>(2&times;3 + 1) mod 5 = <b>q₂</b></td>
+              <td>NO</td>
+            </tr>
+            <tr>
+              <td><b>q₄ (r = 4)</b></td>
+              <td>(2&times;4 + 0) mod 5 = <b>q₃</b></td>
+              <td>(2&times;4 + 1) mod 5 = <b>q₄</b></td>
+              <td>NO</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Complete SVG State Machine for Mod 5 -->
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 620 280" width="580" height="260">
+          <defs>
+            <marker id="m5-arrow" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1A3A6B"/>
+            </marker>
+            <marker id="m5-acc" viewBox="0 0 10 10" refX="24" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1A5C5C"/>
+            </marker>
+          </defs>
+
+          <!-- Pentagon layout of States: center (310, 140), radius 105 -->
+          <!-- q0: top (310, 35) -->
+          <!-- q1: right-top (410, 105) -->
+          <!-- q2: right-bottom (370, 220) -->
+          <!-- q3: left-bottom (250, 220) -->
+          <!-- q4: left-top (210, 105) -->
+          <g font-family="Courier Prime" font-size="14" font-weight="bold" text-anchor="middle">
+            <!-- q0 (Double Circle) -->
+            <circle cx="310" cy="40" r="28" fill="#e2eeeb" stroke="#8B1A1A" stroke-width="2.5"/>
+            <circle cx="310" cy="40" r="22" fill="#e2eeeb" stroke="#8B1A1A" stroke-width="1.5"/>
+            <text x="310" y="45" fill="#8B1A1A">q0</text>
+
+            <!-- q1 -->
+            <circle cx="430" cy="115" r="24" fill="#e6ecf5" stroke="#1A3A6B" stroke-width="2"/>
+            <text x="430" y="120" fill="#1A3A6B">q1</text>
+
+            <!-- q2 -->
+            <circle cx="390" cy="230" r="24" fill="#e6ecf5" stroke="#1A3A6B" stroke-width="2"/>
+            <text x="390" y="235" fill="#1A3A6B">q2</text>
+
+            <!-- q3 -->
+            <circle cx="230" cy="230" r="24" fill="#e6ecf5" stroke="#1A3A6B" stroke-width="2"/>
+            <text x="230" y="235" fill="#1A3A6B">q3</text>
+
+            <!-- q4 -->
+            <circle cx="190" cy="115" r="24" fill="#e6ecf5" stroke="#1A3A6B" stroke-width="2"/>
+            <text x="190" y="120" fill="#1A3A6B">q4</text>
+          </g>
+
+          <!-- Start Arrow into q0 -->
+          <line x1="310" y1="-5" x2="310" y2="12" stroke="#8B1A1A" stroke-width="2" marker-end="url(#m5-acc)"/>
+          <text x="330" y="8" font-family="Lora" font-style="italic" font-size="11" fill="#8B1A1A">start</text>
+
+          <!-- Loop q0 on 0 -->
+          <path d="M 295 18 C 275 -12 345 -12 325 18" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#m5-arrow)"/>
+          <text x="310" y="-8" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">0</text>
+
+          <!-- q0 to q1 on 1 -->
+          <path d="M 335 48 Q 380 65 412 98" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#m5-arrow)"/>
+          <text x="382" y="70" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">1</text>
+
+          <!-- q1 to q2 on 0 -->
+          <path d="M 425 140 Q 420 185 402 208" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#m5-arrow)"/>
+          <text x="424" y="180" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">0</text>
+
+          <!-- q1 to q3 on 1 -->
+          <path d="M 408 125 Q 310 170 252 216" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#m5-arrow)"/>
+          <text x="340" y="162" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">1</text>
+
+          <!-- q2 to q0 on 1 -->
+          <path d="M 380 208 Q 360 120 326 64" fill="none" stroke="#1A5C5C" stroke-width="1.8" marker-end="url(#m5-acc)"/>
+          <text x="352" y="125" font-family="Courier Prime" font-size="12" fill="#1A5C5C" font-weight="bold">1</text>
+
+          <!-- q2 to q4 on 0 -->
+          <path d="M 368 235 Q 260 270 205 138" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#m5-arrow)"/>
+          <text x="270" y="270" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">0</text>
+
+          <!-- q3 to q1 on 0 -->
+          <path d="M 245 210 Q 320 130 408 118" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#m5-arrow)"/>
+          <text x="310" y="145" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">0</text>
+
+          <!-- q3 to q2 on 1 -->
+          <line x1="254" y1="230" x2="366" y2="230" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#m5-arrow)"/>
+          <text x="310" y="222" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">1</text>
+
+          <!-- q4 to q3 on 0 -->
+          <path d="M 198 138 Q 200 185 220 208" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#m5-arrow)"/>
+          <text x="195" y="180" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">0</text>
+
+          <!-- q4 to q4 loop on 1 -->
+          <path d="M 172 100 C 135 80 135 150 172 130" fill="none" stroke="#1A3A6B" stroke-width="1.8" marker-end="url(#m5-arrow)"/>
+          <text x="135" y="120" font-family="Courier Prime" font-size="12" fill="#8B1A1A" font-weight="bold">1</text>
+        </svg>
+        <p class="diagram-caption">Complete 5-state DFA for binary integers divisible by 5. All 10 state transitions are explicitly mapped.</p>
+      </div>
+
+      <div class="subq">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Comprehensive String Execution Traces</button>
+        <div class="subq-body">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>Input String</th><th>Decimal Value</th><th>Step-by-Step State Transition Sequence</th><th>Final State</th><th>Outcome</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>"0"</td><td>0</td><td>q₀ &mdash;0&rarr; <b>q₀</b></td><td>q₀</td><td><b>Accept</b> (0 is divisible by 5)</td></tr>
+                <tr><td>"101"</td><td>5</td><td>q₀ &mdash;1&rarr; q₁ &mdash;0&rarr; q₂ &mdash;1&rarr; <b>q₀</b></td><td>q₀</td><td><b>Accept</b> (5 &divide; 5 = 1, rem 0)</td></tr>
+                <tr><td>"1010"</td><td>10</td><td>q₀ &mdash;1&rarr; q₁ &mdash;0&rarr; q₂ &mdash;1&rarr; q₀ &mdash;0&rarr; <b>q₀</b></td><td>q₀</td><td><b>Accept</b> (10 &divide; 5 = 2, rem 0)</td></tr>
+                <tr><td>"1111"</td><td>15</td><td>q₀ &mdash;1&rarr; q₁ &mdash;1&rarr; q₃ &mdash;1&rarr; q₂ &mdash;1&rarr; <b>q₀</b></td><td>q₀</td><td><b>Accept</b> (15 &divide; 5 = 3, rem 0)</td></tr>
+                <tr><td>"11001"</td><td>25</td><td>q₀ &mdash;1&rarr; q₁ &mdash;1&rarr; q₃ &mdash;0&rarr; q₁ &mdash;0&rarr; q₂ &mdash;1&rarr; <b>q₀</b></td><td>q₀</td><td><b>Accept</b> (25 &divide; 5 = 5, rem 0)</td></tr>
+                <tr><td>"111"</td><td>7</td><td>q₀ &mdash;1&rarr; q₁ &mdash;1&rarr; q₃ &mdash;1&rarr; <b>q₂</b></td><td>q₂</td><td><b>Reject</b> (Remainder 2 &ne; 0)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="answer-box">
+        <span class="ans-label">Final Answer</span>
+        <p>The 5-state DFA has state set $Q = \{q_0, q_1, q_2, q_3, q_4\}$ corresponding to integers modulo 5, initial state $q_0$, sole accepting state $q_0$, and transition function $\delta(q_r, b) = q_{(2r+b)\bmod 5}$. It correctly recognizes all binary multiples of 5.</p>
+      </div>
+    </div>
+
+    <!-- ---------- Q3(b) ---------- -->
+    <div class="qcard" id="card-q3b">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Q3 (b)</span>
+        <span class="qtitle">Moore Machine vs Mealy Machine: Definitions, Conversion &amp; Sequence Detector</span>
+        <div class="meta-row">
+          <span class="meta-chip">Marks: 3</span>
+          <span class="meta-chip">CO: CO2</span>
+          <span class="meta-chip">Bloom Level: BL3</span>
+          <span class="meta-chip">PO: PO1</span>
+          <span class="meta-chip">PI: 1.1.1</span>
+        </div>
+      </div>
+
+      <div class="question-text">
+        Differentiate between Moore and Mealy machines by taking a suitable example.
+      </div>
+
+      <div class="sec-heading">Formal 6-Tuple Definitions</div>
+      <p>Both Moore and Mealy machines are finite automata with output capabilities, formally defined as 6-tuples:</p>
+      <div class="formula">
+        M = (Q, \Sigma, \Delta, \delta, \lambda, q_0)
+      </div>
+      <p>where $Q$ is a finite set of states, $\Sigma$ is the input alphabet, $\Delta$ is the output alphabet, $\delta: Q \times \Sigma \to Q$ is the state transition function, and $q_0$ is the initial state. The sole mathematical difference lies in the <b>output function $\lambda$</b>:</p>
+      <ul class="plain">
+        <li><b>Moore Machine:</b> Output is purely a function of the current state:
+          $$\lambda: Q \to \Delta$$
+        </li>
+        <li><b>Mealy Machine:</b> Output depends on both the current state and the current input symbol:
+          $$\lambda: Q \times \Sigma \to \Delta$$
+        </li>
+      </ul>
+
+      <div class="sec-heading">Comprehensive Contrast Table</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Feature / Metric</th>
+              <th>Moore Machine</th>
+              <th>Mealy Machine</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Output Depends On</b></td>
+              <td>Current state only: $\lambda(q)$</td>
+              <td>Current state AND current input: $\lambda(q, a)$</td>
+            </tr>
+            <tr>
+              <td><b>Output Placement</b></td>
+              <td>Placed inside the state node: $(q / z)$</td>
+              <td>Placed on the transition edge: $a / z$</td>
+            </tr>
+            <tr>
+              <td><b>Output Length</b></td>
+              <td>For input of length $n$, output length is <b>n + 1</b> (initial state emits output before reading input).</td>
+              <td>For input of length $n$, output length is <b>n</b>.</td>
+            </tr>
+            <tr>
+              <td><b>Hardware Response Time</b></td>
+              <td>One clock cycle delayed (must transition to and latch into the state).</td>
+              <td>Immediate; changes asynchronously when input changes.</td>
+            </tr>
+            <tr>
+              <td><b>State Complexity</b></td>
+              <td>Requires more states (needs distinct states for different output values).</td>
+              <td>More compact; requires fewer states.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sec-heading">Concrete Example: Sequence Detector for Substring "01"</div>
+      <p>Consider designing an automaton over $\Sigma = \{0, 1\}$ that produces output $1$ whenever the contiguous substring "01" is detected, and $0$ otherwise.</p>
+
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Mealy Machine Implementation (2 States)</button>
+        <div class="subq-body">
+          <p>State $q_0$: No 0 pending. State $q_1$: A single 0 has just been read.</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>Present State</th><th>Input 0: Next State / Output</th><th>Input 1: Next State / Output</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>q₀</b></td><td>q₁ / 0</td><td>q₀ / 0</td></tr>
+                <tr><td><b>q₁</b></td><td>q₁ / 0</td><td>q₀ / <b>1 (Target "01" detected!)</b></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p><b>Trace on input "0 1 0 1":</b></p>
+          <div class="formula">
+            State: &nbsp; q₀ &mdash;(0/0)&rarr; q₁ &mdash;(1/1)&rarr; q₀ &mdash;(0/0)&rarr; q₁ &mdash;(1/1)&rarr; q₀<br>
+            Output: 0 1 0 1 &nbsp; (Length = 4)
+          </div>
+        </div>
+      </div>
+
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Moore Machine Implementation (3 States)</button>
+        <div class="subq-body">
+          <p>Because output is tied to the state, we must introduce a third dedicated state $q_2$ solely to carry the output label 1:</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>Present State</th><th>State Output &lambda;(q)</th><th>Next State on Input 0</th><th>Next State on Input 1</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>q₀</b> (start / neutral)</td><td>0</td><td>q₁</td><td>q₀</td></tr>
+                <tr><td><b>q₁</b> (saw '0')</td><td>0</td><td>q₁</td><td>q₂</td></tr>
+                <tr><td><b>q₂</b> (saw '01' ✓)</td><td><b>1</b></td><td>q₁</td><td>q₀</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p><b>Trace on input "0 1 0 1":</b></p>
+          <div class="formula">
+            State: &nbsp; q₀(out:0) &mdash;0&rarr; q₁(out:0) &mdash;1&rarr; q₂(out:1) &mdash;0&rarr; q₁(out:0) &mdash;1&rarr; q₂(out:1)<br>
+            Output: 0 0 1 0 1 &nbsp; (Length = 5)
+          </div>
+        </div>
+      </div>
+
+      <div class="answer-box">
+        <span class="ans-label">Final Answer</span>
+        <p>In a <b>Moore machine</b>, output depends strictly on the state ($\lambda: Q \to \Delta$), producing $n+1$ outputs for $n$ inputs. In a <b>Mealy machine</b>, output depends on both state and input ($\lambda: Q \times \Sigma \to \Delta$), producing $n$ outputs. In our "01" sequence detector, the Mealy machine needs only <b>2 states</b>, while the Moore machine requires <b>3 states</b>.</p>
+      </div>
+    </div>
+
+    <!-- ---------- Q3(c) ---------- -->
+    <div class="qcard" id="card-q3c">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Q3 (c)</span>
+        <span class="qtitle">Pumping Lemma: Proving {wwᴿ} is Non-Regular</span>
+        <div class="meta-row">
+          <span class="meta-chip">Marks: 3</span>
+          <span class="meta-chip">CO: CO2</span>
+          <span class="meta-chip">Bloom Level: BL2/3</span>
+          <span class="meta-chip">PO: PO1</span>
+          <span class="meta-chip">PI: 1.1.1</span>
+        </div>
+      </div>
+
+      <div class="question-text">
+        Using the pumping lemma, show that L = {ww<sup>R</sup> : w &isin; (a+b)*} is not regular.
+      </div>
+
+      <div class="sec-heading">Formal Statement of the Pumping Lemma for Regular Languages</div>
+      <p>If $L$ is a regular language, then there exists a constant integer $p \ge 1$ (called the <b>pumping length</b>), dependent only on $L$, such that every string $s \in L$ with $|s| \ge p$ can be partitioned into three substrings $s = xyz$ satisfying three conditions:</p>
+      <ol class="steps">
+        <li>$|y| \ge 1$ &nbsp; (the pumped substring $y$ is non-empty)</li>
+        <li>$|xy| \le p$ &nbsp; (the loop $y$ occurs within the first $p$ symbols)</li>
+        <li>$\forall i \ge 0, \quad x y^i z \in L$ &nbsp; (the string remains in $L$ for all repetitions of $y$, including pumping down $i=0$)</li>
+      </ol>
+
+      <div class="sec-heading">Step-by-Step Proof by Contradiction</div>
+      <ol class="steps">
+        <li><b>Assumption:</b> Assume, for the sake of contradiction, that $L = \{ww^R : w \in (a+b)^*\}$ is regular.</li>
+        <li><b>Pumping Length:</b> Let $p$ be the pumping length guaranteed by the pumping lemma.</li>
+        <li><b>Choice of String s:</b> We choose a string $s \in L$ strategically such that its symmetry is locked across the boundary of length $p$.
+          <br>Let $w = a^p b$. Then $w^R = b a^p$.
+          <div class="formula">
+            s = w \cdot w^R = a^p b b a^p
+          </div>
+          Notice that:
+          <ul>
+            <li>$s$ has the form $u u^R$ with $u = a^p b$, so $s \in L$. ✓</li>
+            <li>$|s| = |a^p b b a^p| = 2p + 2 \ge p$. Thus the pumping lemma must apply to $s$. ✓</li>
+          </ul>
+        </li>
+        <li><b>Applying the Pumping Lemma Constraints:</b>
+          According to the lemma, $s = xyz$ with $|xy| \le p$ and $|y| \ge 1$.
+          <br>The first $p$ characters of $s$ consist entirely of the initial block of $a$'s ($a^p$).
+          <br>Because $|xy| \le p$, both $x$ and $y$ must consist solely of $a$'s, and $y$ cannot contain any $b$'s.
+          <br>Therefore, we can write:
+          <div class="formula">
+            x = a^j, \quad y = a^k, \quad z = a^{p - j - k} b b a^p
+          </div>
+          where $j \ge 0$, $k \ge 1$, and $j + k \le p$.
+        </li>
+        <li><b>Pumping Down (i = 0):</b>
+          The pumping lemma asserts that $x y^0 z = xz \in L$.
+          <br>Let us compute $xz$:
+          <div class="formula">
+            xz = a^j \cdot a^{p - j - k} b b a^p = a^{p - k} b b a^p
+          </div>
+        </li>
+        <li><b>Analyzing the Resulting String:</b>
+          Since $k \ge 1$, we have $p - k < p$.
+          <br>The string $xz$ has $(p-k)$ leading $a$'s before the central $bb$, but it has $p$ trailing $a$'s after the central $bb$.
+          <br>For any word to belong to $L = \{ww^R\}$, its first character must equal its last character, its second must equal its second-to-last, and in general, the number of $a$'s preceding the central $bb$ must equal the number of $a$'s following it.
+          <br>Here, $(p - k) \ne p$, so $xz$ cannot be partitioned into two identical halves reversed:
+          <div class="formula">
+            xz = a^{p-k} b b a^p \notin L
+          </div>
+        </li>
+        <li><b>Contradiction:</b> This directly contradicts the third condition of the Pumping Lemma ($xy^0 z \in L$).</li>
+      </ol>
+
+      <div class="margin-note">
+        <b>Crucial Pitfall to Avoid:</b> Why couldn't we choose $w = a^p$, giving $s = a^{2p}$?
+        Because $s = a^{2p}$ is pumpable! If $y = aa$ ($k=2$), pumping up or down produces $a^{2p \pm 2}$, which is an even number of $a$'s and remains in $L$. To successfully break the lemma, the chosen string must lock down the alphabet symbols with a fixed delimiter like $b$, preventing the loop from rebalancing both halves.
+      </div>
+
+      <div class="answer-box">
+        <span class="ans-label">Final Answer</span>
+        <p>Our assumption that $L$ is regular leads to an impossible contradiction ($a^{p-k}bba^p \in L$ with $k \ge 1$). Therefore, by the Pumping Lemma, <b>L = {wwᴿ : w &isin; (a+b)*} is NOT regular</b>. ∎</p>
+      </div>
+    </div>
+
+    <!-- ---------- Q3(d) ---------- -->
+    <div class="qcard" id="card-q3d">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Q3 (d)</span>
+        <span class="qtitle">Applications &amp; Theoretical Limitations of Finite Automata</span>
+        <div class="meta-row">
+          <span class="meta-chip">Marks: 3</span>
+          <span class="meta-chip">CO: CO2</span>
+          <span class="meta-chip">Bloom Level: BL2/3</span>
+          <span class="meta-chip">PO: PO1</span>
+          <span class="meta-chip">PI: 1.1.1</span>
+        </div>
+      </div>
+
+      <div class="question-text">
+        Discuss in brief about the applications and limitations of finite automata.
+      </div>
+
+      <div class="sec-heading">Engineering &amp; Computational Applications</div>
+      <ol class="steps">
+        <li><b>Compiler Lexical Analysis (Scanners):</b> Compilers (such as Lex, Flex, and GCC) utilize DFAs to scan input source code and partition characters into syntactic tokens (keywords, identifiers, numeric constants, operators). Because token patterns are regular, DFAs process source code in optimal $O(n)$ linear time.</li>
+        <li><b>Pattern Matching &amp; Regular Expression Engines:</b> Software search tools (such as <code>grep</code>, <code>sed</code>, and text editors) convert regular expressions into NFAs using Thompson's construction and simulate them as DFAs to detect text occurrences without backtracking.</li>
+        <li><b>Network Protocols &amp; Distributed Systems:</b> Communication standards (e.g., the TCP/IP state machine: LISTEN $\to$ SYN\_SENT $\to$ ESTABLISHED $\to$ FIN\_WAIT $\to$ CLOSED) are explicitly designed and verified as finite state machines to ensure no illegal state transitions or deadlocks occur.</li>
+        <li><b>Digital Sequential Circuit Design:</b> Hardware controllers in microprocessors (ALU controllers, cache coherence protocols like MESI, vending machines, traffic lights, and elevator controllers) are implemented as synchronous Moore or Mealy circuits using flip-flops and logic gates.</li>
+        <li><b>Bioinformatics:</b> Genetic search algorithms model DNA/RNA sequences (alphabets $\Sigma = \{A, C, G, T\}$) as finite automata to detect motif sites, gene promoter regions, and protein signatures.</li>
+      </ol>
+
+      <div class="sec-heading">Theoretical Limitations</div>
+      <div class="formula">
+        Finite Automata possess only O(1) finite memory &mdash; they cannot count without bound.
+      </div>
+      <ul class="plain">
+        <li><b>Inability to Perform Unbounded Counting:</b> A finite automaton with $k$ states can only remember information up to $k$ configurations. It cannot recognize languages requiring comparison of unbounded quantities, such as $L = \{a^n b^n : n \ge 0\}$.</li>
+        <li><b>Inability to Verify Arbitrary Nesting:</b> Finite automata cannot validate balanced parentheses or nested block syntax (e.g., <code>((...))</code> or HTML/XML tag matching). Such hierarchical structures require a stack data structure, found in <b>Pushdown Automata (Context-Free Languages)</b>.</li>
+        <li><b>Inability to Recognize Global Symmetries:</b> Automata cannot decide palindrome languages $L = \{w w^R\}$ or duplication languages $L = \{w w\}$ because the length of $w$ is unbounded and cannot be stored in fixed states.</li>
+      </ul>
+
+      <div class="sec-heading">Position within the Chomsky Hierarchy</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Chomsky Level</th>
+              <th>Language Class</th>
+              <th>Recognizing Automaton</th>
+              <th>Auxiliary Memory Available</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight">
+              <td><b>Type 3</b></td>
+              <td><b>Regular Languages</b></td>
+              <td><b>Finite Automata (DFA / NFA)</b></td>
+              <td><b>None (Only fixed state register)</b></td>
+            </tr>
+            <tr>
+              <td>Type 2</td>
+              <td>Context-Free</td>
+              <td>Pushdown Automaton (PDA)</td>
+              <td>Single unbounded LIFO Stack</td>
+            </tr>
+            <tr>
+              <td>Type 1</td>
+              <td>Context-Sensitive</td>
+              <td>Linear Bounded Automaton (LBA)</td>
+              <td>Tape bounded by input length</td>
+            </tr>
+            <tr>
+              <td>Type 0</td>
+              <td>Recursively Enumerable</td>
+              <td>Turing Machine (TM)</td>
+              <td>Unbounded bidirectional read/write tape</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="answer-box">
+        <span class="ans-label">Final Answer</span>
+        <p>Finite automata are the ideal mathematical model when decision logic requires only <b>bounded, fixed memory</b> (compilers, protocols, regex engines). Once a computational problem requires unbounded counting, nested hierarchical matching, or arbitrary scratchpad manipulation, more powerful models (Pushdown Automata or Turing Machines) are fundamentally required.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ================         REVISION PANEL         =========== -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="revision" role="tabpanel">
+    <h2 class="panel-title">§ Master Revision &amp; Traps Sheet <span class="q-any">All Regular Expressions, Derived Formulas &amp; Examiner Traps</span></h2>
+
+    <div class="qcard">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§</span>
+        <span class="qtitle">Master Catalog of All Regular Expressions Derived on This Paper</span>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>Question Part</th><th>Target Language Description</th><th>Exact Regular Expression</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><b>Q1 (a) (iv)</b></td><td>Non-trivial palindromic prefix language</td><td><code>(aa + bb + ab⁺a + ba⁺b)(a + b)*</code></td></tr>
+            <tr><td><b>Q2 (a) (i)</b></td><td>Even number of a's followed by even number of b's</td><td><code>(aa)*(bb)*</code></td></tr>
+            <tr><td><b>Q2 (a) (ii)</b></td><td>At most three a's anywhere in string</td><td><code>b* + b*ab* + b*ab*ab* + b*ab*ab*ab*</code></td></tr>
+            <tr><td><b>Q2 (a) (iii)</b></td><td>Never contains substring "ba"</td><td><code>a*b*</code></td></tr>
+            <tr><td><b>Q2 (b)</b></td><td>Binary strings ending in 1 via Arden's Theorem</td><td><code>(0 + 11*0)*11* &equiv; (0 + 1⁺0)*1⁺</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sec-heading">The Two Crucial Traps to Watch For in Exam Scoring</div>
+      <div class="margin-note">
+        <b>Trap 1 (Q1 a iii):</b> When asked <i>"Suppose $ax \notin L$, what can you say about $x$?"</i>, do NOT write the general complement $\{\varepsilon, a, b\} \cup ab^+ \cup ba^+$. The initial letter $a$ is already supplied, which strictly constrains $x \in b^*$ (meaning $x$ contains zero occurrences of 'a').
+      </div>
+
+      <div class="margin-note">
+        <b>Trap 2 (Q2 d):</b> The question specifies a DFA with <b>three states</b>. All four candidate languages are regular, but option (d) ("no 101 substring") requires a minimal DFA with <b>4 states</b> (progress $\varepsilon, 1, 10,$ and trap $101$). It is the only option that cannot be recognized by a 3-state DFA.
+      </div>
+
+      <div class="sec-heading">Recommended Exam Study Priority</div>
+      <ol class="priority-list">
+        <li><b>Myhill–Nerode Theorem:</b> How to define classes, find distinguishing extensions $z$, and build minimal DFAs.</li>
+        <li><b>Pumping Lemma Contradiction Proofs:</b> Selecting the string $s$, bounding $|xy| \le p$, locating $y$, and pumping down ($i=0$) or up ($i=2$).</li>
+        <li><b>Arden's Theorem:</b> Setting up path equations from state diagrams, applying $X = QP^*$, and eliminating state variables.</li>
+        <li><b>Closure &amp; Decision Properties:</b> Cartesian product construction, complementing DFAs, and testing emptiness/finiteness.</li>
+        <li><b>Moore vs Mealy Conversion:</b> Comparing output delays, state counts, and transformation procedures.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    — End of Examination Manuscript · BCS 213 Theory of Computation —
+  </footer>
+
+</div>
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+  // Tab Switching
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      tabPanels.forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      const targetPanel = document.getElementById(btn.getAttribute('data-tab'));
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+      window.scrollTo({
+        top: document.querySelector('.folder-tabs').offsetTop - 12,
+        behavior: 'smooth'
+      });
+    });
+  });
+
+  // Collapsible Sub-questions Toggle
+  document.querySelectorAll('.subq-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const parent = btn.parentElement;
+      parent.classList.toggle('open');
+    });
+  });
+
+  // Expand All / Collapse All Controls
+  const expandAllBtn = document.getElementById('expandAllBtn');
+  const collapseAllBtn = document.getElementById('collapseAllBtn');
+
+  if (expandAllBtn) {
+    expandAllBtn.addEventListener('click', () => {
+      document.querySelectorAll('.subq').forEach(subq => subq.classList.add('open'));
+    });
+  }
+
+  if (collapseAllBtn) {
+    collapseAllBtn.addEventListener('click', () => {
+      document.querySelectorAll('.subq').forEach(subq => subq.classList.remove('open'));
+    });
+  }
+
+  // Instant Search / Filter across sections
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase().trim();
+      if (!term) {
+        document.querySelectorAll('.qcard').forEach(card => card.style.display = '');
+        return;
+      }
+      document.querySelectorAll('.qcard').forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (text.includes(term)) {
+          card.style.display = '';
+          // Open subquestions inside matched card
+          card.querySelectorAll('.subq').forEach(sub => sub.classList.add('open'));
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  }
+</script>
+
+</body>
+</html>
