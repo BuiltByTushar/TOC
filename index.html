@@ -10,8 +10,192 @@
 
 <!-- KaTeX for High-Quality Mathematical Typography -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous" onload="renderAllMath()"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous">
+  // ==================== VIDEO PROGRESS TRACKER ====================
+  const STORAGE_KEY = 'toc_completed_videos';
+
+  function getCompletedVideos() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveCompletedVideos(completed) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(completed));
+    } catch (e) {}
+  }
+
+  function updateProgressUI() {
+    const completed = getCompletedVideos();
+    const completedSet = new Set(completed.map(Number));
+    const totalVideos = 62;
+    const count = completedSet.size;
+    const pct = Math.round((count / totalVideos) * 100);
+
+    const countEl = document.getElementById('progressCount');
+    const pctEl = document.getElementById('progressPct');
+    const fillEl = document.getElementById('progressBarFill');
+    if (countEl) countEl.textContent = count;
+    if (pctEl) pctEl.textContent = pct + '%';
+    if (fillEl) fillEl.style.width = pct + '%';
+
+    document.querySelectorAll('.video-check').forEach(input => {
+      const vid = Number(input.getAttribute('data-vid'));
+      const isDone = completedSet.has(vid);
+      input.checked = isDone;
+
+      const label = input.closest('.video-check-label');
+      if (label) {
+        label.classList.toggle('is-checked', isDone);
+      }
+
+      const rowItem = input.closest('.video-row-item');
+      if (rowItem) {
+        rowItem.classList.toggle('is-completed', isDone);
+      }
+
+      const card = input.closest('.video-card');
+      if (card) {
+        const allCardInputs = card.querySelectorAll('.video-check');
+        const allDone = allCardInputs.length > 0 && Array.from(allCardInputs).every(inp => completedSet.has(Number(inp.getAttribute('data-vid'))));
+        card.classList.toggle('is-completed', allDone);
+      }
+    });
+  }
+
+  function toggleVideoCompletion(vid, shouldComplete) {
+    let completed = getCompletedVideos().map(Number);
+    if (shouldComplete) {
+      if (!completed.includes(vid)) completed.push(vid);
+    } else {
+      completed = completed.filter(id => id !== vid);
+    }
+    saveCompletedVideos(completed);
+    updateProgressUI();
+  }
+
+  // Setup video checkbox listeners
+  function initVideoCheckboxes() {
+    updateProgressUI();
+
+    document.querySelectorAll('.video-check').forEach(input => {
+      input.addEventListener('change', (e) => {
+        const vid = Number(e.target.getAttribute('data-vid'));
+        toggleVideoCompletion(vid, e.target.checked);
+      });
+    });
+
+    const resetBtn = document.getElementById('btnResetProgress');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        if (confirm('Reset all watched video lecture checkboxes to 0?')) {
+          saveCompletedVideos([]);
+          updateProgressUI();
+        }
+      });
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', initVideoCheckboxes);
+
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous" onload="renderAllMath()">
+  // ==================== VIDEO PROGRESS TRACKER ====================
+  const STORAGE_KEY = 'toc_completed_videos';
+
+  function getCompletedVideos() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveCompletedVideos(completed) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(completed));
+    } catch (e) {}
+  }
+
+  function updateProgressUI() {
+    const completed = getCompletedVideos();
+    const completedSet = new Set(completed.map(Number));
+    const totalVideos = 62;
+    const count = completedSet.size;
+    const pct = Math.round((count / totalVideos) * 100);
+
+    const countEl = document.getElementById('progressCount');
+    const pctEl = document.getElementById('progressPct');
+    const fillEl = document.getElementById('progressBarFill');
+    if (countEl) countEl.textContent = count;
+    if (pctEl) pctEl.textContent = pct + '%';
+    if (fillEl) fillEl.style.width = pct + '%';
+
+    document.querySelectorAll('.video-check').forEach(input => {
+      const vid = Number(input.getAttribute('data-vid'));
+      const isDone = completedSet.has(vid);
+      input.checked = isDone;
+
+      const label = input.closest('.video-check-label');
+      if (label) {
+        label.classList.toggle('is-checked', isDone);
+      }
+
+      const rowItem = input.closest('.video-row-item');
+      if (rowItem) {
+        rowItem.classList.toggle('is-completed', isDone);
+      }
+
+      const card = input.closest('.video-card');
+      if (card) {
+        const allCardInputs = card.querySelectorAll('.video-check');
+        const allDone = allCardInputs.length > 0 && Array.from(allCardInputs).every(inp => completedSet.has(Number(inp.getAttribute('data-vid'))));
+        card.classList.toggle('is-completed', allDone);
+      }
+    });
+  }
+
+  function toggleVideoCompletion(vid, shouldComplete) {
+    let completed = getCompletedVideos().map(Number);
+    if (shouldComplete) {
+      if (!completed.includes(vid)) completed.push(vid);
+    } else {
+      completed = completed.filter(id => id !== vid);
+    }
+    saveCompletedVideos(completed);
+    updateProgressUI();
+  }
+
+  // Setup video checkbox listeners
+  function initVideoCheckboxes() {
+    updateProgressUI();
+
+    document.querySelectorAll('.video-check').forEach(input => {
+      input.addEventListener('change', (e) => {
+        const vid = Number(e.target.getAttribute('data-vid'));
+        toggleVideoCompletion(vid, e.target.checked);
+      });
+    });
+
+    const resetBtn = document.getElementById('btnResetProgress');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        if (confirm('Reset all watched video lecture checkboxes to 0?')) {
+          saveCompletedVideos([]);
+          updateProgressUI();
+        }
+      });
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', initVideoCheckboxes);
+
+</script>
 
 <style>
   :root {
@@ -216,15 +400,16 @@
 
   /* Search & Global Controls */
   .manuscript-toolbar {
+    padding: 14px 20px 14px 76px;
+    background: rgba(236, 223, 184, 0.45);
+    border-bottom: 1px solid var(--paper-edge);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
     position: relative;
     z-index: 2;
-    margin: 18px 44px 0 78px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding-bottom: 6px;
   }
   .search-box-wrap {
     display: flex;
@@ -268,16 +453,17 @@
 
   /* Folder-Tab Navigation */
   .folder-tabs {
-    position: relative;
-    z-index: 2;
     display: flex;
-    gap: 6px;
-    padding: 24px 44px 0 78px;
     flex-wrap: nowrap;
     overflow-x: auto;
+    padding: 16px 20px 0 76px;
+    background: rgba(220, 203, 156, 0.35);
+    border-bottom: 2px solid var(--sepia);
+    gap: 6px;
+    position: relative;
+    z-index: 2;
     scrollbar-width: thin;
     -webkit-overflow-scrolling: touch;
-    border-bottom: 2px solid var(--sepia);
   }
   .folder-tabs::-webkit-scrollbar {
     height: 5px;
@@ -289,34 +475,50 @@
   .tab-btn {
     white-space: nowrap;
     flex-shrink: 0;
-    font-family: 'IM Fell English', Georgia, serif;
-    font-size: 1.15rem;
-    background: var(--parchment-deep);
-    border: 2px solid var(--sepia);
+    background: rgba(236, 223, 184, 0.75);
+    border: 1px solid var(--paper-edge);
     border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    padding: 9px 15px 10px;
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 1.02rem;
     color: var(--sepia-soft);
-    padding: 10px 24px 12px;
     cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     position: relative;
     top: 2px;
-    clip-path: polygon(7% 0%, 93% 0%, 100% 100%, 0% 100%);
-    transition: top 0.15s ease, background 0.15s ease, color 0.15s ease;
   }
-  .tab-btn:hover { color: var(--crimson); }
+  .tab-btn:hover {
+    background: rgba(245, 237, 216, 0.9);
+    color: var(--sepia);
+  }
   .tab-btn.active {
     background: var(--parchment);
     color: var(--crimson);
-    top: 0;
-    z-index: 3;
-    border-bottom: 2px solid var(--parchment);
     font-weight: 600;
+    border-color: var(--sepia);
+    border-bottom: 2px solid var(--parchment);
+    box-shadow: 0 -3px 8px rgba(74, 55, 40, 0.12);
+    z-index: 3;
+    top: 2px;
   }
-  .tab-btn .tabnum {
-    color: var(--crimson);
+  .tabnum {
     font-family: 'Courier Prime', monospace;
-    font-size: 0.95rem;
-    margin-right: 8px;
+    font-size: 0.76rem;
     font-weight: 700;
+    background: var(--teal-soft);
+    color: var(--teal);
+    border: 1px solid rgba(26, 92, 92, 0.3);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .tab-btn.active .tabnum {
+    background: var(--crimson-bg);
+    color: var(--crimson);
+    border-color: rgba(139, 26, 26, 0.4);
   }
 
   /* Panels */
@@ -346,17 +548,17 @@
 
   /* Question Card with Red Margin Stripe & Hole Punches */
   .qcard {
-    position: relative;
-    background: rgba(255, 255, 255, 0.45);
-    border: 1.5px solid rgba(74, 55, 40, 0.38);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--paper-edge);
     border-radius: 4px;
-    margin: 32px 0;
-    padding: 24px 28px 24px 64px;
-    box-shadow: 2px 4px 14px rgba(74, 55, 40, 0.15);
+    padding: 24px 28px 24px 44px;
+    margin: 28px 0;
+    position: relative;
+    box-shadow: 2px 3px 9px rgba(74, 55, 40, 0.08);
     transition: box-shadow 0.2s ease;
   }
   .qcard:hover {
-    box-shadow: 2px 6px 18px rgba(74, 55, 40, 0.22);
+    box-shadow: 2px 6px 16px rgba(74, 55, 40, 0.14);
   }
   /* Card Red Margin Stripe */
   .qcard::before {
@@ -466,26 +668,24 @@
   /* Section Headings with § prefix */
   .sec-heading {
     font-family: 'IM Fell English', Georgia, serif;
-    color: var(--sepia);
     font-size: 1.25rem;
-    margin: 22px 0 10px;
+    color: var(--sepia);
+    margin: 24px 0 10px;
     padding-bottom: 4px;
     border-bottom: 1px solid var(--paper-edge);
   }
   .sec-heading::before {
     content: "§ ";
     color: var(--crimson);
-    font-weight: 700;
   }
 
-  /* Collapsible Sub-questions */
+  /* Collapsible Sections */
   .subq {
     margin: 16px 0;
-    border: 1.5px solid rgba(26, 92, 92, 0.35);
-    border-radius: 4px;
+    border: 1px solid rgba(26, 92, 92, 0.35);
+    border-radius: 3px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.55);
-    box-shadow: 1px 2px 6px rgba(0,0,0,0.04);
+    background: rgba(255, 255, 255, 0.4);
   }
   .subq-toggle {
     width: 100%;
@@ -493,27 +693,24 @@
     background: var(--teal-soft);
     border: none;
     border-bottom: 1px solid rgba(26, 92, 92, 0.25);
-    padding: 12px 18px;
+    padding: 11px 18px;
     font-family: 'Lora', Georgia, serif;
     font-weight: 600;
-    font-size: 1.02rem;
+    font-size: 1.01rem;
     color: var(--teal);
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 12px;
-    transition: background 0.15s ease, color 0.15s ease;
+    gap: 10px;
+    transition: background 0.2s ease;
   }
   .subq-toggle:hover {
-    background: #d4e8e2;
-    color: #0e3d3d;
+    background: #d6ebe5;
   }
   .subq-arrow {
     display: inline-block;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.2s ease;
     font-size: 0.85rem;
-    color: var(--crimson);
-    font-family: monospace;
   }
   .subq.open .subq-arrow {
     transform: rotate(90deg);
@@ -521,13 +718,13 @@
   .subq-body {
     display: none;
     padding: 18px 22px 22px;
-    animation: subqFadeIn 0.25s ease;
+    animation: fadeIn 0.25s ease;
   }
   .subq.open .subq-body {
     display: block;
   }
-  @keyframes subqFadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
@@ -892,38 +1089,154 @@
     font-family: 'Courier Prime', monospace;
     color: var(--sepia-soft);
   }
+
+  /* Video Checkboxes & Progress Tracker */
+  .video-row-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
   .video-check-label {
     display: inline-flex;
     align-items: center;
+    gap: 6px;
     cursor: pointer;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--sepia);
     user-select: none;
-    padding: 3px;
-    flex-shrink: 0;
+    padding: 5px 8px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid var(--paper-edge);
+    transition: all 0.15s ease;
+    white-space: nowrap;
   }
-  .video-checkbox {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    accent-color: var(--teal);
-    border-radius: 4px;
+  .video-check-label:hover {
+    background: #fff;
+    border-color: var(--sepia);
+  }
+  .video-check-label input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
     margin: 0;
-    transition: transform 0.15s ease;
-    vertical-align: middle;
+    pointer-events: none;
   }
-  .video-checkbox:hover {
-    transform: scale(1.15);
-  }
-  .video-row-item.watched {
-    background: rgba(26, 92, 92, 0.08);
-  }
-  .video-row-item.watched .video-row-title {
-    color: var(--teal);
-  }
-  .video-btn-wrap {
+  .custom-checkbox {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--sepia-soft);
+    border-radius: 3px;
+    background: #fff;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    transition: all 0.15s ease;
     flex-shrink: 0;
+  }
+  .video-check-label input[type="checkbox"]:checked + .custom-checkbox {
+    background: var(--teal);
+    border-color: var(--teal);
+  }
+  .video-check-label input[type="checkbox"]:checked + .custom-checkbox::after {
+    content: "✓";
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+  .video-check-label.is-checked {
+    background: var(--teal-soft);
+    border-color: rgba(26, 92, 92, 0.45);
+    color: var(--teal);
+  }
+  .video-row-item.is-completed {
+    background: rgba(226, 238, 235, 0.6);
+    border-left: 3px solid var(--teal);
+  }
+  .video-card.is-completed {
+    border-left: 5px solid #2d8a4e !important;
+    background: rgba(240, 248, 244, 0.85);
+  }
+  .video-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .video-card-actions-dual {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .video-action-cell {
+    flex: 1 1 120px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  /* Progress Tracker Card */
+  .progress-card {
+    background: rgba(255, 255, 255, 0.75);
+    border: 1.5px solid var(--paper-edge);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    box-shadow: 0 2px 6px rgba(74, 55, 40, 0.08);
+  }
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .progress-title {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 1.18rem;
+    color: var(--sepia);
+  }
+  .progress-title b {
+    color: var(--teal);
+  }
+  .progress-bar-wrap {
+    width: 100%;
+    height: 12px;
+    background: var(--parchment-deep);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--paper-edge);
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), #2d8a4e);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 6px;
+  }
+  .btn-reset-progress {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    background: transparent;
+    border: 1px dashed var(--sepia-soft);
+    color: var(--sepia-soft);
+    padding: 3px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-reset-progress:hover {
+    color: var(--crimson);
+    border-color: var(--crimson);
+    background: rgba(139, 26, 26, 0.05);
   }
 
   /* Responsive Design */
@@ -2951,6 +3264,19 @@
   <div class="tab-panel" id="videos" role="tabpanel">
     <h2 class="panel-title">Curated Video Lectures &amp; Exam Study Roadmap <span class="q-any">Mapped directly to BCS 213 Syllabus (Unit-I &amp; Unit-II) &amp; Minor Test PYQ</span></h2>
 
+    <!-- Video Lecture Completion Tracker -->
+    <div class="progress-card">
+      <div class="progress-header">
+        <div class="progress-title">
+          🎓 Study Progress: <b id="progressCount">0</b> of 62 lectures completed (<b id="progressPct">0%</b>)
+        </div>
+        <button class="btn-reset-progress" id="btnResetProgress" title="Clear all watched checkboxes">↺ Reset Progress</button>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
+      </div>
+    </div>
+
     <div class="answer-box">
       <span class="ans-label">Curated Video Analysis Briefing</span>
       <p>
@@ -3005,9 +3331,13 @@
               <b>Key Focus:</b> The uniqueness condition $\varepsilon \notin P$ for $X = Q + XP \implies X = QP^*$. Explains why $\varepsilon \in P$ yields infinitely many solutions.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=Idl_0mPzZjE" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 48</a>
-            <label class="video-check-label" title="Mark Video 48 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v48" aria-label="Mark Video 48 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=Idl_0mPzZjE" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 48</a>
+            <label class="video-check-label" title="Mark Video 48 as completed">
+              <input type="checkbox" class="video-check" data-vid="48">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3024,9 +3354,13 @@
               <b>Key Focus:</b> Step-by-step construction of linear state equations from DFA state transition graphs and applying Arden's theorem by elimination.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=SmT1DXLl3f4" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 52</a>
-            <label class="video-check-label" title="Mark Video 52 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v52" aria-label="Mark Video 52 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=SmT1DXLl3f4" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 52</a>
+            <label class="video-check-label" title="Mark Video 52 as completed">
+              <input type="checkbox" class="video-check" data-vid="52">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3043,9 +3377,13 @@
               <b>Key Focus:</b> Handling DFAs where more than one state is accepting by expressing total regular expression as $R = R_{f_1} + R_{f_2} + \dots + R_{f_k}$.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=fRVljh8y7Qw" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 53</a>
-            <label class="video-check-label" title="Mark Video 53 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v53" aria-label="Mark Video 53 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=fRVljh8y7Qw" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 53</a>
+            <label class="video-check-label" title="Mark Video 53 as completed">
+              <input type="checkbox" class="video-check" data-vid="53">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3062,9 +3400,13 @@
               <b>Key Focus:</b> Right invariance relation $\equiv_L$, equivalence classes of $\Sigma^*$, finite index property, and constructing the minimal DFA state table.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=UiXkJUTkp44" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 25</a>
-            <label class="video-check-label" title="Mark Video 25 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v25" aria-label="Mark Video 25 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=UiXkJUTkp44" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 25</a>
+            <label class="video-check-label" title="Mark Video 25 as completed">
+              <input type="checkbox" class="video-check" data-vid="25">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3081,9 +3423,13 @@
               <b>Key Focus:</b> Full tabular execution of distinguishing pairs, cross-marking incompatible states, and merging equivalent states into the minimal DFA.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=Dx2RJ2DXRYs" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 26</a>
-            <label class="video-check-label" title="Mark Video 26 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v26" aria-label="Mark Video 26 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=Dx2RJ2DXRYs" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 26</a>
+            <label class="video-check-label" title="Mark Video 26 as completed">
+              <input type="checkbox" class="video-check" data-vid="26">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3100,9 +3446,13 @@
               <b>Key Focus:</b> The Pigeonhole Principle foundation, formal quantifier structure ($\exists p \ge 1, \forall s \in L, |s| \ge p \dots$), and memory limitations of finite automata.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=dikEDuepOtI" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 60</a>
-            <label class="video-check-label" title="Mark Video 60 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v60" aria-label="Mark Video 60 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=dikEDuepOtI" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 60</a>
+            <label class="video-check-label" title="Mark Video 60 as completed">
+              <input type="checkbox" class="video-check" data-vid="60">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3119,9 +3469,13 @@
               <b>Key Focus:</b> Step-by-step adversary strategy on counting languages ($a^n b^n$), string choice $s$, bounding $|xy| \le p$, and pumping up ($i=2$).
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=Ty9tpikilAo" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 61</a>
-            <label class="video-check-label" title="Mark Video 61 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v61" aria-label="Mark Video 61 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=Ty9tpikilAo" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 61</a>
+            <label class="video-check-label" title="Mark Video 61 as completed">
+              <input type="checkbox" class="video-check" data-vid="61">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3138,9 +3492,13 @@
               <b>Key Focus:</b> Direct match to Q3(c)! Proving reflection / palindromic strings are non-regular by pumping substrings entirely inside the first prefix block.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=kZzH8E-s-9o" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 62</a>
-            <label class="video-check-label" title="Mark Video 62 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v62" aria-label="Mark Video 62 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=kZzH8E-s-9o" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 62</a>
+            <label class="video-check-label" title="Mark Video 62 as completed">
+              <input type="checkbox" class="video-check" data-vid="62">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3157,9 +3515,13 @@
               <b>Key Focus:</b> Formal 6-tuple $(Q, \Sigma, \Delta, \delta, \lambda, q_0)$ definitions, output alphabet $\Delta$, and fundamental distinctions between state and edge outputs.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=EzMWYmRkHFQ" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 27</a>
-            <label class="video-check-label" title="Mark Video 27 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v27" aria-label="Mark Video 27 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=EzMWYmRkHFQ" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 27</a>
+            <label class="video-check-label" title="Mark Video 27 as completed">
+              <input type="checkbox" class="video-check" data-vid="27">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3176,9 +3538,13 @@
               <b>Key Focus:</b> Transition-associated outputs $\lambda: Q \times \Sigma \to \Delta$, strict length preservation ($|y| = |x|$), and synchronous reaction to inputs.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=LioitkXDfmA" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 28</a>
-            <label class="video-check-label" title="Mark Video 28 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v28" aria-label="Mark Video 28 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=LioitkXDfmA" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 28</a>
+            <label class="video-check-label" title="Mark Video 28 as completed">
+              <input type="checkbox" class="video-check" data-vid="28">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3195,9 +3561,13 @@
               <b>Key Focus:</b> State-associated outputs $\lambda: Q \to \Delta$, initial output on empty string $\varepsilon$, and output length $|y| = |x| + 1$ (1-clock cycle delay).
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=MFnRF07SoFo" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 31</a>
-            <label class="video-check-label" title="Mark Video 31 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v31" aria-label="Mark Video 31 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=MFnRF07SoFo" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 31</a>
+            <label class="video-check-label" title="Mark Video 31 as completed">
+              <input type="checkbox" class="video-check" data-vid="31">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3214,9 +3584,13 @@
               <b>Key Focus:</b> Pushing state output $\lambda_{Moore}(q)$ onto all incoming transition edges $(\cdot, a) \to q$. Proves state count preservation: $|Q_{Mealy}| = |Q_{Moore}|$.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=HEVWx4irOx4" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 34</a>
-            <label class="video-check-label" title="Mark Video 34 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v34" aria-label="Mark Video 34 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=HEVWx4irOx4" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 34</a>
+            <label class="video-check-label" title="Mark Video 34 as completed">
+              <input type="checkbox" class="video-check" data-vid="34">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3233,9 +3607,13 @@
               <b>Key Focus:</b> Detecting conflicting incoming edge outputs to a single state and splitting state $q$ into sub-states $(q, y_1), (q, y_2)$ up to $|Q| \cdot |\Delta|$.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=-etILQcfgTg" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 37</a>
-            <label class="video-check-label" title="Mark Video 37 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v37" aria-label="Mark Video 37 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=-etILQcfgTg" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 37</a>
+            <label class="video-check-label" title="Mark Video 37 as completed">
+              <input type="checkbox" class="video-check" data-vid="37">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3252,9 +3630,13 @@
               <b>Key Focus:</b> All 12 standard algebraic identities: idempotence ($R+R=R$), identity ($\varepsilon R = R$), annihilation ($\phi R = \phi$), and Kleene star closures.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=yp4pYgXfYD8" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 47</a>
-            <label class="video-check-label" title="Mark Video 47 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v47" aria-label="Mark Video 47 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=yp4pYgXfYD8" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 47</a>
+            <label class="video-check-label" title="Mark Video 47 as completed">
+              <input type="checkbox" class="video-check" data-vid="47">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3271,9 +3653,13 @@
               <b>Key Focus:</b> Equivalence simplification techniques using algebraic substitutions (such as proving $(a+b)^* = (a^*b^*)^*$ and factoring expressions).
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=TkqcPh0BFUw" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Watch Video 49</a>
-            <label class="video-check-label" title="Mark Video 49 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v49" aria-label="Mark Video 49 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=TkqcPh0BFUw" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 49</a>
+            <label class="video-check-label" title="Mark Video 49 as completed">
+              <input type="checkbox" class="video-check" data-vid="49">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3290,14 +3676,20 @@
               <b>Key Focus:</b> Transition law for streaming binary digits $(2r + b) \pmod 5$ and building prefix/suffix tracking states for palindromes.
             </div>
           </div>
-          <div style="display:flex; gap:8px;">
-            <div style="display:inline-flex; align-items:center; gap:6px; flex:1;">
+          <div class="video-card-actions-dual">
+            <div class="video-action-cell">
               <a href="https://www.youtube.com/watch?v=40i4PKpM0cI" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 4</a>
-              <label class="video-check-label" title="Mark Video 4 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v4" aria-label="Mark Video 4 as completed"></label>
+              <label class="video-check-label" title="Mark Video 4 as completed">
+                <input type="checkbox" class="video-check" data-vid="4">
+                <span class="custom-checkbox"></span>
+              </label>
             </div>
-            <div style="display:inline-flex; align-items:center; gap:6px; flex:1;">
+            <div class="video-action-cell">
               <a href="https://www.youtube.com/watch?v=_2cKtLkdwnc" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 6</a>
-              <label class="video-check-label" title="Mark Video 6 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v6" aria-label="Mark Video 6 as completed"></label>
+              <label class="video-check-label" title="Mark Video 6 as completed">
+                <input type="checkbox" class="video-check" data-vid="6">
+                <span class="custom-checkbox"></span>
+              </label>
             </div>
           </div>
         </div>
@@ -3337,14 +3729,20 @@
               <b>Concept:</b> Power set construction ($2^Q$ states), computing reachable state sets $\delta'(S, a) = \bigcup_{q \in S} \delta(q, a)$, and marking final states.
             </div>
           </div>
-          <div style="display:flex; gap:8px;">
-            <div style="display:inline-flex; align-items:center; gap:6px; flex:1;">
+          <div class="video-card-actions-dual">
+            <div class="video-action-cell">
               <a href="https://www.youtube.com/watch?v=--CSVsFIDng" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 15</a>
-              <label class="video-check-label" title="Mark Video 15 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v15" aria-label="Mark Video 15 as completed"></label>
+              <label class="video-check-label" title="Mark Video 15 as completed">
+                <input type="checkbox" class="video-check" data-vid="15">
+                <span class="custom-checkbox"></span>
+              </label>
             </div>
-            <div style="display:inline-flex; align-items:center; gap:6px; flex:1;">
+            <div class="video-action-cell">
               <a href="https://www.youtube.com/watch?v=pnyXgIXpKnc" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 16</a>
-              <label class="video-check-label" title="Mark Video 16 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v16" aria-label="Mark Video 16 as completed"></label>
+              <label class="video-check-label" title="Mark Video 16 as completed">
+                <input type="checkbox" class="video-check" data-vid="16">
+                <span class="custom-checkbox"></span>
+              </label>
             </div>
           </div>
         </div>
@@ -3362,14 +3760,20 @@
               <b>Concept:</b> 0-equivalence ($F$ vs $Q \setminus F$), 1-equivalence, 2-equivalence, and collapsing indistinguishable states into a minimal canonical automaton.
             </div>
           </div>
-          <div style="display:flex; gap:8px;">
-            <div style="display:inline-flex; align-items:center; gap:6px; flex:1;">
+          <div class="video-card-actions-dual">
+            <div class="video-action-cell">
               <a href="https://www.youtube.com/watch?v=hOzc4BUIXRk" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 20</a>
-              <label class="video-check-label" title="Mark Video 20 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v20" aria-label="Mark Video 20 as completed"></label>
+              <label class="video-check-label" title="Mark Video 20 as completed">
+                <input type="checkbox" class="video-check" data-vid="20">
+                <span class="custom-checkbox"></span>
+              </label>
             </div>
-            <div style="display:inline-flex; align-items:center; gap:6px; flex:1;">
+            <div class="video-action-cell">
               <a href="https://www.youtube.com/watch?v=0XaGAkY09Wc" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 21</a>
-              <label class="video-check-label" title="Mark Video 21 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v21" aria-label="Mark Video 21 as completed"></label>
+              <label class="video-check-label" title="Mark Video 21 as completed">
+                <input type="checkbox" class="video-check" data-vid="21">
+                <span class="custom-checkbox"></span>
+              </label>
             </div>
           </div>
         </div>
@@ -3387,14 +3791,20 @@
               <b>Concept:</b> Calculating $\varepsilon$-closure of states, and computing new transition functions via $\delta'(q, a) = \varepsilon\text{-closure}(\delta(\varepsilon\text{-closure}(q), a))$.
             </div>
           </div>
-          <div style="display:flex; gap:8px;">
-            <div style="display:inline-flex; align-items:center; gap:6px; flex:1;">
+          <div class="video-card-actions-dual">
+            <div class="video-action-cell">
               <a href="https://www.youtube.com/watch?v=84oNUttWlN4" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 41</a>
-              <label class="video-check-label" title="Mark Video 41 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v41" aria-label="Mark Video 41 as completed"></label>
+              <label class="video-check-label" title="Mark Video 41 as completed">
+                <input type="checkbox" class="video-check" data-vid="41">
+                <span class="custom-checkbox"></span>
+              </label>
             </div>
-            <div style="display:inline-flex; align-items:center; gap:6px; flex:1;">
+            <div class="video-action-cell">
               <a href="https://www.youtube.com/watch?v=WSGcmaHNBFM" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 42</a>
-              <label class="video-check-label" title="Mark Video 42 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v42" aria-label="Mark Video 42 as completed"></label>
+              <label class="video-check-label" title="Mark Video 42 as completed">
+                <input type="checkbox" class="video-check" data-vid="42">
+                <span class="custom-checkbox"></span>
+              </label>
             </div>
           </div>
         </div>
@@ -3412,14 +3822,20 @@
               <b>Concept:</b> Inductive definition, precedence order ($* > \cdot > +$), and systematically translating linguistic patterns into algebraic expressions.
             </div>
           </div>
-          <div style="display:flex; gap:8px;">
-            <div style="display:inline-flex; align-items:center; gap:6px; flex:1;">
+          <div class="video-card-actions-dual">
+            <div class="video-action-cell">
               <a href="https://www.youtube.com/watch?v=upu_TeZImN0" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 45</a>
-              <label class="video-check-label" title="Mark Video 45 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v45" aria-label="Mark Video 45 as completed"></label>
+              <label class="video-check-label" title="Mark Video 45 as completed">
+                <input type="checkbox" class="video-check" data-vid="45">
+                <span class="custom-checkbox"></span>
+              </label>
             </div>
-            <div style="display:inline-flex; align-items:center; gap:6px; flex:1;">
+            <div class="video-action-cell">
               <a href="https://www.youtube.com/watch?v=FOhEmW_nMRs" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 50</a>
-              <label class="video-check-label" title="Mark Video 50 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v50" aria-label="Mark Video 50 as completed"></label>
+              <label class="video-check-label" title="Mark Video 50 as completed">
+                <input type="checkbox" class="video-check" data-vid="50">
+                <span class="custom-checkbox"></span>
+              </label>
             </div>
           </div>
         </div>
@@ -3437,14 +3853,20 @@
               <b>Concept:</b> Thompson's Construction: inductive templates for base symbols $\varepsilon, a$, union $R_1 + R_2$, concatenation $R_1 R_2$, and Kleene star $R^*$.
             </div>
           </div>
-          <div style="display:flex; gap:8px;">
-            <div style="display:inline-flex; align-items:center; gap:6px; flex:1;">
+          <div class="video-card-actions-dual">
+            <div class="video-action-cell">
               <a href="https://www.youtube.com/watch?v=RxfXyvfTsgQ" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 54</a>
-              <label class="video-check-label" title="Mark Video 54 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v54" aria-label="Mark Video 54 as completed"></label>
+              <label class="video-check-label" title="Mark Video 54 as completed">
+                <input type="checkbox" class="video-check" data-vid="54">
+                <span class="custom-checkbox"></span>
+              </label>
             </div>
-            <div style="display:inline-flex; align-items:center; gap:6px; flex:1;">
+            <div class="video-action-cell">
               <a href="https://www.youtube.com/watch?v=62JAy4oH6lU" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 55</a>
-              <label class="video-check-label" title="Mark Video 55 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v55" aria-label="Mark Video 55 as completed"></label>
+              <label class="video-check-label" title="Mark Video 55 as completed">
+                <input type="checkbox" class="video-check" data-vid="55">
+                <span class="custom-checkbox"></span>
+              </label>
             </div>
           </div>
         </div>
@@ -3462,9 +3884,13 @@
               <b>Concept:</b> Formal proofs of closure under union, intersection, complement, difference, reversal, and homomorphism using Cartesian product DFAs.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=6aRJQNYYz4s" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 9</a>
-            <label class="video-check-label" title="Mark Video 9 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v9" aria-label="Mark Video 9 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=6aRJQNYYz4s" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Video 9</a>
+            <label class="video-check-label" title="Mark Video 9 as completed">
+              <input type="checkbox" class="video-check" data-vid="9">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3481,9 +3907,13 @@
               <b>Concept:</b> Testing whether $L(M_1) = L(M_2)$ using symmetric difference $(L_1 \cap \overline{L_2}) \cup (\overline{L_1} \cap L_2) = \emptyset$ and product tables.
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <a href="https://www.youtube.com/watch?v=nX4JrcHgpZY" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 58</a>
-            <label class="video-check-label" title="Mark Video 58 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v58" aria-label="Mark Video 58 as completed"></label>
+          <div class="video-card-actions">
+            <a href="https://www.youtube.com/watch?v=nX4JrcHgpZY" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Video 58</a>
+            <label class="video-check-label" title="Mark Video 58 as completed">
+              <input type="checkbox" class="video-check" data-vid="58">
+              <span class="custom-checkbox"></span>
+              <span class="check-text">Done</span>
+            </label>
           </div>
         </div>
 
@@ -3511,74 +3941,102 @@
       <div class="subq">
         <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 1: Introduction, FSM &amp; DFA Fundamentals (Videos 1–7)</button>
         <div class="subq-body">
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="1">
             <div class="video-row-info">
               <div class="video-row-title">Video 1: Introduction to Theory of Computation</div>
               <div class="video-row-sub">Foundations of theoretical computer science, languages, and automata hierarchy.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=58N2N7zJGrQ" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 1 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v1" aria-label="Mark Video 1 as completed"></label>
+              <label class="video-check-label" title="Mark Video 1 as completed">
+                <input type="checkbox" class="video-check" data-vid="1">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="2">
             <div class="video-row-info">
               <div class="video-row-title">Video 2: Finite State Machine (Prerequisites)</div>
               <div class="video-row-sub">Alphabets, strings, operations, prefixes, and suffixes.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=TpIBUeyOuv8" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 2 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v2" aria-label="Mark Video 2 as completed"></label>
+              <label class="video-check-label" title="Mark Video 2 as completed">
+                <input type="checkbox" class="video-check" data-vid="2">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="3">
             <div class="video-row-info">
               <div class="video-row-title">Video 3: Finite State Machine (Finite Automata)</div>
               <div class="video-row-sub">Formal 5-tuple definition of DFA $(Q, \Sigma, \delta, q_0, F)$ and state diagrams.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=Qa6csfkK7_I" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 3 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v3" aria-label="Mark Video 3 as completed"></label>
+              <label class="video-check-label" title="Mark Video 3 as completed">
+                <input type="checkbox" class="video-check" data-vid="3">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="4">
             <div class="video-row-info">
               <div class="video-row-title">Video 4: Deterministic Finite Automata (Example 1) <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(a)</span></div>
               <div class="video-row-sub">DFA construction for modulo arithmetic and length constraints.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=40i4PKpM0cI" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 4 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v4" aria-label="Mark Video 4 as completed"></label>
+              <label class="video-check-label" title="Mark Video 4 as completed">
+                <input type="checkbox" class="video-check" data-vid="4">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="5">
             <div class="video-row-info">
               <div class="video-row-title">Video 5: Deterministic Finite Automata (Example 2)</div>
               <div class="video-row-sub">DFA construction starting or ending with specific substrings.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=2KindKcLjos" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 5 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v5" aria-label="Mark Video 5 as completed"></label>
+              <label class="video-check-label" title="Mark Video 5 as completed">
+                <input type="checkbox" class="video-check" data-vid="5">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="6">
             <div class="video-row-info">
               <div class="video-row-title">Video 6: Deterministic Finite Automata (Example 3) <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q1(a)</span></div>
               <div class="video-row-sub">Substring containment and prefix tracking DFAs.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=_2cKtLkdwnc" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 6 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v6" aria-label="Mark Video 6 as completed"></label>
+              <label class="video-check-label" title="Mark Video 6 as completed">
+                <input type="checkbox" class="video-check" data-vid="6">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="7">
             <div class="video-row-info">
               <div class="video-row-title">Video 7: Deterministic Finite Automata (Example 4)</div>
               <div class="video-row-sub">Even/odd parity and counting constraints.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=Fpmr1nHqYrw" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 7 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v7" aria-label="Mark Video 7 as completed"></label>
+              <label class="video-check-label" title="Mark Video 7 as completed">
+                <input type="checkbox" class="video-check" data-vid="7">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
         </div>
@@ -3588,24 +4046,32 @@
       <div class="subq">
         <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 2: Regular Languages, Operations &amp; Closure (Videos 8–9)</button>
         <div class="subq-body">
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="8">
             <div class="video-row-info">
               <div class="video-row-title">Video 8: Regular Languages</div>
               <div class="video-row-sub">Definition of regular languages and acceptance criteria.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=WrzaPNj9OZ4" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 8 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v8" aria-label="Mark Video 8 as completed"></label>
+              <label class="video-check-label" title="Mark Video 8 as completed">
+                <input type="checkbox" class="video-check" data-vid="8">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="9">
             <div class="video-row-info">
               <div class="video-row-title">Video 9: Operations on Regular Languages <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q1(b), Q2(c)</span></div>
               <div class="video-row-sub">Closure properties under union, intersection, complementation, reversal, and concatenation.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=6aRJQNYYz4s" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 9 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v9" aria-label="Mark Video 9 as completed"></label>
+              <label class="video-check-label" title="Mark Video 9 as completed">
+                <input type="checkbox" class="video-check" data-vid="9">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
         </div>
@@ -3615,104 +4081,144 @@
       <div class="subq">
         <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 3: Nondeterministic Finite Automata (NFA) &amp; NFA to DFA (Videos 10–19)</button>
         <div class="subq-body">
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="10">
             <div class="video-row-info">
               <div class="video-row-title">Video 10: Non-Deterministic Finite Automata</div>
               <div class="video-row-sub">Introduction to nondeterminism, multiple choices, and branching trees.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=ehy0jGIYRtE" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 10 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v10" aria-label="Mark Video 10 as completed"></label>
+              <label class="video-check-label" title="Mark Video 10 as completed">
+                <input type="checkbox" class="video-check" data-vid="10">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="11">
             <div class="video-row-info">
               <div class="video-row-title">Video 11: Formal Definition of NFA</div>
               <div class="video-row-sub">Mathematical 5-tuple definition with power set transition $\delta: Q \times \Sigma \to 2^Q$.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=egXhe55dAIk" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 11 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v11" aria-label="Mark Video 11 as completed"></label>
+              <label class="video-check-label" title="Mark Video 11 as completed">
+                <input type="checkbox" class="video-check" data-vid="11">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="12">
             <div class="video-row-info">
               <div class="video-row-title">Video 12: NFA Solved Example 1</div>
               <div class="video-row-sub">Construction of NFA accepting strings ending in a given pattern.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=4bjqVsoy6bA" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 12 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v12" aria-label="Mark Video 12 as completed"></label>
+              <label class="video-check-label" title="Mark Video 12 as completed">
+                <input type="checkbox" class="video-check" data-vid="12">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="13">
             <div class="video-row-info">
               <div class="video-row-title">Video 13: NFA Solved Example 2</div>
               <div class="video-row-sub">NFA design for substring matching with non-deterministic guesses.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=Bcen1W_uFEU" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 13 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v13" aria-label="Mark Video 13 as completed"></label>
+              <label class="video-check-label" title="Mark Video 13 as completed">
+                <input type="checkbox" class="video-check" data-vid="13">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="14">
             <div class="video-row-info">
               <div class="video-row-title">Video 14: NFA Solved Example 3</div>
               <div class="video-row-sub">Advanced NFA problem on positional constraints ($k$-th symbol from right).</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=NGF-b3QVeJU" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 14 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v14" aria-label="Mark Video 14 as completed"></label>
+              <label class="video-check-label" title="Mark Video 14 as completed">
+                <input type="checkbox" class="video-check" data-vid="14">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="15">
             <div class="video-row-info">
               <div class="video-row-title">Video 15: Conversion of NFA to DFA <span class="video-badge badge-core" style="display:inline-flex;">CORE SYLLABUS</span></div>
               <div class="video-row-sub">The subset construction (powerset) algorithm explained theoretically.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=--CSVsFIDng" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 15 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v15" aria-label="Mark Video 15 as completed"></label>
+              <label class="video-check-label" title="Mark Video 15 as completed">
+                <input type="checkbox" class="video-check" data-vid="15">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="16">
             <div class="video-row-info">
               <div class="video-row-title">Video 16: Conversion of NFA to DFA (Example 1) <span class="video-badge badge-core" style="display:inline-flex;">CORE SYLLABUS</span></div>
               <div class="video-row-sub">Step-by-step conversion table and state diagram generation.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=pnyXgIXpKnc" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 16 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v16" aria-label="Mark Video 16 as completed"></label>
+              <label class="video-check-label" title="Mark Video 16 as completed">
+                <input type="checkbox" class="video-check" data-vid="16">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="17">
             <div class="video-row-info">
               <div class="video-row-title">Video 17: Conversion of NFA to DFA (Example 2)</div>
               <div class="video-row-sub">Conversion involving dead/trap state subsets.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=i-fk9o46oVY" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 17 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v17" aria-label="Mark Video 17 as completed"></label>
+              <label class="video-check-label" title="Mark Video 17 as completed">
+                <input type="checkbox" class="video-check" data-vid="17">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="18">
             <div class="video-row-info">
               <div class="video-row-title">Video 18: Conversion of NFA to DFA (Example 3)</div>
               <div class="video-row-sub">Conversion of 3-state NFA to minimal DFA.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=dY1bCC6syLI" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 18 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v18" aria-label="Mark Video 18 as completed"></label>
+              <label class="video-check-label" title="Mark Video 18 as completed">
+                <input type="checkbox" class="video-check" data-vid="18">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
-          <div class="video-row-item">
+          <div class="video-row-item" data-vid="19">
             <div class="video-row-info">
               <div class="video-row-title">Video 19: Conversion of NFA to DFA (Example 4)</div>
               <div class="video-row-sub">Complex subset construction walkthrough.</div>
             </div>
-            <div class="video-btn-wrap">
+            <div class="video-row-actions">
               <a href="https://www.youtube.com/watch?v=Y92dtMnarAU" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 19 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v19" aria-label="Mark Video 19 as completed"></label>
+              <label class="video-check-label" title="Mark Video 19 as completed">
+                <input type="checkbox" class="video-check" data-vid="19">
+                <span class="custom-checkbox"></span>
+                <span class="check-text">Done</span>
+              </label>
             </div>
           </div>
         </div>
@@ -3722,171 +4228,5 @@
       <div class="subq">
         <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 4: DFA Minimization &amp; Myhill–Nerode Theorem (Videos 20–26)</button>
         <div class="subq-body">
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 20: Minimization of DFA <span class="video-badge badge-core" style="display:inline-flex;">CORE SYLLABUS</span></div>
-              <div class="video-row-sub">State equivalence, $k$-distinguishability, and partition refinement algorithm.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=hOzc4BUIXRk" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 20 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v20" aria-label="Mark Video 20 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 21: Minimization of DFA (Example 1) <span class="video-badge badge-core" style="display:inline-flex;">CORE SYLLABUS</span></div>
-              <div class="video-row-sub">Solved partition minimization table on 5-state DFA.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=0XaGAkY09Wc" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 21 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v21" aria-label="Mark Video 21 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 22: Minimization of DFA (Example 2)</div>
-              <div class="video-row-sub">Additional minimization example with multiple equivalent pairs.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=ex9sPLq5CRg" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 22 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v22" aria-label="Mark Video 22 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 23: Minimization of DFA (Multiple Final States)</div>
-              <div class="video-row-sub">Partitioning initial group $F$ containing several distinct final states.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=DV8cZp-2VmM" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 23 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v23" aria-label="Mark Video 23 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 24: Minimization of DFA (With Unreachable States)</div>
-              <div class="video-row-sub">Pruning unreachable states prior to state equivalence calculation.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=kYMqDgB2GbU" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 24 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v24" aria-label="Mark Video 24 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 25: Myhill Nerode Theorem - Table Filling Method <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q1(d)</span></div>
-              <div class="video-row-sub">Theoretical foundation of right-invariant equivalence relation and table filling.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=UiXkJUTkp44" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 25 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v25" aria-label="Mark Video 25 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 26: Myhill Nerode Theorem - Solved Example <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q1(d)</span></div>
-              <div class="video-row-sub">Step-by-step triangular table marking and canonical minimal state creation.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=Dx2RJ2DXRYs" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 26 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v26" aria-label="Mark Video 26 as completed"></label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Category 5 -->
-      <div class="subq">
-        <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 5: FA with Output: Moore &amp; Mealy Machines (Videos 27–40)</button>
-        <div class="subq-body">
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 27: Finite Automata With Outputs <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(b)</span></div>
-              <div class="video-row-sub">Formal mathematical definitions of transducers (Moore and Mealy).</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=EzMWYmRkHFQ" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 27 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v27" aria-label="Mark Video 27 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 28: Construction of Mealy Machine <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(b)</span></div>
-              <div class="video-row-sub">Edge output mapping $\lambda(q, a)$ and 1's/2's complement Mealy designs.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=LioitkXDfmA" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 28 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v28" aria-label="Mark Video 28 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 29: Mealy Machine (Example 1)</div>
-              <div class="video-row-sub">Sequence detector with Mealy machine output.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=s-Ul9dIS9AE" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 29 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v29" aria-label="Mark Video 29 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 30: Mealy Machine (Example 2)</div>
-              <div class="video-row-sub">Overlapping pattern detection in Mealy machines.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=fkdufhcBraw" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 30 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v30" aria-label="Mark Video 30 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 31: Construction of Moore Machine <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(b)</span></div>
-              <div class="video-row-sub">State output mapping $\lambda(q)$ and initial clock output.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=MFnRF07SoFo" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 31 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v31" aria-label="Mark Video 31 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 32: Moore Machine (Example 1)</div>
-              <div class="video-row-sub">Modulo counter and residue output Moore machine.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=BQPSt8dRX1Q" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 32 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v32" aria-label="Mark Video 32 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 33: Moore Machine (Example 2)</div>
-              <div class="video-row-sub">Substring detection output in Moore model.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=UKTzwXSJiIk" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 33 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v33" aria-label="Mark Video 33 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 34: Conversion of Moore to Mealy Machine <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(b)</span></div>
-              <div class="video-row-sub">Moving state outputs to incoming edges; preservation of state count.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=HEVWx4irOx4" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 34 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v34" aria-label="Mark Video 34 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-item">
-            <div class="video-row-info">
-              <div class="video-row-title">Video 35: Moore to Mealy Conversion (Example 1)</div>
-              <div class="video-row-sub">Worked conversion example with transition tables.</div>
-            </div>
-            <div class="video-btn-wrap">
-              <a href="https://www.youtube.com/watch?v=lqvVtBdazvg" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
-              <label class="video-check-label" title="Mark Video 35 as completed"><input type="checkbox" class="video-checkbox" data-video-id="v35" aria-label="Mark Video 35 as completed"></label>
-            </div>
-          </div>
-          <div class="video-row-ite
+          <div class="video-row-item" data-vid="20">
+            <di
