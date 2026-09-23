@@ -7,6 +7,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<!-- KaTeX for High-Quality Mathematical Typography -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous" onload="renderAllMath()"></script>
+
 <style>
   :root {
     --parchment: #F5EDD8;
@@ -473,21 +479,38 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Formula Blocks */
+  /* Formula Blocks (Ink Blue on Manuscript) */
   .formula {
-    font-family: 'Courier Prime', monospace;
     background: var(--blue-soft);
     color: var(--blue);
     border: 1px solid rgba(26, 58, 107, 0.35);
-    border-radius: 3px;
+    border-radius: 4px;
     padding: 14px 18px;
-    margin: 14px 0;
-    font-size: 0.95rem;
+    margin: 16px 0;
+    font-size: 1.02rem;
     line-height: 1.85;
     overflow-x: auto;
     box-shadow: inset 0 1px 3px rgba(26,58,107,0.06);
+    text-align: center;
   }
   .formula b { color: #0d2347; }
+
+  /* KaTeX LaTeX Manuscript Styling */
+  .katex {
+    font-size: 1.08em;
+    color: var(--sepia);
+  }
+  .formula .katex {
+    color: var(--blue);
+  }
+  .formula .katex-display {
+    margin: 4px 0;
+    text-align: center;
+  }
+  .answer-box .katex {
+    color: var(--teal);
+    font-weight: 600;
+  }
 
   /* Answer Boxes with Teal Left Border */
   .answer-box {
@@ -791,19 +814,19 @@
           <div class="sec-heading">Formal Definition &amp; Decomposition</div>
           <p>By definition, a word $w$ belongs to $L$ if and only if there exist strings $u, v \in \Sigma^*$ such that:</p>
           <div class="formula">
-            w = u \cdot v, \quad \text{where } u = u^R \text{ (a palindrome)}, \quad |u| \ge 2, \quad \text{and } v \in (a+b)^*
+            $$w = u \cdot v, \quad \text{where } u = u^R \text{ (a palindrome)}, \quad |u| \ge 2, \quad \text{and } v \in (a+b)^*$$
           </div>
           <p>The definition places <b>no restriction whatsoever on the suffix $v$</b>. Therefore, any word whose beginning forms a palindrome of length $\ge 2$, but whose overall structure is asymmetric, satisfies the condition.</p>
 
           <div class="sec-heading">Primary Witness: w = abbaa</div>
           <ul class="plain">
-            <li><b>Decomposition:</b> Choose $u = \text{"abba"}$ and $v = \text{"a"}$. Here $w = u \cdot v = \text{"abba"} \cdot \text{"a"} = \text{"abbaa"}$.</li>
-            <li><b>Prefix check:</b> $u = \text{"abba"}$, so $u^R = \text{"abba"}$. Since $u = u^R$ and $|u| = 4 \ge 2$, $u$ is a non-trivial palindrome. Thus, $w \in L$.</li>
-            <li><b>Total reversal check:</b> $w^R = (\text{"abbaa"})^R = \text{"aabba"}$. Clearly, $\text{"abbaa"} \ne \text{"aabba"}$, proving $w$ is <b>not a palindrome</b>.</li>
+            <li><b>Decomposition:</b> Choose $u = \text{abba}$ and $v = \text{a}$. Here $w = u \cdot v = \text{abba} \cdot \text{a} = \text{abbaa}$.</li>
+            <li><b>Prefix check:</b> $u = \text{abba}$, so $u^R = \text{abba}$. Since $u = u^R$ and $|u| = 4 \ge 2$, $u$ is a non-trivial palindrome. Thus, $w \in L$.</li>
+            <li><b>Total reversal check:</b> $w^R = (\text{abbaa})^R = \text{aabba}$. Clearly, $\text{abbaa} \ne \text{aabba}$, proving $w$ is <b>not a palindrome</b>.</li>
           </ul>
 
           <div class="sec-heading">Secondary Minimal Example: w = aab</div>
-          <p>An even shorter witness is $w = \text{"aab"}$. Choosing $u = \text{"aa"}$ ($|u|=2$, $u=u^R$) and $v = \text{"b"}$, we have $w \in L$. But $w^R = \text{"baa"} \ne \text{"aab"}$, so $w$ is not a palindrome.</p>
+          <p>An even shorter witness is $w = \text{aab}$. Choosing $u = \text{aa}$ ($|u|=2$, $u=u^R$) and $v = \text{b}$, we have $w \in L$. But $w^R = \text{baa} \ne \text{aab}$, so $w$ is not a palindrome.</p>
 
           <div class="answer-box">
             <span class="ans-label">Final Answer</span>
@@ -908,7 +931,7 @@
           </ol>
 
           <div class="formula">
-            L^c = \Sigma^* \setminus L = \{\varepsilon, a, b\} \cup \{a b^k : k \ge 1\} \cup \{b a^k : k \ge 1\}
+            $$L^c = \Sigma^* \setminus L = \{\varepsilon, a, b\} \cup \{a b^k : k \ge 1\} \cup \{b a^k : k \ge 1\}$$
           </div>
 
           <div class="sec-heading">Deducing x from s = a &middot; x &notin; L</div>
@@ -928,7 +951,7 @@
 
           <div class="answer-box">
             <span class="ans-label">Final Answer</span>
-            <p><b>x must consist entirely of zero or more b's — that is, x &isin; b* (or x = b<sup>k</sup> for some integer k &ge; 0).</b> Equivalently, $x$ cannot contain any occurrence of the symbol 'a'. The moment even a single 'a' is present in $x$ (say $x = b^i a \dots$), the string $ax$ gains a palindromic prefix $a b^i a$ and immediately enters $L$.</p>
+            <p><b>x must consist entirely of zero or more b's — that is, $x \in b^*$ (or $x = b^k$ for some integer $k \ge 0$).</b> Equivalently, $x$ cannot contain any occurrence of the symbol 'a'. The moment even a single 'a' is present in $x$ (say $x = b^i a \dots$), the string $ax$ gains a palindromic prefix $a b^i a$ and immediately enters $L$.</p>
           </div>
         </div>
       </div>
@@ -945,9 +968,9 @@
             <li>Length 2: <code>aa</code> and <code>bb</code></li>
             <li>Length &ge; 3: <code>ab⁺a</code> (i.e. $a b^k a$ for $k \ge 1$) and <code>ba⁺b</code> (i.e. $b a^k b$ for $k \ge 1$)</li>
           </ul>
-          <p>Any longer palindrome prefix will contain one of these minimal palindromes as an initial segment (or will itself be in this form). Once any of these minimal palindromes occurs as a prefix, the remainder of the word can be arbitrary ($ (a+b)^* $). Therefore:</p>
+          <p>Any longer palindrome prefix will contain one of these minimal palindromes as an initial segment (or will itself be in this form). Once any of these minimal palindromes occurs as a prefix, the remainder of the word can be arbitrary ($(a+b)^*$). Therefore:</p>
           <div class="formula">
-            L = (aa + bb + ab^+a + ba^+b)(a + b)*
+            $$L = (aa + bb + ab^+a + ba^+b)(a + b)^*$$
           </div>
           <p>Since $L$ is expressed using only union ($+$), concatenation, and Kleene star ($*$) over a finite alphabet, by <b>Kleene's Theorem</b>, $L$ is a regular language.</p>
 
@@ -1104,7 +1127,7 @@
 
           <div class="answer-box">
             <span class="ans-label">Final Answer</span>
-            <p><b>L is regular.</b> It is described by the regular expression <b>L = (aa + bb + ab⁺a + ba⁺b)(a+b)*</b> and accepted by the complete 6-state Deterministic Finite Automaton detailed above. ∎</p>
+            <p><b>L is regular.</b> It is described by the regular expression <b>$L = (aa + bb + ab^+a + ba^+b)(a+b)^*$</b> and accepted by the complete 6-state Deterministic Finite Automaton detailed above. ∎</p>
           </div>
         </div>
       </div>
@@ -1136,7 +1159,7 @@
       <div class="sec-heading">Structural Reformulation of Mix</div>
       <p>Observe that $w_1, w_2, w_3 \in \Sigma^*$ are arbitrary strings from the universal language $\Sigma^*$. Therefore, the definition of Mix simplifies algebraically to:</p>
       <div class="formula">
-        \text{Mix}(L_1, L_2) = \Sigma^* \cdot L_1 \cdot \Sigma^* \cdot L_2 \cdot \Sigma^*
+        $$\text{Mix}(L_1, L_2) = \Sigma^* \cdot L_1 \cdot \Sigma^* \cdot L_2 \cdot \Sigma^*$$
       </div>
       <p>In intuitive terms, $\text{Mix}(L_1, L_2)$ is the set of all words that contain a subword from $L_1$ followed subsequently (with or without intervening symbols) by a subword from $L_2$.</p>
 
@@ -1146,7 +1169,7 @@
         <div class="subq-body">
           <p>We choose finite (and therefore simple) languages:</p>
           <div class="formula">
-            L_1 = \{a\}, \quad L_2 = \{ab\}
+            $$L_1 = \{a\}, \quad L_2 = \{ab\}$$
           </div>
           <p>Substituting into the simplified form:</p>
           <ul class="plain">
@@ -1170,7 +1193,7 @@
 
           <div class="answer-box">
             <span class="ans-label">Final Answer</span>
-            <p>Choosing <b>L₁ = {a}</b> and <b>L₂ = {ab}</b>, the string <b>w = aab</b> satisfies $w \in \text{Mix}(L_1, L_2)$ but $w \notin \text{Mix}(L_2, L_1)$. Hence, <b>Mix is not commutative</b>: $\text{Mix}(L_1, L_2) \ne \text{Mix}(L_2, L_1)$.</p>
+            <p>Choosing <b>$L_1 = \{a\}$</b> and <b>$L_2 = \{ab\}$</b>, the string <b>$w = \text{aab}$</b> satisfies $w \in \text{Mix}(L_1, L_2)$ but $w \notin \text{Mix}(L_2, L_1)$. Hence, <b>Mix is not commutative</b>: $\text{Mix}(L_1, L_2) \ne \text{Mix}(L_2, L_1)$.</p>
           </div>
         </div>
       </div>
@@ -1219,7 +1242,7 @@
           <div class="sec-heading">Construction: Adding &epsilon; to a Classical Non-Regular Language</div>
           <p>Define:</p>
           <div class="formula">
-            L_1 = L_2 = \{\varepsilon\} \cup \{a^n b^n : n \ge 1\}
+            $$L_1 = L_2 = \{\varepsilon\} \cup \{a^n b^n : n \ge 1\}$$
           </div>
 
           <div class="sec-heading">Step 1: Rigorous Proof that L₁ and L₂ are NOT Regular</div>
@@ -1235,21 +1258,21 @@
           <p>Because $\varepsilon \in L_1$ and $\varepsilon \in L_2$, we choose $u = \varepsilon \in L_1$ and $v = \varepsilon \in L_2$.</p>
           <p>For <b>any arbitrary string</b> $w \in \Sigma^*$, we can decompose it as:</p>
           <div class="formula">
-            w_1 = w, \quad u = \varepsilon, \quad w_2 = \varepsilon, \quad v = \varepsilon, \quad w_3 = \varepsilon
+            $$w_1 = w, \quad u = \varepsilon, \quad w_2 = \varepsilon, \quad v = \varepsilon, \quad w_3 = \varepsilon$$
           </div>
           <p>Evaluating the combination:</p>
           <div class="formula">
-            w_1 \cdot u \cdot w_2 \cdot v \cdot w_3 = w \cdot \varepsilon \cdot \varepsilon \cdot \varepsilon \cdot \varepsilon = w
+            $$w_1 \cdot u \cdot w_2 \cdot v \cdot w_3 = w \cdot \varepsilon \cdot \varepsilon \cdot \varepsilon \cdot \varepsilon = w$$
           </div>
           <p>Since this holds for every $w \in \Sigma^*$, we have $\Sigma^* \subseteq \text{Mix}(L_1, L_2)$. Furthermore, since $\text{Mix}(L_1, L_2) \subseteq \Sigma^*$ by definition, we obtain:</p>
           <div class="formula">
-            \text{Mix}(L_1, L_2) = \Sigma^* = (a + b)*
+            $$\text{Mix}(L_1, L_2) = \Sigma^* = (a + b)^*$$
           </div>
           <p>The universal language $\Sigma^*$ is regular (accepted by a 1-state DFA).</p>
 
           <div class="answer-box">
             <span class="ans-label">Final Answer</span>
-            <p>Take <b>L₁ = L₂ = {&epsilon;} &cup; {aⁿbⁿ : n &ge; 1}</b>. Both languages are non-regular (by closure under difference with finite sets), yet <b>Mix(L₁, L₂) = &Sigma;*</b>, which is universally regular.</p>
+            <p>Take <b>$L_1 = L_2 = \{\varepsilon\} \cup \{a^n b^n : n \ge 1\}$</b>. Both languages are non-regular (by closure under difference with finite sets), yet <b>$\text{Mix}(L_1, L_2) = \Sigma^*$</b>, which is universally regular.</p>
           </div>
         </div>
       </div>
@@ -1289,68 +1312,68 @@
           <tbody>
             <tr>
               <td><b>Commutativity of Union</b></td>
-              <td>R + S = S + R</td>
+              <td>$R + S = S + R$</td>
               <td>Order of language alternatives does not affect language membership.</td>
             </tr>
             <tr>
               <td><b>Associativity of Union</b></td>
-              <td>(R + S) + T = R + (S + T)</td>
+              <td>$(R + S) + T = R + (S + T)$</td>
               <td>Grouping of unions is irrelevant.</td>
             </tr>
             <tr>
               <td><b>Associativity of Concat.</b></td>
-              <td>(RS)T = R(ST)</td>
+              <td>$(RS)T = R(ST)$</td>
               <td>Sequential concatenation groups unambiguously.</td>
             </tr>
             <tr>
               <td><b>Idempotence of Union</b></td>
-              <td>R + R = R</td>
+              <td>$R + R = R$</td>
               <td>Set union with itself adds no new strings (unlike 1+1=2).</td>
             </tr>
             <tr>
               <td><b>Identity for Union</b></td>
-              <td>R + &empty; = &empty; + R = R</td>
-              <td>Empty language &empty; is the additive identity.</td>
+              <td>$R + \emptyset = \emptyset + R = R$</td>
+              <td>Empty language $\emptyset$ is the additive identity.</td>
             </tr>
             <tr>
               <td><b>Identity for Concat.</b></td>
-              <td>R&epsilon; = &epsilon;R = R</td>
-              <td>Empty string &epsilon; is the multiplicative identity.</td>
+              <td>$R\varepsilon = \varepsilon R = R$</td>
+              <td>Empty string $\varepsilon$ is the multiplicative identity.</td>
             </tr>
             <tr>
               <td><b>Annihilator for Concat.</b></td>
-              <td>R&empty; = &empty;R = &empty;</td>
+              <td>$R\emptyset = \emptyset R = \emptyset$</td>
               <td>Concatenating with empty language yields the empty language.</td>
             </tr>
             <tr>
               <td><b>Left Distributivity</b></td>
-              <td>R(S + T) = RS + RT</td>
+              <td>$R(S + T) = RS + RT$</td>
               <td>Concatenation distributes over union from the left.</td>
             </tr>
             <tr>
               <td><b>Right Distributivity</b></td>
-              <td>(S + T)R = SR + TR</td>
+              <td>$(S + T)R = SR + TR$</td>
               <td>Concatenation distributes over union from the right.</td>
             </tr>
             <tr>
               <td><b>Kleene Star Unfolding</b></td>
-              <td>R* = &epsilon; + RR* = &epsilon; + R*R</td>
-              <td>R* decomposes into zero copies (&epsilon;) or at least one copy.</td>
+              <td>$R^* = \varepsilon + RR^* = \varepsilon + R^*R$</td>
+              <td>$R^*$ decomposes into zero copies ($\varepsilon$) or at least one copy.</td>
             </tr>
             <tr>
               <td><b>Star Idempotence</b></td>
-              <td>(R*)* = R*, &nbsp; R*R* = R*</td>
+              <td>$(R^*)^* = R^*, \quad R^*R^* = R^*$</td>
               <td>Repeated closure yields no additional strings.</td>
             </tr>
             <tr>
               <td><b>Star Base Cases</b></td>
-              <td>&epsilon;* = &epsilon;, &nbsp; &empty;* = &epsilon;</td>
+              <td>$\varepsilon^* = \varepsilon, \quad \emptyset^* = \varepsilon$</td>
               <td>Zero-length repetitions of empty set produce the empty string.</td>
             </tr>
             <tr>
               <td><b>Sum under Star</b></td>
-              <td>(R + S)* = (R*S*)* = (R* + S*)*</td>
-              <td>Interleaved repetitions of R and S.</td>
+              <td>$(R + S)^* = (R^*S^*)^* = (R^* + S^*)^*$</td>
+              <td>Interleaved repetitions of $R$ and $S$.</td>
             </tr>
           </tbody>
         </table>
@@ -1362,20 +1385,20 @@
           <thead>
             <tr>
               <th>Property</th>
-              <th>Ordinary Real Algebra (x, y)</th>
-              <th>Regular Expression Algebra (R, S)</th>
+              <th>Ordinary Real Algebra ($x, y$)</th>
+              <th>Regular Expression Algebra ($R, S$)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>Multiplication Commutativity</td>
-              <td>xy = yx (Commutative)</td>
-              <td><b>RS &ne; SR in general</b> (e.g., ab &ne; ba)</td>
+              <td>$xy = yx$ (Commutative)</td>
+              <td><b>$RS \ne SR$ in general</b> (e.g., $ab \ne ba$)</td>
             </tr>
             <tr>
               <td>Additive Idempotence</td>
-              <td>x + x = 2x</td>
-              <td><b>R + R = R</b> (Idempotent)</td>
+              <td>$x + x = 2x$</td>
+              <td><b>$R + R = R$</b> (Idempotent)</td>
             </tr>
             <tr>
               <td>Inverse Operations</td>
@@ -1384,8 +1407,8 @@
             </tr>
             <tr>
               <td>Cancellation Law</td>
-              <td>If xy = xz and x &ne; 0 &rArr; y = z</td>
-              <td><b>Fails</b>: a*(a*) = a*(&epsilon; + a) but a* &ne; &epsilon;+a</td>
+              <td>If $xy = xz$ and $x \ne 0 \implies y = z$</td>
+              <td><b>Fails</b>: $a^*(a^*) = a^*(\varepsilon + a)$ but $a^* \ne \varepsilon+a$</td>
             </tr>
           </tbody>
         </table>
@@ -1436,7 +1459,7 @@
       <div class="sec-heading">Formal Definition of the Indistinguishability Relation &equiv;<sub>L</sub></div>
       <p>Let $L \subseteq \Sigma^*$ be any language over an alphabet $\Sigma$. We define an equivalence relation $\equiv_L$ on $\Sigma^*$, called the <b>Myhill–Nerode indistinguishability relation</b>, as follows:</p>
       <div class="formula">
-        x \equiv_L y \iff \forall z \in \Sigma^*, \quad (xz \in L \iff yz \in L)
+        $$x \equiv_L y \iff \forall z \in \Sigma^*, \quad (xz \in L \iff yz \in L)$$
       </div>
       <p>Two strings $x$ and $y$ are equivalent ($\equiv_L$) if no future suffix $z$ can distinguish between them with respect to membership in $L$. If there exists even one suffix $z \in \Sigma^*$ such that $xz \in L$ and $yz \notin L$ (or vice versa), then $z$ is called a <b>distinguishing extension</b>, and $x \not\equiv_L y$.</p>
 
@@ -1503,23 +1526,23 @@
                 <tr>
                   <td><b>C₀ (&epsilon;) vs C₁ (0)</b></td>
                   <td>z = "1"</td>
-                  <td>&epsilon; &middot; 1 = "1" &notin; L</td>
-                  <td>0 &middot; 1 = "01" <b>&isin; L</b></td>
-                  <td><b>Distinguishable!</b> (&epsilon; &ne; 0)</td>
+                  <td>$\varepsilon \cdot 1 = 1 \notin L$</td>
+                  <td>$0 \cdot 1 = 01 \in L$</td>
+                  <td><b>Distinguishable!</b> ($\varepsilon \not\equiv_L 0$)</td>
                 </tr>
                 <tr>
                   <td><b>C₀ (&epsilon;) vs C₂ (01)</b></td>
                   <td>z = &epsilon;</td>
-                  <td>&epsilon; &middot; &epsilon; = &epsilon; &notin; L</td>
-                  <td>01 &middot; &epsilon; = "01" <b>&isin; L</b></td>
-                  <td><b>Distinguishable!</b> (&epsilon; &ne; 01)</td>
+                  <td>$\varepsilon \cdot \varepsilon = \varepsilon \notin L$</td>
+                  <td>$01 \cdot \varepsilon = 01 \in L$</td>
+                  <td><b>Distinguishable!</b> ($\varepsilon \not\equiv_L 01$)</td>
                 </tr>
                 <tr>
                   <td><b>C₁ (0) vs C₂ (01)</b></td>
                   <td>z = "1"</td>
-                  <td>0 &middot; 1 = "01" <b>&isin; L</b></td>
-                  <td>01 &middot; 1 = "011" &notin; L</td>
-                  <td><b>Distinguishable!</b> (0 &ne; 01)</td>
+                  <td>$0 \cdot 1 = 01 \in L$</td>
+                  <td>$01 \cdot 1 = 011 \notin L$</td>
+                  <td><b>Distinguishable!</b> ($0 \not\equiv_L 01$)</td>
                 </tr>
               </tbody>
             </table>
@@ -1531,9 +1554,11 @@
       <div class="sec-heading">Closure Under Extension &amp; Minimal DFA Construction</div>
       <p>We verify that the 3 classes are closed under the transition function $\delta(C, b) = [w \cdot b]$:</p>
       <div class="formula">
-        \delta(C_0, 0) = C_1, \quad \delta(C_0, 1) = C_0<br>
-        \delta(C_1, 0) = C_1, \quad \delta(C_1, 1) = C_2<br>
-        \delta(C_2, 0) = C_1, \quad \delta(C_2, 1) = C_0
+        $$\begin{aligned}
+          \delta(C_0, 0) &= C_1, & \delta(C_0, 1) &= C_0 \\
+          \delta(C_1, 0) &= C_1, & \delta(C_1, 1) &= C_2 \\
+          \delta(C_2, 0) &= C_1, & \delta(C_2, 1) &= C_0
+        \end{aligned}$$
       </div>
 
       <!-- Minimal DFA SVG -->
@@ -1645,7 +1670,9 @@
               $$(bb)^* = \{\varepsilon, bb, bbbb, bbbbbb, \dots\}$$
             </li>
             <li><b>Concatenation:</b> All $a$'s strictly precede all $b$'s, with independent counts $n$ and $m$. Concatenating the two expressions:
-              $$R = (aa)^*(bb)^*$$
+              <div class="formula">
+                $$R = (aa)^*(bb)^*$$
+              </div>
             </li>
             <li><b>Edge case verification:</b>
               <ul>
@@ -1659,7 +1686,7 @@
           </ol>
           <div class="answer-box">
             <span class="ans-label">Answer (i)</span>
-            <p><b>(aa)*(bb)*</b></p>
+            <p><b>$(aa)^*(bb)^*$</b></p>
           </div>
         </div>
       </div>
@@ -1679,19 +1706,19 @@
             <li>Exactly three $a$'s: $b^* a b^* a b^* a b^*$</li>
           </ul>
           <div class="formula">
-            R = b* + b*ab* + b*ab*ab* + b*ab*ab*ab*
+            $$R = b^* + b^*ab^* + b^*ab^*ab^* + b^*ab^*ab^*ab^*$$
           </div>
 
           <div class="sec-heading">Equivalent Compact Factored Form</div>
           <p>By factoring out $b^*$ and using the optional term $(a + \varepsilon)$:</p>
           <div class="formula">
-            R = b*(a + \varepsilon)b*(a + \varepsilon)b*(a + \varepsilon)b*
+            $$R = b^*(a + \varepsilon)b^*(a + \varepsilon)b^*(a + \varepsilon)b^*$$
           </div>
           <p>Both forms are mathematically identical; the expanded union form is standard for university examination scoring.</p>
 
           <div class="answer-box">
             <span class="ans-label">Answer (ii)</span>
-            <p><b>b* + b*ab* + b*ab*ab* + b*ab*ab*ab*</b> &nbsp; (or <b>b*(a + &epsilon;)b*(a + &epsilon;)b*(a + &epsilon;)b*</b>)</p>
+            <p><b>$b^* + b^*ab^* + b^*ab^*ab^* + b^*ab^*ab^*ab^*$</b> &nbsp; (or <b>$b^*(a + \varepsilon)b^*(a + \varepsilon)b^*(a + \varepsilon)b^*$</b>)</p>
           </div>
         </div>
       </div>
@@ -1705,8 +1732,10 @@
             <li><b>Analyzing the constraint:</b> The substring "ba" occurs if and only if at some point a 'b' is immediately followed by an 'a'.</li>
             <li><b>Propagation effect:</b> If a 'b' occurs, could an 'a' occur later? Suppose $w = \dots b b \dots b a \dots$. The transition from the last $b$ before the $a$ would still form the contiguous substring "ba"! Therefore, <b>once a single 'b' has appeared in the string, no 'a' can ever appear again</b> anywhere in the remainder of the word.</li>
             <li><b>Ordering:</b> All $a$'s (if any) must strictly precede all $b$'s (if any).</li>
-            <li><b>Resulting Language:</b> Any number of $a$'s followed by any number of $b$'s.
-              $$R = a^* b^*$$
+            <li><b>Resulting Language:</b> Any number of $a$'s followed by any number of $b$'s:
+              <div class="formula">
+                $$R = a^* b^*$$
+              </div>
             </li>
             <li><b>Verification:</b>
               <ul>
@@ -1717,7 +1746,7 @@
           </ol>
           <div class="answer-box">
             <span class="ans-label">Answer (iii)</span>
-            <p><b>a*b*</b></p>
+            <p><b>$a^*b^*$</b></p>
           </div>
         </div>
       </div>
@@ -1745,11 +1774,11 @@
       <div class="sec-heading">Formal Statement of Arden's Theorem</div>
       <p>Let $P$ and $Q$ be two regular expressions over an alphabet $\Sigma$. If $\varepsilon \notin P$ (i.e., $P$ does not contain the null string $\varepsilon$), then the equation:</p>
       <div class="formula">
-        X = Q + XP
+        $$X = Q + XP$$
       </div>
       <p>has a <b>unique solution</b> given by:</p>
       <div class="formula">
-        X = QP*
+        $$X = QP^*$$
       </div>
       <p><i>Note:</i> In symmetric left-linear form, if $X = Q + PX$ with $\varepsilon \notin P$, the unique solution is $X = P^*Q$.</p>
 
@@ -1759,26 +1788,24 @@
           <p><b>Part 1: Proof of Existence (Verification that $X = QP^*$ is a solution):</b></p>
           <p>Substitute $X = QP^*$ into the right-hand side of $X = Q + XP$:</p>
           <div class="formula">
-            \text{RHS} = Q + (QP^*)P = Q(\varepsilon + P^*P)
+            $$\text{RHS} = Q + (QP^*)P = Q(\varepsilon + P^*P) = QP^* = X = \text{LHS}$$
           </div>
-          <p>By the Kleene star unfolding law, $\varepsilon + P^*P = P^*$. Therefore:</p>
-          <div class="formula">
-            \text{RHS} = QP^* = X = \text{LHS}
-          </div>
-          <p>Hence $X = QP^*$ is indeed a valid solution.</p>
+          <p>By the Kleene star unfolding law, $\varepsilon + P^*P = P^*$. Hence $X = QP^*$ is indeed a valid solution.</p>
 
           <p><b>Part 2: Proof of Uniqueness (when $\varepsilon \notin P$):</b></p>
           <p>Repeatedly substitute $X = Q + XP$ into itself:</p>
           <div class="formula">
-            X = Q + (Q + XP)P = Q + QP + XP^2<br>
-            X = Q + QP + (Q + XP)P^2 = Q + QP + QP^2 + XP^3<br>
-            \dots<br>
-            X = Q(\varepsilon + P + P^2 + \dots + P^k) + XP^{k+1}
+            $$\begin{aligned}
+              X &= Q + (Q + XP)P = Q + QP + XP^2 \\
+              &= Q + QP + (Q + XP)P^2 = Q + QP + QP^2 + XP^3 \\
+              &\;\;\vdots \\
+              &= Q(\varepsilon + P + P^2 + \dots + P^k) + XP^{k+1}
+            \end{aligned}$$
           </div>
           <p>Because $\varepsilon \notin P$, every string in $P$ has length at least 1 ($|w| \ge 1$ for all $w \in P$). Consequently, every string in $P^{k+1}$ has length at least $k+1$.</p>
           <p>Now consider any string $w$ of length $n$ ($|w| = n$). If we choose $k = n$, then every string in $XP^{n+1}$ must have length $\ge n+1 > |w|$. Therefore, $w$ cannot belong to $XP^{n+1}$. It follows that:</p>
           <div class="formula">
-            w \in X \iff w \in Q(\varepsilon + P + P^2 + \dots + P^n) \subseteq QP^*
+            $$w \in X \iff w \in Q(\varepsilon + P + P^2 + \dots + P^n) \subseteq QP^*$$
           </div>
           <p>Since this holds for every string $w \in \Sigma^*$, $X = QP^*$ is the only possible solution. ∎</p>
         </div>
@@ -1857,8 +1884,10 @@
       <ol class="steps">
         <li><b>Formulate state equations:</b>
           <div class="formula">
-            R_0 = \varepsilon + R_0 0 + R_1 0 \quad \text{--- (Equation 1)}<br>
-            R_1 = R_0 1 + R_1 1 \quad \text{--- (Equation 2)}
+            $$\begin{aligned}
+              R_0 &= \varepsilon + R_0 0 + R_1 0 \quad \text{--- (Equation 1)} \\
+              R_1 &= R_0 1 + R_1 1 \quad \text{--- (Equation 2)}
+            \end{aligned}$$
           </div>
           <i>(Note: $\varepsilon$ is added to $R_0$ because $q_0$ is the start state).</i>
         </li>
@@ -1866,36 +1895,36 @@
           Equation 2 has the form $X = Q + XP$ where $X = R_1$, $Q = R_0 1$, and $P = 1$.
           Since $\varepsilon \notin P$ ($P = \{1\}$), by Arden's Theorem:
           <div class="formula">
-            R_1 = (R_0 1) \cdot 1^* = R_0 1 1^* \quad \text{--- (Equation 3)}
+            $$R_1 = (R_0 1) \cdot 1^* = R_0 1 1^* \quad \text{--- (Equation 3)}$$
           </div>
         </li>
         <li><b>Substitute Equation 3 into Equation 1:</b>
           <div class="formula">
-            R_0 = \varepsilon + R_0 0 + (R_0 1 1^*) 0 = \varepsilon + R_0(0 + 1 1^* 0)
+            $$R_0 = \varepsilon + R_0 0 + (R_0 1 1^*) 0 = \varepsilon + R_0(0 + 1 1^* 0)$$
           </div>
         </li>
         <li><b>Apply Arden's Theorem to $R_0$:</b>
           This matches $X = Q + XP$ with $X = R_0$, $Q = \varepsilon$, and $P = (0 + 1 1^* 0)$.
           Since $\varepsilon \notin P$, by Arden's Theorem:
           <div class="formula">
-            R_0 = \varepsilon \cdot (0 + 1 1^* 0)^* = (0 + 1 1^* 0)^*
+            $$R_0 = \varepsilon \cdot (0 + 1 1^* 0)^* = (0 + 1 1^* 0)^*$$
           </div>
         </li>
         <li><b>Back-substitute $R_0$ to obtain $R_1$:</b>
           <div class="formula">
-            R_1 = R_0 1 1^* = (0 + 1 1^* 0)^* 1 1^*
+            $$R_1 = R_0 1 1^* = (0 + 1 1^* 0)^* 1 1^*$$
           </div>
         </li>
         <li><b>Final Regular Expression:</b> Since $q_1$ is the only final state, the regular expression for the language accepted by the DFA is:
           <div class="formula">
-            R = (0 + 1 1^* 0)^* 1 1^* = (0 + 1^+ 0)^* 1^+
+            $$R = (0 + 1 1^* 0)^* 1 1^* = (0 + 1^+ 0)^* 1^+$$
           </div>
         </li>
       </ol>
 
       <div class="answer-box">
         <span class="ans-label">Final Answer</span>
-        <p>Arden's Theorem states that $X = Q + XP$ with $\varepsilon \notin P$ has unique solution $X = QP^*$. For the DFA above, applying Arden's theorem yields the regular expression <b>R = (0 + 11*0)*11*</b>.</p>
+        <p>Arden's Theorem states that $X = Q + XP$ with $\varepsilon \notin P$ has unique solution $X = QP^*$. For the DFA above, applying Arden's theorem yields the regular expression <b>$R = (0 + 11^*0)^*11^*$</b>.</p>
       </div>
     </div>
 
@@ -1933,47 +1962,47 @@
           <tbody>
             <tr>
               <td><b>Union</b></td>
-              <td>L₁ &cup; L₂</td>
+              <td>$L_1 \cup L_2$</td>
               <td>Product construction with $F = (F_1 \times Q_2) \cup (Q_1 \times F_2)$, or NFA with new start state $\varepsilon$-branching to both.</td>
             </tr>
             <tr>
               <td><b>Intersection</b></td>
-              <td>L₁ &cap; L₂</td>
+              <td>$L_1 \cap L_2$</td>
               <td>Product DFA construction with states $Q_1 \times Q_2$ and accepting states $F = F_1 \times F_2$.</td>
             </tr>
             <tr>
               <td><b>Complement</b></td>
-              <td>L̄ = &Sigma;* \ L</td>
+              <td>$\bar{L} = \Sigma^* \setminus L$</td>
               <td>Invert accepting states of a complete DFA: $F' = Q \setminus F$. (Note: Requires a deterministic DFA, fails on NFA).</td>
             </tr>
             <tr>
               <td><b>Set Difference</b></td>
-              <td>L₁ \ L₂ = L₁ &cap; L̄₂</td>
+              <td>$L_1 \setminus L_2 = L_1 \cap \bar{L}_2$</td>
               <td>Direct consequence of closure under intersection and complement ($L_1 \setminus L_2 = L_1 \cap L_2^c$).</td>
             </tr>
             <tr>
               <td><b>Concatenation</b></td>
-              <td>L₁ &middot; L₂</td>
+              <td>$L_1 \cdot L_2$</td>
               <td>NFA chaining: connect all accepting states of $NFA_1$ via $\varepsilon$-transitions to the start state of $NFA_2$.</td>
             </tr>
             <tr>
               <td><b>Kleene Star</b></td>
-              <td>L*</td>
+              <td>$L^*$</td>
               <td>Add a new start/accept state with $\varepsilon$-transition to old start, and $\varepsilon$-transitions from all old accept states back to old start.</td>
             </tr>
             <tr>
               <td><b>Reversal</b></td>
-              <td>L<sup>R</sup> = {w<sup>R</sup> : w &isin; L}</td>
+              <td>$L^R = \{w^R : w \in L\}$</td>
               <td>Reverse the direction of every transition arc in an NFA, swap the roles of start state and accepting states.</td>
             </tr>
             <tr>
               <td><b>Homomorphism</b></td>
-              <td>h(L) = {h(w) : w &isin; L}</td>
+              <td>$h(L) = \{h(w) : w \in L\}$</td>
               <td>Replace each transition label $a$ in the NFA with the string $h(a)$.</td>
             </tr>
             <tr>
               <td><b>Inverse Homomorphism</b></td>
-              <td>h⁻¹(L) = {w : h(w) &isin; L}</td>
+              <td>$h^{-1}(L) = \{w : h(w) \in L\}$</td>
               <td>DFA simulation: define new transition $\delta'(q, a) = \hat{\delta}(q, h(a))$.</td>
             </tr>
           </tbody>
@@ -1990,7 +2019,7 @@
 
       <div class="answer-box">
         <span class="ans-label">Final Answer</span>
-        <p>Regular languages form a <b>Boolean algebra</b> (closed under &cup;, &cap;, complement, and set difference) that is additionally closed under concatenation, Kleene star, reversal, and homomorphisms. These guarantees enable complex automata and compilers to be assembled modularly.</p>
+        <p>Regular languages form a <b>Boolean algebra</b> (closed under $\cup$, $\cap$, complement, and set difference) that is additionally closed under concatenation, Kleene star, reversal, and homomorphisms. These guarantees enable complex automata and compilers to be assembled modularly.</p>
       </div>
     </div>
 
@@ -2163,11 +2192,11 @@
       <div class="sec-heading">Mathematical Formulation of Binary Modulo Arithmetic</div>
       <p>Strings are processed left-to-right (Most Significant Bit first). Suppose the prefix read so far evaluates to integer value $V$. Reading a new incoming bit $b \in \{0, 1\}$ shifts the existing number left by one binary place and adds $b$:</p>
       <div class="formula">
-        V_{\text{new}} = 2 \cdot V_{\text{old}} + b
+        $$V_{\text{new}} = 2 \cdot V_{\text{old}} + b$$
       </div>
       <p>Taking modulo 5 on both sides:</p>
       <div class="formula">
-        r_{\text{new}} = (2 \cdot r_{\text{old}} + b) \pmod 5
+        $$r_{\text{new}} = (2 \cdot r_{\text{old}} + b) \pmod{5}$$
       </div>
       <p>Because the remainder modulo 5 can only assume values in $\{0, 1, 2, 3, 4\}$, the DFA requires exactly <b>5 states</b>: $Q = \{q_0, q_1, q_2, q_3, q_4\}$, where state $q_r$ corresponds to current remainder $r$.</p>
 
@@ -2230,11 +2259,6 @@
           </defs>
 
           <!-- Pentagon layout of States: center (310, 140), radius 105 -->
-          <!-- q0: top (310, 35) -->
-          <!-- q1: right-top (410, 105) -->
-          <!-- q2: right-bottom (370, 220) -->
-          <!-- q3: left-bottom (250, 220) -->
-          <!-- q4: left-top (210, 105) -->
           <g font-family="Courier Prime" font-size="14" font-weight="bold" text-anchor="middle">
             <!-- q0 (Double Circle) -->
             <circle cx="310" cy="40" r="28" fill="#e2eeeb" stroke="#8B1A1A" stroke-width="2.5"/>
@@ -2354,7 +2378,7 @@
       <div class="sec-heading">Formal 6-Tuple Definitions</div>
       <p>Both Moore and Mealy machines are finite automata with output capabilities, formally defined as 6-tuples:</p>
       <div class="formula">
-        M = (Q, \Sigma, \Delta, \delta, \lambda, q_0)
+        $$M = (Q, \Sigma, \Delta, \delta, \lambda, q_0)$$
       </div>
       <p>where $Q$ is a finite set of states, $\Sigma$ is the input alphabet, $\Delta$ is the output alphabet, $\delta: Q \times \Sigma \to Q$ is the state transition function, and $q_0$ is the initial state. The sole mathematical difference lies in the <b>output function $\lambda$</b>:</p>
       <ul class="plain">
@@ -2426,8 +2450,7 @@
           </div>
           <p><b>Trace on input "0 1 0 1":</b></p>
           <div class="formula">
-            State: &nbsp; q₀ &mdash;(0/0)&rarr; q₁ &mdash;(1/1)&rarr; q₀ &mdash;(0/0)&rarr; q₁ &mdash;(1/1)&rarr; q₀<br>
-            Output: 0 1 0 1 &nbsp; (Length = 4)
+            $$\text{State: } q_0 \xrightarrow{0/0} q_1 \xrightarrow{1/1} q_0 \xrightarrow{0/0} q_1 \xrightarrow{1/1} q_0 \quad \implies \text{Output: } 0101 \quad (\text{Length } 4)$$
           </div>
         </div>
       </div>
@@ -2450,8 +2473,7 @@
           </div>
           <p><b>Trace on input "0 1 0 1":</b></p>
           <div class="formula">
-            State: &nbsp; q₀(out:0) &mdash;0&rarr; q₁(out:0) &mdash;1&rarr; q₂(out:1) &mdash;0&rarr; q₁(out:0) &mdash;1&rarr; q₂(out:1)<br>
-            Output: 0 0 1 0 1 &nbsp; (Length = 5)
+            $$\text{State: } q_0(\text{out }0) \xrightarrow{0} q_1(\text{out }0) \xrightarrow{1} q_2(\text{out }1) \xrightarrow{0} q_1(\text{out }0) \xrightarrow{1} q_2(\text{out }1) \quad \implies \text{Output: } 00101 \quad (\text{Length } 5)$$
           </div>
         </div>
       </div>
@@ -2496,7 +2518,7 @@
         <li><b>Choice of String s:</b> We choose a string $s \in L$ strategically such that its symmetry is locked across the boundary of length $p$.
           <br>Let $w = a^p b$. Then $w^R = b a^p$.
           <div class="formula">
-            s = w \cdot w^R = a^p b b a^p
+            $$s = w \cdot w^R = a^p b b a^p$$
           </div>
           Notice that:
           <ul>
@@ -2510,7 +2532,7 @@
           <br>Because $|xy| \le p$, both $x$ and $y$ must consist solely of $a$'s, and $y$ cannot contain any $b$'s.
           <br>Therefore, we can write:
           <div class="formula">
-            x = a^j, \quad y = a^k, \quad z = a^{p - j - k} b b a^p
+            $$x = a^j, \quad y = a^k, \quad z = a^{p - j - k} b b a^p$$
           </div>
           where $j \ge 0$, $k \ge 1$, and $j + k \le p$.
         </li>
@@ -2518,7 +2540,7 @@
           The pumping lemma asserts that $x y^0 z = xz \in L$.
           <br>Let us compute $xz$:
           <div class="formula">
-            xz = a^j \cdot a^{p - j - k} b b a^p = a^{p - k} b b a^p
+            $$xz = a^j \cdot a^{p - j - k} b b a^p = a^{p - k} b b a^p$$
           </div>
         </li>
         <li><b>Analyzing the Resulting String:</b>
@@ -2527,7 +2549,7 @@
           <br>For any word to belong to $L = \{ww^R\}$, its first character must equal its last character, its second must equal its second-to-last, and in general, the number of $a$'s preceding the central $bb$ must equal the number of $a$'s following it.
           <br>Here, $(p - k) \ne p$, so $xz$ cannot be partitioned into two identical halves reversed:
           <div class="formula">
-            xz = a^{p-k} b b a^p \notin L
+            $$xz = a^{p-k} b b a^p \notin L$$
           </div>
         </li>
         <li><b>Contradiction:</b> This directly contradicts the third condition of the Pumping Lemma ($xy^0 z \in L$).</li>
@@ -2540,7 +2562,7 @@
 
       <div class="answer-box">
         <span class="ans-label">Final Answer</span>
-        <p>Our assumption that $L$ is regular leads to an impossible contradiction ($a^{p-k}bba^p \in L$ with $k \ge 1$). Therefore, by the Pumping Lemma, <b>L = {wwᴿ : w &isin; (a+b)*} is NOT regular</b>. ∎</p>
+        <p>Our assumption that $L$ is regular leads to an impossible contradiction ($a^{p-k}bba^p \in L$ with $k \ge 1$). Therefore, by the Pumping Lemma, <b>$L = \{ww^R : w \in (a+b)^*\}$ is NOT regular</b>. ∎</p>
       </div>
     </div>
 
@@ -2574,7 +2596,7 @@
 
       <div class="sec-heading">Theoretical Limitations</div>
       <div class="formula">
-        Finite Automata possess only O(1) finite memory &mdash; they cannot count without bound.
+        $$\text{Finite Automata possess only } O(1) \text{ finite memory --- they cannot count without bound.}$$
       </div>
       <ul class="plain">
         <li><b>Inability to Perform Unbounded Counting:</b> A finite automaton with $k$ states can only remember information up to $k$ configurations. It cannot recognize languages requiring comparison of unbounded quantities, such as $L = \{a^n b^n : n \ge 0\}$.</li>
@@ -2686,6 +2708,26 @@
 
 <!-- ==================== JAVASCRIPT ==================== -->
 <script>
+  // KaTeX Math Rendering Function
+  function renderAllMath() {
+    if (typeof renderMathInElement !== 'undefined') {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+          { left: '\\[', right: '\\]', display: true },
+          { left: '\\(', right: '\\)', display: false }
+        ],
+        throwOnError: false,
+        ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      });
+    }
+  }
+
+  // Trigger math rendering on load and ready states
+  window.addEventListener('DOMContentLoaded', renderAllMath);
+  window.addEventListener('load', renderAllMath);
+
   // Tab Switching
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabPanels = document.querySelectorAll('.tab-panel');
@@ -2703,6 +2745,8 @@
       const targetPanel = document.getElementById(btn.getAttribute('data-tab'));
       if (targetPanel) {
         targetPanel.classList.add('active');
+        // Re-render math inside newly revealed panel if needed
+        renderAllMath();
       }
       window.scrollTo({
         top: document.querySelector('.folder-tabs').offsetTop - 12,
@@ -2716,6 +2760,9 @@
     btn.addEventListener('click', () => {
       const parent = btn.parentElement;
       parent.classList.toggle('open');
+      if (parent.classList.contains('open')) {
+        renderAllMath();
+      }
     });
   });
 
@@ -2726,6 +2773,7 @@
   if (expandAllBtn) {
     expandAllBtn.addEventListener('click', () => {
       document.querySelectorAll('.subq').forEach(subq => subq.classList.add('open'));
+      renderAllMath();
     });
   }
 
@@ -2754,6 +2802,7 @@
           card.style.display = 'none';
         }
       });
+      renderAllMath();
     });
   }
 </script>
