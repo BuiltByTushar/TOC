@@ -1,0 +1,2298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BCS 213 · Theory of Computation — Comprehensive Course Compendium & Lecture Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<!-- KaTeX for High-Quality Mathematical Typography -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous" onload="renderAllMath()"></script>
+
+<style>
+  :root {
+    --parchment: #F5EDD8;
+    --parchment-deep: #ECDFB8;
+    --parchment-shadow: #DCCB9C;
+    --sepia: #3B2A1E;
+    --sepia-soft: #634F3D;
+    --sepia-faint: rgba(59, 42, 30, 0.12);
+    --crimson: #8B1A1A;
+    --crimson-soft: #A32929;
+    --crimson-bg: rgba(139, 26, 26, 0.08);
+    --teal: #1A5C5C;
+    --teal-soft: #e2eeeb;
+    --teal-bg: rgba(26, 92, 92, 0.07);
+    --blue: #1A3A6B;
+    --blue-soft: #e5edf7;
+    --blue-bg: rgba(26, 58, 107, 0.07);
+    --rule-line: rgba(139, 101, 60, 0.18);
+    --paper-edge: rgba(74, 55, 40, 0.28);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: #d8c697;
+    background-image:
+      radial-gradient(ellipse at top, rgba(255, 255, 255, 0.18), transparent 60%),
+      linear-gradient(180deg, #c7b382, #d8c697 10%);
+    font-family: 'Lora', Georgia, serif;
+    color: var(--sepia);
+    padding: 24px 12px 60px;
+    line-height: 1.7;
+  }
+  .paper {
+    max-width: 1040px;
+    margin: 0 auto;
+    background-color: var(--parchment);
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.4) 0%, transparent 8%),
+      repeating-linear-gradient(to bottom, transparent 0px, transparent 27px, var(--rule-line) 28px);
+    box-shadow:
+      0 0 0 1px var(--paper-edge),
+      0 12px 36px rgba(45, 32, 20, 0.35),
+      0 30px 70px rgba(45, 32, 20, 0.22);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .paper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 48px;
+    width: 2px;
+    background: rgba(139, 26, 26, 0.35);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .paper::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 52px;
+    width: 1px;
+    background: rgba(139, 26, 26, 0.18);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* KaTeX Responsive & Overflow Rules */
+  .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    padding: 6px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .katex-display::-webkit-scrollbar {
+    height: 4px;
+  }
+  .katex-display::-webkit-scrollbar-thumb {
+    background: var(--paper-edge);
+    border-radius: 2px;
+  }
+  .katex {
+    max-width: 100%;
+  }
+
+  /* Universal text and formula wrapping */
+  .paper,
+  .qcard,
+  .question-text,
+  .subq-body,
+  .answer-box,
+  .margin-note,
+  .formula-box,
+  p, li {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  /* Masthead */
+  .masthead {
+    padding: 34px 36px 28px 76px;
+    border-bottom: 2px solid var(--sepia);
+    position: relative;
+    background: linear-gradient(180deg, rgba(236,223,184,0.65), rgba(245,237,216,0.3) 70%);
+  }
+  .masthead-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .subcode-tag {
+    position: static;
+    font-family: 'Courier Prime', monospace;
+    background: var(--crimson);
+    color: var(--parchment);
+    padding: 5px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border-radius: 3px;
+    letter-spacing: 1px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    flex-shrink: 0;
+  }
+  .kicker {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    font-weight: 700;
+    margin-bottom: 0;
+  }
+  .masthead h1 {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 2.35rem;
+    font-weight: 400;
+    margin: 4px 0 10px;
+    color: var(--sepia);
+    line-height: 1.15;
+  }
+  .masthead h1 em {
+    color: var(--crimson);
+    font-style: italic;
+  }
+  .masthead .sub {
+    font-size: 1.05rem;
+    color: var(--sepia-soft);
+    margin: 0 0 14px;
+    max-width: 780px;
+  }
+  .meta-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.82rem;
+    color: var(--sepia-soft);
+    padding-top: 10px;
+    border-top: 1px dashed var(--paper-edge);
+  }
+  .meta-strip span b {
+    color: var(--sepia);
+  }
+  .cross-link-bar {
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .nav-pill {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .pill-minor {
+    background: var(--crimson);
+    color: var(--parchment);
+    border: 1px solid var(--crimson-soft);
+  }
+  .pill-minor:hover {
+    background: #6a1313;
+    color: #fff;
+  }
+  .pill-curated {
+    background: var(--blue);
+    color: var(--parchment);
+    border: 1px solid #132b4f;
+  }
+  .pill-curated:hover {
+    background: #0d203b;
+    color: #fff;
+  }
+
+  /* Toolbar */
+  .manuscript-toolbar {
+    padding: 14px 20px 14px 76px;
+    background: rgba(236, 223, 184, 0.45);
+    border-bottom: 1px solid var(--paper-edge);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .search-box-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid var(--paper-edge);
+    border-radius: 3px;
+    padding: 4px 10px;
+    flex-grow: 1;
+    max-width: 440px;
+  }
+  .search-input {
+    border: none;
+    background: transparent;
+    font-family: 'Lora', serif;
+    font-size: 0.9rem;
+    color: var(--sepia);
+    width: 100%;
+    outline: none;
+  }
+  .toolbar-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .tool-btn {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+    background: rgba(255,255,255,0.65);
+    color: var(--sepia);
+    border: 1px solid var(--paper-edge);
+    padding: 5px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+  .tool-btn:hover {
+    background: var(--sepia);
+    color: var(--parchment);
+  }
+
+  /* Folder-Tab Navigation */
+  .folder-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 16px 20px 0 76px;
+    background: rgba(220, 203, 156, 0.35);
+    border-bottom: 2px solid var(--sepia);
+    gap: 6px;
+    position: relative;
+    z-index: 2;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+  .folder-tabs::-webkit-scrollbar {
+    height: 5px;
+  }
+  .folder-tabs::-webkit-scrollbar-thumb {
+    background: var(--sepia-soft);
+    border-radius: 2px;
+  }
+  .tab-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+    background: rgba(236, 223, 184, 0.75);
+    border: 1px solid var(--paper-edge);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    padding: 9px 15px 10px;
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 1.02rem;
+    color: var(--sepia-soft);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    position: relative;
+    top: 2px;
+  }
+  .tab-btn:hover {
+    background: rgba(255, 255, 255, 0.65);
+    color: var(--sepia);
+  }
+  .tab-btn.active {
+    background: var(--parchment);
+    color: var(--crimson);
+    font-weight: 600;
+    border-color: var(--sepia);
+    border-bottom: 2px solid var(--parchment);
+    box-shadow: 0 -3px 8px rgba(74, 55, 40, 0.12);
+    z-index: 3;
+    top: 2px;
+  }
+  .tabnum {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.76rem;
+    font-weight: 700;
+    background: var(--crimson-bg);
+    color: var(--crimson);
+    border: 1px solid var(--crimson);
+    padding: 1px 6px;
+    border-radius: 8px;
+  }
+  .tab-btn.active .tabnum {
+    background: var(--crimson);
+    color: var(--parchment);
+  }
+
+  /* Tab Panels */
+  .tab-panel {
+    display: none;
+    padding: 32px 36px 48px 76px;
+    animation: fadeInPanel 0.28s ease;
+  }
+  .tab-panel.active {
+    display: block;
+  }
+  @keyframes fadeInPanel {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .panel-title {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 1.85rem;
+    color: var(--sepia);
+    margin: 0 0 20px;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid var(--sepia);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .panel-badge {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.8rem;
+    font-style: normal;
+    color: var(--teal);
+    background: var(--teal-soft);
+    padding: 3px 10px;
+    border-radius: 3px;
+    border: 1px solid rgba(26,92,92,0.3);
+  }
+
+  /* Question & Topic Cards */
+  .qcard {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--paper-edge);
+    border-radius: 4px;
+    padding: 24px 28px 24px 44px;
+    margin: 28px 0;
+    position: relative;
+    box-shadow: 2px 3px 9px rgba(74, 55, 40, 0.08);
+  }
+  .qcard::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    width: 2px;
+    background: rgba(139, 26, 26, 0.4);
+  }
+  .qcard::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 23px;
+    width: 1px;
+    background: rgba(139, 26, 26, 0.2);
+  }
+  .punch-holes {
+    position: absolute;
+    top: 14px;
+    left: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .punch-holes span {
+    width: 11px;
+    height: 11px;
+    background: #d8c697;
+    border-radius: 50%;
+    border: 1px solid rgba(74, 55, 40, 0.45);
+    box-shadow: inset 1px 1px 2px rgba(0,0,0,0.35);
+  }
+  .qcard-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--paper-edge);
+  }
+  .qnum {
+    font-family: 'Courier Prime', monospace;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--crimson);
+    letter-spacing: 0.5px;
+  }
+  .qtitle {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 1.35rem;
+    color: var(--sepia);
+    flex: 1 1 200px;
+    min-width: 0;
+  }
+  .meta-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .meta-chip {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: var(--teal-soft);
+    color: var(--teal);
+    border: 1px solid rgba(26, 92, 92, 0.35);
+    padding: 2px 8px;
+    border-radius: 8px;
+  }
+  .source-chip {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    background: var(--blue-soft);
+    color: var(--blue);
+    border: 1px solid rgba(26, 58, 107, 0.3);
+    padding: 2px 8px;
+    border-radius: 8px;
+  }
+
+  /* Text & Formulas */
+  .formula {
+    font-family: 'Courier Prime', monospace;
+    background: var(--blue-bg);
+    border: 1px solid rgba(26, 58, 107, 0.28);
+    border-left: 4px solid var(--blue);
+    padding: 12px 18px;
+    margin: 16px 0;
+    border-radius: 0 4px 4px 0;
+    line-height: 1.7;
+    overflow-x: auto;
+    font-size: 0.96rem;
+    color: var(--sepia);
+  }
+  .formula .katex {
+    color: var(--blue);
+  }
+  .formula .katex-display {
+    margin: 4px 0;
+    text-align: center;
+  }
+  .answer-box {
+    border-left: 5px solid var(--teal);
+    background: var(--teal-bg);
+    padding: 14px 20px;
+    margin: 18px 0;
+    border-radius: 0 4px 4px 0;
+    border-top: 1px solid rgba(26,92,92,0.15);
+    border-right: 1px solid rgba(26,92,92,0.15);
+    border-bottom: 1px solid rgba(26,92,92,0.15);
+  }
+  .answer-box .ans-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Courier Prime', monospace;
+    font-weight: 700;
+    color: var(--teal);
+    font-size: 0.82rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .answer-box .ans-label::before {
+    content: "■";
+    font-size: 0.75rem;
+  }
+  .margin-note {
+    background: #F8F1D2;
+    border: 1.5px dashed var(--sepia-soft);
+    border-radius: 3px;
+    padding: 12px 18px 12px 42px;
+    margin: 18px 0;
+    font-size: 0.93rem;
+    position: relative;
+    transform: rotate(-0.3deg);
+    box-shadow: 2px 3px 8px rgba(74, 55, 40, 0.1);
+    color: var(--sepia);
+  }
+  .margin-note::before {
+    content: "✏️";
+    position: absolute;
+    left: 12px;
+    top: 11px;
+    font-size: 1.15rem;
+  }
+  .margin-note b {
+    color: var(--crimson);
+  }
+  .sec-heading {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 1.25rem;
+    color: var(--sepia);
+    margin: 24px 0 10px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--paper-edge);
+  }
+  .sec-heading::before {
+    content: "§ ";
+    color: var(--crimson);
+  }
+
+  /* Collapsible Sections */
+  .subq {
+    margin: 16px 0;
+    border: 1px solid rgba(26, 92, 92, 0.35);
+    border-radius: 3px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.4);
+  }
+  .subq-toggle {
+    width: 100%;
+    text-align: left;
+    background: var(--teal-soft);
+    border: none;
+    border-bottom: 1px solid rgba(26, 92, 92, 0.25);
+    padding: 11px 18px;
+    font-family: 'Lora', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.01rem;
+    color: var(--teal);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.2s ease;
+  }
+  .subq-toggle:hover {
+    background: #d6ebe5;
+  }
+  .subq-arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+    font-size: 0.85rem;
+  }
+  .subq.open .subq-arrow {
+    transform: rotate(90deg);
+  }
+  .subq-body {
+    display: none;
+    padding: 18px 22px 22px;
+    animation: fadeIn 0.25s ease;
+  }
+  .subq.open .subq-body {
+    display: block;
+  }
+
+  /* Data & Transition Tables */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  table.data-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.88rem;
+    min-width: 440px;
+    background: rgba(255,255,255,0.75);
+  }
+  table.data-table th, table.data-table td {
+    border: 1px solid rgba(74, 55, 40, 0.32);
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: middle;
+  }
+  table.data-table th {
+    background: var(--sepia);
+    color: var(--parchment);
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  table.data-table tr:nth-child(even) td {
+    background: rgba(236, 223, 184, 0.35);
+  }
+  table.data-table td.center, table.data-table th.center {
+    text-align: center;
+  }
+  table.data-table td.highlight {
+    background: rgba(139, 26, 26, 0.08);
+    font-weight: 700;
+  }
+
+  /* Lists */
+  ol.steps { padding-left: 24px; margin: 10px 0; }
+  ol.steps li { margin-bottom: 10px; line-height: 1.65; }
+  ul.plain { padding-left: 24px; margin: 10px 0; }
+  ul.plain li { margin-bottom: 8px; line-height: 1.65; }
+
+  /* Priority list */
+  .priority-list {
+    list-style: none;
+    padding: 0;
+    margin: 14px 0 0;
+    counter-reset: pri;
+  }
+  .priority-list li {
+    counter-increment: pri;
+    padding: 8px 0 8px 38px;
+    position: relative;
+    line-height: 1.6;
+    border-bottom: 1px dashed var(--paper-edge);
+  }
+  .priority-list li:last-child { border-bottom: none; }
+  .priority-list li::before {
+    content: counter(pri);
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--crimson);
+    color: var(--parchment);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Question Bank Badges */
+  .qbadge {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.74rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(139, 26, 26, 0.12);
+    color: var(--crimson);
+    border: 1px solid var(--crimson);
+  }
+  .qbadge-sol {
+    background: rgba(26, 92, 92, 0.12);
+    color: var(--teal);
+    border: 1px solid var(--teal);
+  }
+
+  /* Diagrams */
+  .diagram-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 18px 0;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1.5px solid rgba(74, 55, 40, 0.28);
+    border-radius: 4px;
+    padding: 16px;
+    overflow-x: auto;
+  }
+  .diagram-wrap svg {
+    max-width: 100%;
+    height: auto;
+  }
+  .diagram-caption {
+    text-align: center;
+    font-style: italic;
+    color: var(--sepia-soft);
+    font-size: 0.88rem;
+    margin-top: 8px;
+  }
+
+  /* Footer */
+  footer {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    font-family: 'IM Fell English', Georgia, serif;
+    font-style: italic;
+    color: var(--sepia-soft);
+    padding: 32px 20px 40px;
+    border-top: 2px solid var(--sepia);
+    font-size: 1.05rem;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .masthead { padding: 28px 24px 22px 64px; }
+    .manuscript-toolbar { padding: 14px 20px 14px 64px; }
+    .folder-tabs { padding: 16px 20px 0 64px; }
+    .tab-panel { padding: 26px 20px 36px 64px; }
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 10px 6px 36px; }
+    .paper::before { left: 24px; }
+    .paper::after { left: 28px; }
+    .masthead { padding: 22px 16px 18px 40px; }
+    .masthead h1 { font-size: 1.85rem; }
+    .manuscript-toolbar { padding: 12px 14px 12px 40px; flex-direction: column; align-items: stretch; }
+    .folder-tabs { padding: 14px 12px 0 40px; }
+    .tab-panel { padding: 20px 14px 28px 40px; }
+    .subcode-tag { margin-bottom: 8px; }
+    .qcard { padding: 18px 14px 20px 36px; margin: 18px 0; }
+    .qcard::before { left: 18px; width: 1.5px; }
+    .qcard::after { display: none; }
+    .punch-holes { left: 5px; width: 12px; }
+    .punch-holes span { width: 9px; height: 9px; }
+    .tab-btn { font-size: 0.95rem; padding: 8px 12px 9px; }
+    .search-box-wrap { width: 100%; max-width: 100%; }
+    .table-wrap table.data-table { min-width: 100%; }
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 6px 4px 24px; }
+    .paper::before { left: 10px; width: 1px; }
+    .paper::after { display: none; }
+    .masthead { padding: 18px 12px 16px 20px; }
+    .masthead h1 { font-size: 1.5rem; }
+    .manuscript-toolbar { padding: 10px 10px 10px 20px; }
+    .folder-tabs { padding: 12px 8px 0 20px; }
+    .tab-panel { padding: 16px 8px 24px 16px; }
+    .qcard { padding: 14px 10px 16px 14px; margin: 14px 0; }
+    .qcard::before { display: none; }
+    .punch-holes { display: none; }
+    .margin-note { padding: 10px 12px 10px 32px; font-size: 0.88rem; }
+    .margin-note::before { left: 8px; top: 9px; }
+    .tab-btn { font-size: 0.88rem; padding: 7px 11px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="paper">
+
+  <!-- ==================== MASTHEAD ==================== -->
+  <div class="masthead">
+    <div class="masthead-top">
+      <div class="kicker">Madan Mohan Malaviya University of Technology · Gorakhpur</div>
+      <div class="subcode-tag">Sub Code: BCS 213</div>
+    </div>
+    <h1>Theory of Computation <em>— Course Lecture Compendium</em></h1>
+    <p class="sub">Complete, Faithful Synthesis of All 9 Official Lecture Slide Decks (Units I &amp; II) · Exact Definitions, Formal Tuples, Algorithms &amp; Complete Question Bank</p>
+    <div class="meta-strip">
+      <span><b>Course:</b> Theory Of Computation (BCS 213)</span>
+      <span><b>Scope:</b> Units I &amp; II Complete</span>
+      <span><b>Sources:</b> 9 Slide Decks (323 Total Slides)</span>
+      <span><b>Wording:</b> Exact Slide Terminology Preserved</span>
+    </div>
+    <div class="cross-link-bar">
+      <a href="index.html" class="nav-pill pill-minor">📝 Minor Test Solved Paper (30 Marks Manuscript)</a>
+      <a href="index.html#videos" class="nav-pill pill-curated">📺 Curated Video Lectures &amp; Roadmap</a>
+    </div>
+  </div>
+
+  <!-- Toolbar with Instant Filter and Collapse Controls -->
+  <div class="manuscript-toolbar">
+    <div class="search-box-wrap">
+      <span>🔍</span>
+      <input type="text" id="searchInput" class="search-input" placeholder="Search topic, definition, tuple, theorem, exercise...">
+    </div>
+    <div class="toolbar-actions">
+      <button class="tool-btn" id="expandAllBtn">Expand All Sections</button>
+      <button class="tool-btn" id="collapseAllBtn">Collapse All</button>
+    </div>
+  </div>
+
+  <!-- Folder-Tab Navigation -->
+  <div class="folder-tabs" role="tablist">
+    <button class="tab-btn active" data-tab="mod1" role="tab" aria-selected="true"><span class="tabnum">§1</span>Languages &amp; Grammars</button>
+    <button class="tab-btn" data-tab="mod2" role="tab" aria-selected="false"><span class="tabnum">§2</span>Deterministic FA (DFA)</button>
+    <button class="tab-btn" data-tab="mod3" role="tab" aria-selected="false"><span class="tabnum">§3</span>NFA &amp; Conversions</button>
+    <button class="tab-btn" data-tab="mod4" role="tab" aria-selected="false"><span class="tabnum">§4</span>DFA Minimization</button>
+    <button class="tab-btn" data-tab="mod5" role="tab" aria-selected="false"><span class="tabnum">§5</span>Moore &amp; Mealy Machines</button>
+    <button class="tab-btn" data-tab="mod6" role="tab" aria-selected="false"><span class="tabnum">§6</span>Regular Expressions &amp; Arden</button>
+    <button class="tab-btn" data-tab="mod7" role="tab" aria-selected="false"><span class="tabnum">§7</span>Pumping Lemma &amp; Closure</button>
+    <button class="tab-btn" data-tab="questions" role="tab" aria-selected="false"><span class="tabnum">📚</span>Master Question Bank</button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ================         MODULE 1 PANEL    ================ -->
+  <!-- ============================================================ -->
+  <div class="tab-panel active" id="mod1" role="tabpanel">
+    <h2 class="panel-title">Module 1 · Foundational Concepts, Languages &amp; Grammars <span class="panel-badge">Unit-I · Source: 2. Three_Concepts_Computation.pdf</span></h2>
+
+    <div class="answer-box">
+      <span class="ans-label">Module Overview</span>
+      <p>
+        Covers the three fundamental pillars of the Theory of Computation: <b>Automata</b>, <b>Formal Languages</b>, and <b>Grammars</b>. Preserves the exact mathematical definitions of alphabets, strings, operations, language classes, and phrase-structure grammars from the course slide deck.
+      </p>
+    </div>
+
+    <!-- Topic Card 1.1 -->
+    <div class="qcard" id="card-mod1-automaton">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 1.1</span>
+        <span class="qtitle">The Fundamental Concept of an Automaton</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slide 1</span>
+          <span class="source-chip">2. Three_Concepts_Computation.pdf</span>
+        </div>
+      </div>
+
+      <div class="formula">
+        <b>Automaton Definition:</b> An automaton is a formal construct that accepts input, produces output, may have some temporary storage, and can make decisions in transforming input to output.
+      </div>
+
+      <div class="sec-heading">The Three Essential Features of an Automaton</div>
+      <ul class="plain">
+        <li><b>Input Mechanism:</b> Reads a finite sequence of symbols chosen from a finite alphabet.</li>
+        <li><b>Internal States &amp; Finite Control:</b> At any moment, the automaton is in one of a finite number of internal states, changing state according to a predetermined transition function $\delta$.</li>
+        <li><b>Storage &amp; Output:</b> Some automata possess temporary storage (like the infinite tape in Turing Machines or a stack in Pushdown Automata), while basic Finite State Automata possess strictly zero auxiliary external memory.</li>
+      </ul>
+
+      <div class="margin-note">
+        <b>Core Distinction:</b> In finite state automata, the memory is strictly limited to the finite set of internal states $Q$. There is no additional external tape or stack to remember unbounded counts or arbitrary length history.
+      </div>
+    </div>
+
+    <!-- Topic Card 1.2 -->
+    <div class="qcard" id="card-mod1-languages">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 1.2</span>
+        <span class="qtitle">Alphabets, Strings, and Formal Languages</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 2–5</span>
+          <span class="source-chip">2. Three_Concepts_Computation.pdf</span>
+        </div>
+      </div>
+
+      <div class="sec-heading">Mathematical Definitions from Slides</div>
+      <ul class="plain">
+        <li><b>Alphabet ($\Sigma$):</b> A finite, non-empty set of symbols. Common examples include $\Sigma = \{a, b\}$ and the binary alphabet $\Sigma = \{0, 1\}$.</li>
+        <li><b>String ($w$ or $v$):</b> A finite sequence of symbols chosen from $\Sigma$. For instance, over $\Sigma = \{a, b\}$, valid strings include $v = aba$ and $w = bbabb$.</li>
+        <li><b>Empty String ($\varepsilon$ or $\lambda$):</b> The unique string containing zero symbols. Its length is $|\varepsilon| = 0$.</li>
+        <li><b>Length of a String ($|w|$):</b> The number of symbols in $w$. If $w = abb$, then $|w| = 3$.</li>
+        <li><b>Kleene Star ($\Sigma^*$):</b> The set of all strings formed by concatenating zero or more symbols from $\Sigma$:
+          $$\Sigma^* = \bigcup_{i=0}^{\infty} \Sigma^i = \{\varepsilon\} \cup \Sigma \cup \Sigma^2 \cup \dots$$
+        </li>
+        <li><b>Positive Closure ($\Sigma^+$):</b> The set of all strings of length at least 1:
+          $$\Sigma^+ = \bigcup_{i=1}^{\infty} \Sigma^i = \Sigma^* \setminus \{\varepsilon\}$$
+        </li>
+        <li><b>Formal Language ($L$):</b> Any subset of $\Sigma^*$, i.e., $L \subseteq \Sigma^*$. A language may be finite or infinite.</li>
+      </ul>
+
+      <div class="sec-heading">Operations on Languages (Slide 5)</div>
+      <p>Because a language is a mathematical set, set operations are defined as usual:</p>
+      <div class="table-wrap">
+        <table class="data-table">
+          <tr><th>Operation</th><th>Notation</th><th>Formal Definition</th></tr>
+          <tr><td><b>Union</b></td><td>$L_1 \cup L_2$</td><td>$\{w \in \Sigma^* \mid w \in L_1 \lor w \in L_2\}$</td></tr>
+          <tr><td><b>Intersection</b></td><td>$L_1 \cap L_2$</td><td>$\{w \in \Sigma^* \mid w \in L_1 \land w \in L_2\}$</td></tr>
+          <tr><td><b>Complement</b></td><td>$\overline{L} \text{ or } L^c$</td><td>$\Sigma^* \setminus L = \{w \in \Sigma^* \mid w \notin L\}$</td></tr>
+          <tr><td><b>Difference</b></td><td>$L_1 \setminus L_2$</td><td>$\{w \in \Sigma^* \mid w \in L_1 \land w \notin L_2\}$</td></tr>
+          <tr><td><b>Concatenation</b></td><td>$L_1 L_2$</td><td>$\{xy \mid x \in L_1 \land y \in L_2\}$</td></tr>
+          <tr><td><b>Reversal</b></td><td>$L^R$</td><td>$\{w^R \mid w \in L\}$ where $(a_1 a_2 \dots a_k)^R = a_k \dots a_2 a_1$</td></tr>
+          <tr><td><b>Kleene Star</b></td><td>$L^*$</td><td>$\bigcup_{i=0}^{\infty} L^i = \{\varepsilon\} \cup L \cup L^2 \cup L^3 \dots$</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Topic Card 1.3 -->
+    <div class="qcard" id="card-mod1-grammars">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 1.3</span>
+        <span class="qtitle">Phrase-Structure Grammars &amp; The Chomsky Hierarchy</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 6–10</span>
+          <span class="source-chip">2. Three_Concepts_Computation.pdf</span>
+        </div>
+      </div>
+
+      <div class="formula">
+        <b>Formal Definition of a Grammar:</b> A phrase-structure grammar is formally defined as a 4-tuple:
+        $$G = (V, T, S, P)$$
+        where:
+        <ul style="margin:6px 0; padding-left:20px;">
+          <li>$V$: A finite set of <b>variables</b> (also called non-terminal symbols).</li>
+          <li>$T$: A finite set of <b>terminal symbols</b>, disjoint from $V$ ($V \cap T = \emptyset$).</li>
+          <li>$S \in V$: The designated <b>start symbol</b>.</li>
+          <li>$P$: A finite set of <b>production rules</b> of the form $\alpha \to \beta$, where $\alpha \in (V \cup T)^+$ and $\beta \in (V \cup T)^*$.</li>
+        </ul>
+      </div>
+
+      <div class="sec-heading">The Chomsky Hierarchy of Grammars (Slides 6 &amp; 10)</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <tr><th>Type</th><th>Grammar Class</th><th>Production Restriction ($\alpha \to \beta$)</th><th>Accepting Automaton</th></tr>
+          <tr><td><b>Type 0</b></td><td>Unrestricted / Phase-Structure</td><td>No restrictions; $\alpha$ must contain at least one non-terminal.</td><td>Turing Machine</td></tr>
+          <tr><td><b>Type 1</b></td><td>Context-Sensitive (CSG)</td><td>$|\alpha| \le |\beta|$ (non-contracting), e.g., $\gamma A \delta \to \gamma \beta \delta$ with $\beta \neq \varepsilon$.</td><td>Linear Bounded Automaton (LBA)</td></tr>
+          <tr><td><b>Type 2</b></td><td>Context-Free (CFG)</td><td>$A \to \beta$ where $A \in V$ and $\beta \in (V \cup T)^*$.</td><td>Pushdown Automaton (PDA)</td></tr>
+          <tr><td><b>Type 3</b></td><td>Regular Grammar (RG)</td><td>Right-linear ($A \to wB$ or $A \to w$) or Left-linear ($A \to Bw$ or $A \to w$), $w \in T^*$.</td><td>Finite State Automaton (DFA/NFA)</td></tr>
+        </table>
+      </div>
+
+      <div class="margin-note">
+        <b>Chomsky Containment Property:</b>
+        $$\text{Regular (Type 3)} \subset \text{Context-Free (Type 2)} \subset \text{Context-Sensitive (Type 1)} \subset \text{Recursively Enumerable (Type 0)}$$
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ================         MODULE 2 PANEL    ================ -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="mod2" role="tabpanel">
+    <h2 class="panel-title">Module 2 · Deterministic Finite Automata (DFA) <span class="panel-badge">Unit-I · Sources: 3. D_FiniteAutomata_.pdf &amp; 4. DFA_Exercise.pdf</span></h2>
+
+    <div class="answer-box">
+      <span class="ans-label">Module Overview</span>
+      <p>
+        Detailed study of Deterministic Finite State Automata (DFA). Contains the formal 5-tuple specification, the one-way infinite tape model, the formal definition of the extended transition function $\hat{\delta}$, language acceptance $L(M)$, dead/trap states, and foundational design principles.
+      </p>
+    </div>
+
+    <!-- Topic Card 2.1 -->
+    <div class="qcard" id="card-mod2-dfa-def">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 2.1</span>
+        <span class="qtitle">Formal Definition of a Deterministic Finite Automaton (DFA)</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 1–7</span>
+          <span class="source-chip">3. D_FiniteAutomata_.pdf</span>
+        </div>
+      </div>
+
+      <div class="formula">
+        <b>Formal 5-Tuple Definition:</b> A Deterministic Finite Automaton (DFA) is a 5-tuple:
+        $$M = (Q, \Sigma, \delta, q_0, F)$$
+        where:
+        <ul style="margin:6px 0; padding-left:20px;">
+          <li>$Q$: A finite, non-empty set of <b>states</b>.</li>
+          <li>$\Sigma$: A finite set of <b>input symbols</b> (the input alphabet).</li>
+          <li>$\delta$: The <b>transition function</b> mapping $Q \times \Sigma \to Q$. That is, for every state $q \in Q$ and input symbol $a \in \Sigma$, $\delta(q, a)$ specifies exactly one next state.</li>
+          <li>$q_0 \in Q$: The <b>initial state</b> (or start state) where execution begins.</li>
+          <li>$F \subseteq Q$: The set of <b>final states</b> (or accepting states).</li>
+        </ul>
+      </div>
+
+      <div class="sec-heading">The Tape &amp; Finite Control Model (Slide 1)</div>
+      <ul class="plain">
+        <li><b>One-way, infinite tape:</b> Broken into discrete cells, each holding one symbol from $\Sigma$.</li>
+        <li><b>Read-only tape head:</b> Scans one cell at a time and strictly moves from left to right by one cell after each transition.</li>
+        <li><b>Deterministic operation:</b> For each combination of current state and current input symbol, there is <i>uniquely and exactly one</i> transition. No choices or guesses are permitted.</li>
+      </ul>
+
+      <div class="sec-heading">The Extended Transition Function ($\hat{\delta}$ or $\delta^*$)</div>
+      <p>To process entire strings rather than single symbols, the transition function is recursively extended from $Q \times \Sigma \to Q$ to $\hat{\delta}: Q \times \Sigma^* \to Q$:</p>
+      <div class="formula">
+        $$\begin{aligned}
+        \text{Basis:} \quad & \hat{\delta}(q, \varepsilon) = q \
+        \text{Induction:} \quad & \hat{\delta}(q, wa) = \delta(\hat{\delta}(q, w), a) \quad \text{for all } w \in \Sigma^*, a \in \Sigma
+        \end{aligned}$$
+      </div>
+
+      <div class="sec-heading">Language of a DFA ($L(M)$)</div>
+      <div class="formula">
+        $$L(M) = \{w \in \Sigma^* \mid \hat{\delta}(q_0, w) \in F\}$$
+        A string $w$ is accepted by $M$ if and only if starting in $q_0$ and reading $w$ leaves the automaton in an accepting state $q \in F$. Otherwise, $w$ is rejected.
+      </div>
+    </div>
+
+    <!-- Topic Card 2.2 -->
+    <div class="qcard" id="card-mod2-dfa-design">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 2.2</span>
+        <span class="qtitle">DFA Construction Principles &amp; Parity Automata</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 2–5</span>
+          <span class="source-chip">3. D_FiniteAutomata_.pdf</span>
+        </div>
+      </div>
+
+      <div class="sec-heading">Example: DFA for Strings with Even Number of 0's (Slide 2)</div>
+      <p>Alphabet $\Sigma = \{0, 1\}$. We track the parity of the count of 0's using two states:</p>
+      <ul class="plain">
+        <li>$q_0$: Even number of 0's seen so far (Start &amp; Final state).</li>
+        <li>$q_1$: Odd number of 0's seen so far (Non-final state).</li>
+      </ul>
+      <div class="table-wrap">
+        <table class="data-table">
+          <tr><th>State</th><th>Input 0</th><th>Input 1</th><th>State Meaning</th></tr>
+          <tr class="highlight"><td>$\to *q_0$</td><td>$q_1$</td><td>$q_0$</td><td>Even count of 0's (Accepting)</td></tr>
+          <tr><td>$q_1$</td><td>$q_0$</td><td>$q_1$</td><td>Odd count of 0's (Rejecting)</td></tr>
+        </table>
+      </div>
+
+      <div class="sec-heading">Dead State / Trap State Concept (Slide 15)</div>
+      <p>
+        A <b>dead state</b> (or trap state) is a non-final state from which the automaton can never leave once entered ($\delta(q_{dead}, a) = q_{dead}$ for all $a \in \Sigma$).
+        When constructing a DFA, because $\delta$ is a total function, every symbol must have an outgoing transition. If a string violates the language condition irrevocably (such as an illegal prefix), the transition is routed to the trap state.
+      </p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ================         MODULE 3 PANEL    ================ -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="mod3" role="tabpanel">
+    <h2 class="panel-title">Module 3 · Nondeterministic Finite Automata (NFA) &amp; Conversions <span class="panel-badge">Unit-I · Sources: 3. FiniteAutomata_2.pdf, 5. NFA_NFA_Elimination.pdf, 6. nfa-to-dfa.pdf</span></h2>
+
+    <div class="answer-box">
+      <span class="ans-label">Module Overview</span>
+      <p>
+        Examines Nondeterministic Finite Automata (NFA), formal 5-tuple definition with power set transitions, $\varepsilon$-transitions, the $\varepsilon$-closure algorithm, elimination of $\varepsilon$-moves, and the complete Subset Construction (powerset) method for converting NFA to DFA.
+      </p>
+    </div>
+
+    <!-- Topic Card 3.1 -->
+    <div class="qcard" id="card-mod3-nfa-def">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 3.1</span>
+        <span class="qtitle">Formal Definition of NFA &amp; Nondeterminism</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 23–28</span>
+          <span class="source-chip">3. FiniteAutomata_2.pdf</span>
+        </div>
+      </div>
+
+      <div class="formula">
+        <b>Formal Definition of NFA:</b> An NFA is a 5-tuple:
+        $$M = (Q, \Sigma, \delta, q_0, F)$$
+        where $Q, \Sigma, q_0, F$ are as in a DFA, but the transition function maps to the <b>power set</b> of states:
+        $$\delta: Q \times \Sigma \to 2^Q \quad (\text{or } \mathcal{P}(Q))$$
+      </div>
+
+      <div class="sec-heading">The Three Non-Deterministic Features of NFA (Slide 2 of Lecture 12)</div>
+      <ol class="steps">
+        <li><b>Multiple transitions:</b> On a single input symbol, the machine may transition to multiple possible states ($\delta(q, a) = \{q_1, q_2\}$).</li>
+        <li><b>No transition:</b> On an input symbol, the machine may have zero transitions ($\delta(q, a) = \emptyset$), causing that computational path to terminate/die.</li>
+        <li><b>$\varepsilon$-transitions:</b> The machine can change state spontaneously without consuming any input symbol.</li>
+      </ol>
+
+      <div class="answer-box">
+        <span class="ans-label">Acceptance Criterion in NFA</span>
+        <p>A string $w$ is accepted by an NFA if <b>at least one computation path</b> leads to an accepting state in $F$ upon exhausting $w$. It does not matter if several other computational branches die or end in non-accepting states.</p>
+      </div>
+    </div>
+
+    <!-- Topic Card 3.2 -->
+    <div class="qcard" id="card-mod3-epsilon">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 3.2</span>
+        <span class="qtitle">NFA with $\varepsilon$-Transitions &amp; $\varepsilon$-Elimination Algorithm</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 1–13</span>
+          <span class="source-chip">5. NFA_NFA_Elimination.pdf</span>
+        </div>
+      </div>
+
+      <div class="sec-heading">Definition of $\varepsilon$-Closure ($\varepsilon\text{-CLOSURE}(q)$)</div>
+      <p>
+        The $\varepsilon$-closure of a state $q$, denoted $\varepsilon\text{-CLOSURE}(q)$, is the set of all states reachable from $q$ by making zero or more $\varepsilon$-transitions:
+      </p>
+      <div class="formula">
+        $$\varepsilon\text{-CLOSURE}(q) = \{p \in Q \mid q \overset{\varepsilon^*}{\implies} p\}$$
+        <i>Always includes $q$ itself because 0 $\varepsilon$-steps leave the machine in state $q$.</i>
+      </div>
+
+      <div class="sec-heading">Algorithm: Elimination of $\varepsilon$-Transitions (Slide 2)</div>
+      <p>To convert an NFA with $\varepsilon$-transitions $M = (Q, \Sigma, \delta, q_0, F)$ into an equivalent standard NFA without $\varepsilon$-transitions $M' = (Q, \Sigma, \delta', q_0, F')$:</p>
+      <ol class="steps">
+        <li>
+          <b>Compute the new transition function $\delta'$:</b> For every state $q \in Q$ and input symbol $a \in \Sigma$:
+          $$\delta'(q, a) = \varepsilon\text{-CLOSURE}\Big(\delta\big(\varepsilon\text{-CLOSURE}(q), a\big)\Big)$$
+        </li>
+        <li>
+          <b>Determine the new set of final states $F'$:</b>
+          $$F' = \begin{cases} F \cup \{q_0\} & \text{if } \varepsilon\text{-CLOSURE}(q_0) \cap F \neq \emptyset \ F & \text{otherwise} \end{cases}$$
+        </li>
+      </ol>
+    </div>
+
+    <!-- Topic Card 3.3 -->
+    <div class="qcard" id="card-mod3-subset">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 3.3</span>
+        <span class="qtitle">The Subset Construction Method (NFA to DFA)</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 3–14</span>
+          <span class="source-chip">6. nfa-to-dfa.pdf</span>
+        </div>
+      </div>
+
+      <div class="formula">
+        <b>Theoretical Principle:</b> Every NFA can be converted to an equivalent DFA using the <b>Subset Construction (Powerset) Algorithm</b>. If the NFA has $n$ states, the equivalent DFA will have at most $2^n$ states (state explosion bound).
+      </div>
+
+      <div class="sec-heading">Algorithm Steps (Slide 3)</div>
+      <ol class="steps">
+        <li><b>Initial State:</b> The start state of the DFA is the set $\{q_0\}$ (or $\varepsilon\text{-CLOSURE}(q_0)$ if converting from $\varepsilon$-NFA).</li>
+        <li>
+          <b>Transition Computation:</b> For each newly discovered set of states $S \subseteq Q$ and each input symbol $a \in \Sigma$:
+          $$\delta_D(S, a) = \bigcup_{q \in S} \delta_N(q, a)$$
+          If the resulting subset is not yet in the DFA state table, add it as an unprocessed state.
+        </li>
+        <li><b>Termination:</b> Repeat step 2 until no new state subsets are generated.</li>
+        <li><b>Final States:</b> A state subset $S$ in the DFA is an accepting state ($S \in F_D$) if and only if it contains <i>at least one</i> final state of the NFA ($S \cap F_N \neq \emptyset$).</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ================         MODULE 4 PANEL    ================ -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="mod4" role="tabpanel">
+    <h2 class="panel-title">Module 4 · DFA Minimization &amp; State Equivalence <span class="panel-badge">Unit-I · Source: 07_dfa_minimize.pdf</span></h2>
+
+    <div class="answer-box">
+      <span class="ans-label">Module Overview</span>
+      <p>
+        Systematic algorithm for minimizing Deterministic Finite Automata. Based on the concept of state equivalence and the <b>Table-Filling Algorithm</b>. Collapses redundant states with identical future behavior into canonical equivalence classes.
+      </p>
+    </div>
+
+    <!-- Topic Card 4.1 -->
+    <div class="qcard" id="card-mod4-minimize">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 4.1</span>
+        <span class="qtitle">The Minimization Principle &amp; State Equivalence</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 1–4</span>
+          <span class="source-chip">07_dfa_minimize.pdf</span>
+        </div>
+      </div>
+
+      <div class="formula">
+        <b>Meaning of "Minimal" (Slide 1):</b> A DFA is minimal if no other DFA with fewer states recognizes the exact same language. By the Myhill–Nerode Theorem, the minimal DFA for any regular language is unique up to state isomorphism.
+      </div>
+
+      <div class="sec-heading">State Equivalence vs. Distinguishability</div>
+      <ul class="plain">
+        <li>
+          <b>Equivalent States ($p \equiv q$):</b> Two states $p, q \in Q$ are equivalent if for every string $w \in \Sigma^*$,
+          $$\hat{\delta}(p, w) \in F \iff \hat{\delta}(q, w) \in F$$
+        </li>
+        <li>
+          <b>Distinguishable States ($p \not\equiv q$):</b> Two states $p$ and $q$ are distinguishable if there exists at least one string $w \in \Sigma^*$ such that one of $\hat{\delta}(p, w)$ and $\hat{\delta}(q, w)$ is in $F$ while the other is not. Such a string $w$ is called a <b>distinguishing extension</b>.
+        </li>
+      </ul>
+
+      <div class="sec-heading">The Table-Filling Algorithm (Slides 3 &amp; 4)</div>
+      <ol class="steps">
+        <li><b>Preprocessing:</b> Eliminate all unreachable states from the start state $q_0$.</li>
+        <li><b>Table Initialization:</b> Construct a lower-triangular table containing an entry for each unordered pair of distinct states $\{p, q\}$. Initialize all entries as unmarked and with no dependencies.</li>
+        <li><b>Base Step (0-Distinguishability):</b> Mark every pair $\{p, q\}$ where one state is final ($p \in F$) and the other is non-final ($q \notin F$). This is marked with $\times$ because $\varepsilon$ distinguishes them.</li>
+        <li>
+          <b>Inductive Step:</b> For every unmarked pair $\{p, q\}$ and every symbol $a \in \Sigma$:
+          <ul style="margin:4px 0; padding-left:18px;">
+            <li>Compute successors $p' = \delta(p, a)$ and $q' = \delta(q, a)$.</li>
+            <li>If $p' \neq q'$ and the pair $\{p', q'\}$ is already marked, mark $\{p, q\}$.</li>
+            <li>If $\{p', q'\}$ is unmarked, add $\{p, q\}$ to the dependency list of $\{p', q'\}$.</li>
+            <li>Whenever a pair $\{r, s\}$ is marked, recursively mark all pairs on its dependency list!</li>
+          </ul>
+        </li>
+        <li><b>State Merging:</b> When no further marks can be added, all remaining unmarked pairs $\{p, q\}$ are equivalent ($p \equiv q$). Collapse each connected component of equivalent states into a single state in the minimal DFA.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ================         MODULE 5 PANEL    ================ -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="mod5" role="tabpanel">
+    <h2 class="panel-title">Module 5 · Finite Automata with Output: Moore &amp; Mealy Machines <span class="panel-badge">Unit-II · Source: 8_FA_out.pdf</span></h2>
+
+    <div class="answer-box">
+      <span class="ans-label">Module Overview</span>
+      <p>
+        Transducers (Finite Automata with Output). Covers the formal 6-tuple definitions of Moore and Mealy machines, output timing relationships, string length constraints ($|y|=|x|$ vs. $|y|=|x|+1$), and bidirectional conversion algorithms with state-splitting.
+      </p>
+    </div>
+
+    <!-- Topic Card 5.1 -->
+    <div class="qcard" id="card-mod5-definitions">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 5.1</span>
+        <span class="qtitle">Formal Definitions of Moore &amp; Mealy Machines</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 1–4</span>
+          <span class="source-chip">8_FA_out.pdf</span>
+        </div>
+      </div>
+
+      <div class="sec-heading">1. Mealy Machine Formal 6-Tuple (Slide 2)</div>
+      <div class="formula">
+        A Mealy machine is defined as a 6-tuple:
+        $$M = (Q, \Sigma, \Delta, \delta, \lambda, q_0)$$
+        where:
+        <ul style="margin:6px 0; padding-left:20px;">
+          <li>$Q$: A finite set of states.</li>
+          <li>$\Sigma$: A finite set of input symbols.</li>
+          <li>$\Delta$: A finite set of output symbols (the output alphabet).</li>
+          <li>$\delta$: The state transition function mapping $Q \times \Sigma \to Q$.</li>
+          <li>$\lambda$: The <b>machine output function</b> mapping $Q \times \Sigma \to \Delta$ (output depends on both present state and present input symbol).</li>
+          <li>$q_0 \in Q$: The initial state of the machine.</li>
+        </ul>
+      </div>
+
+      <div class="sec-heading">2. Moore Machine Formal 6-Tuple (Slide 1)</div>
+      <div class="formula">
+        A Moore machine is defined as a 6-tuple:
+        $$M = (Q, \Sigma, \Delta, \delta, \lambda, q_0)$$
+        where $Q, \Sigma, \Delta, \delta, q_0$ are as above, but:
+        <ul style="margin:6px 0; padding-left:20px;">
+          <li>$\lambda$: The <b>machine output function</b> mapping $Q \to \Delta$ (output depends strictly and solely upon the current state).</li>
+        </ul>
+      </div>
+
+      <div class="sec-heading">Critical Output Length &amp; Delay Comparison (Slide 2 &amp; 3)</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <tr><th>Feature</th><th>Mealy Machine</th><th>Moore Machine</th></tr>
+          <tr><td><b>Output Association</b></td><td>Associated with the <b>transition edges</b> $\lambda(q, a)$.</td><td>Associated with the <b>states</b> $\lambda(q)$.</td></tr>
+          <tr><td><b>Output for Empty Input $\varepsilon$</b></td><td>Produces $\varepsilon$ (length 0).</td><td>Produces $\lambda(q_0)$ (length 1).</td></tr>
+          <tr><td><b>Output String Length</b></td><td>$|y| = |x|$ (Strict length equality).</td><td>$|y| = |x| + 1$ (1 additional symbol).</td></tr>
+          <tr><td><b>Response Characteristic</b></td><td>Instantaneous reaction to input transitions.</td><td>Reacts after entering state (1 clock cycle delay).</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Topic Card 5.2 -->
+    <div class="qcard" id="card-mod5-conversions">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 5.2</span>
+        <span class="qtitle">Equivalence &amp; Conversion Algorithms (Section 2.10)</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 11–18</span>
+          <span class="source-chip">8_FA_out.pdf</span>
+        </div>
+      </div>
+
+      <div class="sec-heading">Conversion: Moore Machine $\implies$ Mealy Machine (Slide 11)</div>
+      <p>
+        Let $M = (Q, \Sigma, \Delta, \delta, \lambda, q_0)$ be a Moore machine. The equivalent Mealy machine $M' = (Q, \Sigma, \Delta, \delta, \lambda', q_0)$ retains the exact same state set $Q$, with the edge output defined by:
+      </p>
+      <div class="formula">
+        $$\lambda'(q, a) = \lambda(\delta(q, a))$$
+        <i>The output of the transition $(q, a)$ is simply the state output of the target state $\delta(q, a)$. Preserves state count: $|Q_{Mealy}| = |Q_{Moore}|$.</i>
+      </div>
+
+      <div class="sec-heading">Conversion: Mealy Machine $\implies$ Moore Machine (Slide 15)</div>
+      <p>
+        Because transitions entering a state $q$ in a Mealy machine might carry different output symbols (e.g., $(p_1, 0) \to q$ emits $A$, while $(p_2, 1) \to q$ emits $B$), a single state $q$ cannot have a unique state output.
+      </p>
+      <div class="formula">
+        <b>State-Splitting Principle:</b> State $q$ is split into pairs $[q, b]$ for each output symbol $b \in \Delta$ emitted by incoming edges:
+        $$Q_{Moore} = \{[q, b] \mid q \in Q_{Mealy}, b \in \Delta\}$$
+        $$\delta'([q, b], a) = [\delta(q, a), \lambda(q, a)]$$
+        $$\lambda'([q, b]) = b$$
+        <i>State space expands up to $|Q| \cdot |\Delta|$ states. Unreachable split states are removed.</i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ================         MODULE 6 PANEL    ================ -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="mod6" role="tabpanel">
+    <h2 class="panel-title">Module 6 · Regular Expressions, Arden's Theorem &amp; RE $\to$ FA <span class="panel-badge">Unit-II · Source: toc_unit-2.pdf</span></h2>
+
+    <div class="answer-box">
+      <span class="ans-label">Module Overview</span>
+      <p>
+        Covers the algebraic description of regular languages using Regular Expressions (RE), operator precedence, algebraic laws, Thompson's construction (RE to FA), and Arden's Theorem with complete uniqueness proof condition ($\varepsilon \notin P$).
+      </p>
+    </div>
+
+    <!-- Topic Card 6.1 -->
+    <div class="qcard" id="card-mod6-re-def">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 6.1</span>
+        <span class="qtitle">Formal Definition &amp; Precedence of Regular Expressions</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 1–9</span>
+          <span class="source-chip">toc_unit-2.pdf</span>
+        </div>
+      </div>
+
+      <div class="formula">
+        <b>Recursive Definition of Regular Expressions (Slides 6 &amp; 7):</b>
+        <ol style="margin:4px 0; padding-left:20px;">
+          <li>$\varepsilon$ is a Regular Expression denoting the language $\{\varepsilon\}$.</li>
+          <li>$\phi$ (empty set) is a Regular Expression denoting the empty language $\emptyset$.</li>
+          <li>For each $a \in \Sigma$, $a$ is a Regular Expression denoting the language $\{a\}$.</li>
+          <li>If $R_1$ and $R_2$ are Regular Expressions denoting languages $L_1$ and $L_2$, then:
+            <ul style="margin:4px 0; padding-left:16px;">
+              <li>$(R_1 + R_2)$ is a Regular Expression denoting $L_1 \cup L_2$ (Union).</li>
+              <li>$(R_1 \cdot R_2)$ is a Regular Expression denoting $L_1 L_2$ (Concatenation).</li>
+              <li>$(R_1^*)$ is a Regular Expression denoting $L_1^*$ (Kleene Star Closure).</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <div class="sec-heading">Operator Precedence (Slide 9)</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <tr><th>Precedence</th><th>Operator</th><th>Notation</th><th>Meaning</th></tr>
+          <tr class="highlight"><td><b>Highest (1)</b></td><td>Kleene Star / Plus</td><td>$R^*$ / $R^+$</td><td>Zero or more (or 1 or more) repetitions</td></tr>
+          <tr><td><b>Middle (2)</b></td><td>Concatenation</td><td>$R_1 \cdot R_2 \text{ or } R_1 R_2$</td><td>Sequence concatenation</td></tr>
+          <tr><td><b>Lowest (3)</b></td><td>Union (Alternation)</td><td>$R_1 + R_2 \text{ or } R_1 \cup R_2$</td><td>Logical choice / set union</td></tr>
+        </table>
+      </div>
+
+      <div class="sec-heading">Algebraic Identities of Regular Expressions (Slide 34)</div>
+      <ul class="plain">
+        <li>$\phi + R = R$ and $\phi \cdot R = R \cdot \phi = \phi$</li>
+        <li>$\varepsilon \cdot R = R \cdot \varepsilon = R$</li>
+        <li>$R + R = R$ (Idempotence of union)</li>
+        <li>$R^* R^* = R^*$ and $(R^*)^* = R^*$</li>
+        <li>$\varepsilon + R R^* = \varepsilon + R^* R = R^*$</li>
+        <li>$(P + Q) R = PR + QR$ and $R(P + Q) = RP + RQ$ (Distributivity)</li>
+        <li>$(PQ)^* P = P(QP)^*$</li>
+        <li>$(P + Q)^* = (P^* Q^*)^* = (P^* + Q^*)^*$</li>
+      </ul>
+    </div>
+
+    <!-- Topic Card 6.2 -->
+    <div class="qcard" id="card-mod6-ardens">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 6.2</span>
+        <span class="qtitle">Arden’s Theorem &amp; DFA-to-RE Conversion</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 62–66</span>
+          <span class="source-chip">toc_unit-2.pdf</span>
+        </div>
+      </div>
+
+      <div class="formula">
+        <b>Statement of Arden’s Theorem (Slide 62):</b>
+        Let $P, Q,$ and $R$ be regular expressions over $\Sigma$. If $P$ does not contain the null string $\varepsilon$ ($\varepsilon \notin P$), then the equation:
+        $$R = Q + RP$$
+        has the <b>unique solution</b> given by:
+        $$R = QP^*$$
+        <i>(Symmetrically, if $R = Q + PR$ with $\varepsilon \notin P$, the unique solution is $R = P^*Q$.)</i>
+      </div>
+
+      <div class="answer-box">
+        <span class="ans-label">Proof of Uniqueness &amp; The $\varepsilon \notin P$ Condition</span>
+        <p><b>1. Existence:</b> Substitute $R = QP^*$ into the right side:
+          $$Q + (QP^*)P = Q(\varepsilon + P^* P) = QP^*$$
+          Hence $R = QP^*$ is always a valid solution.
+        </p>
+        <p><b>2. Uniqueness:</b> Repeatedly substitute $R = Q + RP$ into itself:
+          $$R = Q + (Q + RP)P = Q + QP + RP^2 = Q + QP + QP^2 + \dots + QP^k + RP^{k+1}$$
+          If $\varepsilon \notin P$, then any string $w$ has finite length $|w| = k$. For all $m > k$, $RP^m$ only contains strings of length $\ge m > k$. Thus, $w$ cannot belong to $RP^m$ and its membership in $R$ is completely determined by $Q(\varepsilon + P + P^2 + \dots + P^k) \subseteq QP^*$.<br>
+          <b>If $\varepsilon \in P$:</b> Then $P = \varepsilon + S$. Substituting gives $R = Q + R$, which is satisfied by <i>any</i> language containing $Q$, yielding infinitely many solutions!
+        </p>
+      </div>
+
+      <div class="sec-heading">Conversion Algorithm: DFA to RE via Arden's Theorem (Slides 63–71)</div>
+      <ol class="steps">
+        <li>Label each state $q_1, q_2, \dots, q_n$.</li>
+        <li>For each state $q_i$, express its incoming paths as an algebraic equation:
+          $$q_i = \sum_{j} q_j a_{ji} \quad (+\, \varepsilon \text{ if } q_i \text{ is the start state } q_0)$$
+        </li>
+        <li>Use algebraic substitution and Arden's theorem ($X = Q + XP \implies X = QP^*$) to eliminate intermediate state variables until expressions for all final states $q_f \in F$ are found in terms of input symbols alone.</li>
+        <li>The final regular expression is the union of expressions for all accepting states:
+          $$R = \sum_{q_f \in F} q_f$$
+        </li>
+      </ol>
+    </div>
+
+    <!-- Topic Card 6.3 -->
+    <div class="qcard" id="card-mod6-thompson">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 6.3</span>
+        <span class="qtitle">Conversion of Regular Expression to Finite Automata (Thompson’s Construction)</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 10–22</span>
+          <span class="source-chip">toc_unit-2.pdf</span>
+        </div>
+      </div>
+
+      <p>
+        Kleene's Theorem establishes that for every regular expression, there exists an equivalent Finite Automaton. Thompson's algorithm inductively constructs an $\varepsilon$-NFA with <b>exactly one start state</b> and <b>exactly one final state</b>:
+      </p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <tr><th>Expression</th><th>Automaton Structure</th><th>Construction Rule</th></tr>
+          <tr><td>$R = \varepsilon$</td><td>$\to (q_0) \overset{\varepsilon}{\longrightarrow} ((q_f))$</td><td>Single $\varepsilon$-transition between start and final state.</td></tr>
+          <tr><td>$R = \phi$</td><td>$\to (q_0) \quad ((q_f))$</td><td>No transitions between start and final state.</td></tr>
+          <tr><td>$R = a$</td><td>$\to (q_0) \overset{a}{\longrightarrow} ((q_f))$</td><td>Single transition labeled $a$.</td></tr>
+          <tr><td>$R = R_1 + R_2$</td><td>$\varepsilon$-branches to $M_1, M_2$</td><td>New start state branches on $\varepsilon$ to start states of $M_1$ and $M_2$; final states of $M_1, M_2$ branch on $\varepsilon$ to new single final state.</td></tr>
+          <tr><td>$R = R_1 \cdot R_2$</td><td>Sequential cascade</td><td>Final state of $M_1$ merged with (or linked via $\varepsilon$) to start state of $M_2$.</td></tr>
+          <tr><td>$R = R_1^*$</td><td>Feedback loop</td><td>New start branches on $\varepsilon$ to start of $M_1$ and new final state; final state of $M_1$ loops back on $\varepsilon$ to start of $M_1$ and branches to new final state.</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ================         MODULE 7 PANEL    ================ -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="mod7" role="tabpanel">
+    <h2 class="panel-title">Module 7 · Non-Regular Languages, Pumping Lemma &amp; Closure Properties <span class="panel-badge">Unit-II · Source: toc_unit-2.pdf</span></h2>
+
+    <div class="answer-box">
+      <span class="ans-label">Module Overview</span>
+      <p>
+        Techniques for establishing the theoretical boundaries of Finite State Automata. Covers the Pumping Lemma for Regular Languages, the Pigeonhole Principle justification, the 4-step adversary proof framework, and closure and decision properties.
+      </p>
+    </div>
+
+    <!-- Topic Card 7.1 -->
+    <div class="qcard" id="card-mod7-pumping">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 7.1</span>
+        <span class="qtitle">The Pumping Lemma for Regular Languages</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 72–77</span>
+          <span class="source-chip">toc_unit-2.pdf</span>
+        </div>
+      </div>
+
+      <div class="formula">
+        <b>Formal Statement of Pumping Lemma (Slides 72 &amp; 73):</b>
+        Let $L$ be a regular language. Then there exists a constant integer $n \ge 1$ (the pumping length) depending only on $L$, such that for every string $w \in L$ with $|w| \ge n$, $w$ can be broken into three substrings:
+        $$w = xyz$$
+        satisfying all three of the following conditions:
+        <ol style="margin:4px 0; padding-left:20px;">
+          <li>$|y| > 0$ &nbsp; (i.e., $y \neq \varepsilon$, the pumped part is non-empty).</li>
+          <li>$|xy| \le n$ &nbsp; (the loop must occur within the first $n$ symbols).</li>
+          <li>$x y^i z \in L$ for all $i \ge 0$ &nbsp; (where $y^0 = \varepsilon$, $y^1 = y$, $y^2 = yy, \dots$).</li>
+        </ol>
+      </div>
+
+      <div class="sec-heading">Theoretical Foundation: The Pigeonhole Principle (Slide 73)</div>
+      <p>
+        If $L$ is regular, it is recognized by a DFA $M = (Q, \Sigma, \delta, q_0, F)$ with $n = |Q|$ states.
+        When processing any string $w$ of length $|w| \ge n$, the automaton visits a sequence of $|w| + 1 \ge n + 1$ states:
+        $$q_0, q_1, q_2, \dots, q_{|w|}$$
+        By the <b>Pigeonhole Principle</b>, among the first $n + 1$ states visited ($q_0$ through $q_n$), at least one state must repeat:
+        $$q_j = q_k \quad \text{for some } 0 \le j < k \le n$$
+        The string is partitioned into:
+        $$x = w_1 \dots w_j, \quad y = w_{j+1} \dots w_k, \quad z = w_{k+1} \dots w_{|w|}$$
+        Because $q_j = q_k$, the loop $y$ can be traversed $i$ times for any $i \ge 0$, leaving the machine in the exact same state and thus accepting $x y^i z$.
+      </p>
+
+      <div class="answer-box">
+        <span class="ans-label">Important Caveat (Slide 72)</span>
+        <p>
+          The Pumping Lemma is a <b>necessary condition</b> for regularity, not a sufficient one.
+          If a language satisfies the pumping lemma, it is <b>not guaranteed</b> to be regular.
+          However, by contrapositive, if a language violates the pumping lemma for even a single choice, it is <b>provably not regular</b>!
+        </p>
+      </div>
+
+      <div class="sec-heading">The 4-Step Adversary Proof Framework (Slide 74)</div>
+      <ol class="steps">
+        <li><b>Assumption:</b> Assume for contradiction that $L$ is regular. Therefore, $L$ has a pumping length $n$.</li>
+        <li><b>Adversary Choice of String:</b> Pick a specific string $w \in L$ expressed in terms of $n$, such that $|w| \ge n$. (Smart choices isolate blocks, e.g., $w = a^n b^n$ or $w = a^n b^{2n}$).</li>
+        <li><b>Analyze Decomposition:</b> For every possible split $w = xyz$ satisfying $|xy| \le n$ and $|y| > 0$, show that $y$ must consist solely of symbols from the first prefix block.</li>
+        <li><b>Pumping to Contradiction:</b> Choose an exponent $i$ (pump down with $i=0$ or pump up with $i=2$) such that $x y^i z \notin L$, violating condition 3 and proving $L$ is non-regular!</li>
+      </ol>
+    </div>
+
+    <!-- Topic Card 7.2 -->
+    <div class="qcard" id="card-mod7-closure">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">§ 7.2</span>
+        <span class="qtitle">Closure &amp; Decision Properties of Regular Languages</span>
+        <div class="meta-row">
+          <span class="meta-chip">Slides 78–86</span>
+          <span class="source-chip">toc_unit-2.pdf</span>
+        </div>
+      </div>
+
+      <div class="sec-heading">Closure Properties (Slide 78)</div>
+      <p>A class of languages is closed under an operation if applying that operation to regular languages always produces another regular language.</p>
+      <div class="table-wrap">
+        <table class="data-table">
+          <tr><th>Operation</th><th>Closure Status</th><th>Proof Technique / Construction</th></tr>
+          <tr><td><b>Union ($L_1 \cup L_2$)</b></td><td>Closed ✓</td><td>Thompson's construction ($R_1 + R_2$) or Cartesian Product DFA with $F = (F_1 \times Q_2) \cup (Q_1 \times F_2)$.</td></tr>
+          <tr><td><b>Concatenation ($L_1 L_2$)</b></td><td>Closed ✓</td><td>Thompson's sequential construction ($R_1 \cdot R_2$).</td></tr>
+          <tr><td><b>Kleene Star ($L^*$)</b></td><td>Closed ✓</td><td>Thompson's loopback construction ($R^*$).</td></tr>
+          <tr><td><b>Complementation ($\overline{L}$)</b></td><td>Closed ✓</td><td>Complement DFA $M' = (Q, \Sigma, \delta, q_0, Q \setminus F)$. Swap accepting and non-accepting states.</td></tr>
+          <tr><td><b>Intersection ($L_1 \cap L_2$)</b></td><td>Closed ✓</td><td>De Morgan's law: $L_1 \cap L_2 = \overline{\overline{L_1} \cup \overline{L_2}}$, or Cartesian Product DFA with $F = F_1 \times F_2$.</td></tr>
+          <tr><td><b>Difference ($L_1 \setminus L_2$)</b></td><td>Closed ✓</td><td>Set difference identity: $L_1 \setminus L_2 = L_1 \cap \overline{L_2}$.</td></tr>
+          <tr><td><b>Reversal ($L^R$)</b></td><td>Closed ✓</td><td>Reverse all transition edges in NFA and swap start and final states.</td></tr>
+        </table>
+      </div>
+
+      <div class="sec-heading">Decision Properties of Regular Languages</div>
+      <ul class="plain">
+        <li><b>Emptiness ($L = \emptyset$):</b> Decidable. Test if any state in $F$ is reachable from $q_0$ using graph BFS/DFS.</li>
+        <li><b>Finiteness:</b> Decidable. Test if the DFA contains any reachable, productive directed cycles.</li>
+        <li><b>Membership ($w \in L$):</b> Decidable. Simulate the DFA on $w$ in $|w|$ deterministic steps.</li>
+        <li><b>Equivalence ($L_1 = L_2$):</b> Decidable. Test if the symmetric difference $(L_1 \cap \overline{L_2}) \cup (\overline{L_1} \cap L_2)$ is empty.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ================         MODULE 8 PANEL    ================ -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="questions" role="tabpanel">
+    <h2 class="panel-title">Module 8 · Master Slide Question &amp; Exercise Bank <span class="panel-badge">Complete Compilation from All 9 Slide Decks</span></h2>
+
+    <div class="answer-box">
+      <span class="ans-label">Question Bank Compilation Briefing</span>
+      <p>
+        Every single exercise, worked textbook example, slide problem, and homework challenge appearing across all 9 official course PowerPoint decks has been systematically transcribed and solved in exhaustive detail below. Grouped by conceptual topic for high-yield exam practice.
+      </p>
+    </div>
+
+    <!-- ==================== GROUP 1: DFA DESIGN PROBLEMS ==================== -->
+    <div class="sec-heading">Group 1: DFA Construction &amp; Language Acceptance Exercises (Sources: 3. D_FiniteAutomata_ &amp; 4. DFA_Exercise)</div>
+
+    <!-- Question 1.1 -->
+    <div class="qcard" id="q-dfa-1">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 1</span>
+        <span class="qtitle">Design FA for Even Number of 0's and Even Number of 1's</span>
+        <div class="meta-row">
+          <span class="qbadge">4. DFA_Exercise Slide 2</span>
+          <span class="source-chip">Example 1.18</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Design a Finite Automaton over $\Sigma = \{0, 1\}$ which accepts all strings containing an even number of 0's and an even number of 1's.</p>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Step-by-Step Solution &amp; Transition Table</button>
+        <div class="subq-body">
+          <p>We require tracking the parity (even/odd) of two independent counters (count of 0's and count of 1's). This gives $2 \times 2 = 4$ states:</p>
+          <ul class="plain">
+            <li>$q_0$: Even 0's, Even 1's (Start state &amp; only Accepting state).</li>
+            <li>$q_1$: Even 0's, Odd 1's.</li>
+            <li>$q_2$: Odd 0's, Even 1's.</li>
+            <li>$q_3$: Odd 0's, Odd 1's.</li>
+          </ul>
+          <div class="table-wrap">
+            <table class="data-table">
+              <tr><th>Current State</th><th>Input 0</th><th>Input 1</th><th>Parity Description</th></tr>
+              <tr class="highlight"><td>$\to *q_0$</td><td>$q_2$</td><td>$q_1$</td><td>Even 0's, Even 1's (Accepting)</td></tr>
+              <tr><td>$q_1$</td><td>$q_3$</td><td>$q_0$</td><td>Even 0's, Odd 1's</td></tr>
+              <tr><td>$q_2$</td><td>$q_0$</td><td>$q_3$</td><td>Odd 0's, Even 1's</td></tr>
+              <tr><td>$q_3$</td><td>$q_1$</td><td>$q_2$</td><td>Odd 0's, Odd 1's</td></tr>
+            </table>
+          </div>
+          <div class="formula">
+            <b>Formal 5-Tuple:</b> $M = (\{q_0, q_1, q_2, q_3\}, \{0, 1\}, \delta, q_0, \{q_0\})$.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 1.2 -->
+    <div class="qcard" id="q-dfa-2">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 2</span>
+        <span class="qtitle">Construct FA for Strings Starting with 0 and Ending with 1</span>
+        <div class="meta-row">
+          <span class="qbadge">4. DFA_Exercise Slide 5</span>
+          <span class="source-chip">Example 1.20</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Construct the transition graph for a Finite Automaton which accepts a language $L$ over $\Sigma = \{0, 1\}$ in which every string starts with 0 and ends with 1.</p>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Step-by-Step Solution</button>
+        <div class="subq-body">
+          <p>Any string starting with 1 is permanently illegal and transitions to a trap state $q_d$. Once starting with 0, we track whether the most recent symbol seen was 0 or 1:</p>
+          <ul class="plain">
+            <li>$q_0$: Start state (no symbols read yet).</li>
+            <li>$q_1$: Starts with 0, most recent symbol is 0 (Non-final).</li>
+            <li>$q_2$: Starts with 0, most recent symbol is 1 (Final state!).</li>
+            <li>$q_d$: Dead/trap state (entered on reading 1 from $q_0$).</li>
+          </ul>
+          <div class="table-wrap">
+            <table class="data-table">
+              <tr><th>State</th><th>Input 0</th><th>Input 1</th><th>Interpretation</th></tr>
+              <tr><td>$\to q_0$</td><td>$q_1$</td><td>$q_d$</td><td>Initial empty string state</td></tr>
+              <tr><td>$q_1$</td><td>$q_1$</td><td>$q_2$</td><td>Started with 0, last seen 0</td></tr>
+              <tr class="highlight"><td>$*q_2$</td><td>$q_1$</td><td>$q_2$</td><td>Started with 0, last seen 1 (Accepting)</td></tr>
+              <tr><td>$q_d$</td><td>$q_d$</td><td>$q_d$</td><td>Dead/trap state</td></tr>
+            </table>
+          </div>
+          <div class="formula">
+            <b>Corresponding Regular Expression:</b> $0(0+1)^*1$.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 1.3 -->
+    <div class="qcard" id="q-dfa-3">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 3</span>
+        <span class="qtitle">Design FA for Total Number of a's Divisible by 3</span>
+        <div class="meta-row">
+          <span class="meta-chip">4. DFA_Exercise Slide 8</span>
+          <span class="source-chip">Example 1.22</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Design FA to accept $L$ where all the strings in $L$ over $\Sigma = \{a, b\}$ are such that the total number of $a$'s in them is divisible by 3.</p>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Step-by-Step Solution</button>
+        <div class="subq-body">
+          <p>We track the remainder of $N_a(w) \pmod 3$. Input $b$ has no effect on the count of $a$'s (self-loops):</p>
+          <ul class="plain">
+            <li>$q_0$: $N_a(w) \equiv 0 \pmod 3$ (Start &amp; Final state).</li>
+            <li>$q_1$: $N_a(w) \equiv 1 \pmod 3$.</li>
+            <li>$q_2$: $N_a(w) \equiv 2 \pmod 3$.</li>
+          </ul>
+          <div class="table-wrap">
+            <table class="data-table">
+              <tr><th>State</th><th>Input $a$</th><th>Input $b$</th><th>Condition</th></tr>
+              <tr class="highlight"><td>$\to *q_0$</td><td>$q_1$</td><td>$q_0$</td><td>$N_a \equiv 0 \pmod 3$ (Accepting)</td></tr>
+              <tr><td>$q_1$</td><td>$q_2$</td><td>$q_1$</td><td>$N_a \equiv 1 \pmod 3$</td></tr>
+              <tr><td>$q_2$</td><td>$q_0$</td><td>$q_2$</td><td>$N_a \equiv 2 \pmod 3$</td></tr>
+            </table>
+          </div>
+          <div class="formula">
+            <b>Corresponding Regular Expression:</b> $(b^* a b^* a b^* a b^*)^*$.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 1.4 -->
+    <div class="qcard" id="q-dfa-4">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 4</span>
+        <span class="qtitle">Design FA to Check Whether Given Decimal Number is Divisible by 3</span>
+        <div class="meta-row">
+          <span class="meta-chip">4. DFA_Exercise Slide 11</span>
+          <span class="source-chip">Example 1.16</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Design FA to check whether a given decimal number (over alphabet $\Sigma = \{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}$) is divisible by three.</p>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Step-by-Step Solution</button>
+        <div class="subq-body">
+          <p>
+            When a new decimal digit $d \in \{0, 1, \dots, 9\}$ arrives, the value of the number updates according to:
+            $$\text{New Value} = 10 \times \text{Old Value} + d$$
+            Taking modulo 3, since $10 \equiv 1 \pmod 3$:
+            $$\text{New Remainder} = (1 \times r + d) \pmod 3 = (r + d) \pmod 3$$
+            Thus, transitions depend solely upon the remainder of the digit $d \pmod 3$:
+          </p>
+          <ul class="plain">
+            <li>Digits with $d \pmod 3 = 0$: $\{0, 3, 6, 9\}$.</li>
+            <li>Digits with $d \pmod 3 = 1$: $\{1, 4, 7\}$.</li>
+            <li>Digits with $d \pmod 3 = 2$: $\{2, 5, 8\}$.</li>
+          </ul>
+          <div class="table-wrap">
+            <table class="data-table">
+              <tr><th>State</th><th>on $\{0, 3, 6, 9\}$</th><th>on $\{1, 4, 7\}$</th><th>on $\{2, 5, 8\}$</th></tr>
+              <tr class="highlight"><td>$\to *q_0$ (rem 0)</td><td>$q_0$</td><td>$q_1$</td><td>$q_2$</td></tr>
+              <tr><td>$q_1$ (rem 1)</td><td>$q_1$</td><td>$q_2$</td><td>$q_0$</td></tr>
+              <tr><td>$q_2$ (rem 2)</td><td>$q_2$</td><td>$q_0$</td><td>$q_1$</td></tr>
+            </table>
+          </div>
+          <div class="answer-box">
+            <span class="ans-label">Conclusion</span>
+            <p>The automaton has 3 states $\{q_0, q_1, q_2\}$ with initial and accepting state $q_0$. Validates the well-known mathematical divisibility rule: a decimal integer is divisible by 3 iff the sum of its digits is divisible by 3.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 1.5 -->
+    <div class="qcard" id="q-dfa-5">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 5</span>
+        <span class="qtitle">Find Language Accepted by Given 4-State Transition Table</span>
+        <div class="meta-row">
+          <span class="meta-chip">4. DFA_Exercise Slide 16</span>
+          <span class="source-chip">Slide Exercise</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Consider the finite automata transition table shown below with start state $q_0$ and $F = \{q_0\}$. Find the language accepted by this finite automaton:</p>
+      <div class="table-wrap">
+        <table class="data-table" style="max-width:320px;">
+          <tr><th>State</th><th>Input 0</th><th>Input 1</th></tr>
+          <tr class="highlight"><td>$\to *q_0$</td><td>$q_2$</td><td>$q_1$</td></tr>
+          <tr><td>$q_1$</td><td>$q_3$</td><td>$q_0$</td></tr>
+          <tr><td>$q_2$</td><td>$q_0$</td><td>$q_3$</td></tr>
+          <tr><td>$q_3$</td><td>$q_1$</td><td>$q_2$</td></tr>
+        </table>
+      </div>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Step-by-Step Solution</button>
+        <div class="subq-body">
+          <p>Let us analyze the state transitions:</p>
+          <ul class="plain">
+            <li>Reading 0 from $q_0$ toggles to $q_2$; reading another 0 returns to $q_0$. Reading 1 from $q_0$ toggles to $q_1$; reading another 1 returns to $q_0$.</li>
+            <li>$q_1$ has seen an odd number of 1's and an even number of 0's.</li>
+            <li>$q_2$ has seen an even number of 1's and an odd number of 0's.</li>
+            <li>$q_3$ has seen an odd number of 1's and an odd number of 0's.</li>
+            <li>The start state $q_0$ is the only accepting state ($F = \{q_0\}$).</li>
+          </ul>
+          <div class="answer-box">
+            <span class="ans-label">Final Answer</span>
+            <p><b>$L = \{w \in \{0, 1\}^* \mid w \text{ contains an even number of 0's and an even number of 1's}\}$.</b></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 1.6 -->
+    <div class="qcard" id="q-dfa-6">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 6</span>
+        <span class="qtitle">DFA for Language Where 3rd Symbol from Last is 1</span>
+        <div class="meta-row">
+          <span class="meta-chip">3. D_FiniteAutomata_ Slide 22</span>
+          <span class="source-chip">Slide Problem</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Construct a DFA over $\Sigma = \{0, 1\}$ that accepts all strings where the 3rd symbol from the right end is '1'.</p>
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Step-by-Step Solution</button>
+        <div class="subq-body">
+          <p>
+            An NFA can simply guess the 3rd symbol from the end using 4 states ($q_0 \overset{0,1}{\to} q_0 \overset{1}{\to} q_1 \overset{0,1}{\to} q_2 \overset{0,1}{\to} q_3$).
+            However, a <b>DFA</b> must remember the last 3 symbols read at every step. This requires $2^3 = 8$ states corresponding to all binary suffixes of length 3:
+            $$\{000, 001, 010, 011, 100, 101, 110, 111\}$$
+            The accepting states are precisely the 4 states whose leading bit is 1:
+            $$F = \{100, 101, 110, 111\}$$
+            When reading a new bit $b \in \{0, 1\}$, state $s_1 s_2 s_3$ shifts to $s_2 s_3 b$.
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== GROUP 2: NFA & CONVERSIONS ==================== -->
+    <div class="sec-heading">Group 2: NFA, $\varepsilon$-Elimination &amp; Subset Construction (Sources: 5. NFA_NFA_Elimination &amp; 6. nfa-to-dfa)</div>
+
+    <!-- Question 2.1 -->
+    <div class="qcard" id="q-nfa-1">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 7</span>
+        <span class="qtitle">Elimination of $\varepsilon$-Transitions (Worked Example 1)</span>
+        <div class="meta-row">
+          <span class="meta-chip">5. NFA_NFA_Elimination Slide 3</span>
+          <span class="source-chip">Example 1</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Convert the given $\varepsilon$-NFA with states $\{q_0, q_1, q_2\}$, transitions $\delta(q_0, \varepsilon) = \{q_1\}, \delta(q_1, \varepsilon) = \{q_2\}, \delta(q_0, a) = \{q_0\}, \delta(q_1, b) = \{q_1\}, \delta(q_2, c) = \{q_2\}$ and final state $F = \{q_2\}$ into an equivalent NFA without $\varepsilon$-transitions.</p>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Step-by-Step Solution</button>
+        <div class="subq-body">
+          <ol class="steps">
+            <li><b>Compute $\varepsilon$-Closures:</b>
+              $$\varepsilon\text{-CLOSURE}(q_0) = \{q_0, q_1, q_2\}$$
+              $$\varepsilon\text{-CLOSURE}(q_1) = \{q_1, q_2\}$$
+              $$\varepsilon\text{-CLOSURE}(q_2) = \{q_2\}$$
+            </li>
+            <li><b>Compute New Transitions $\delta'(q, x) = \varepsilon\text{-CLOSURE}(\delta(\varepsilon\text{-CLOSURE}(q), x))$:</b>
+              <ul class="plain">
+                <li>$\delta'(q_0, a) = \varepsilon\text{-CLOSURE}(\delta(\{q_0, q_1, q_2\}, a)) = \varepsilon\text{-CLOSURE}(\{q_0\}) = \{q_0, q_1, q_2\}$</li>
+                <li>$\delta'(q_0, b) = \varepsilon\text{-CLOSURE}(\delta(\{q_0, q_1, q_2\}, b)) = \varepsilon\text{-CLOSURE}(\{q_1\}) = \{q_1, q_2\}$</li>
+                <li>$\delta'(q_0, c) = \varepsilon\text{-CLOSURE}(\delta(\{q_0, q_1, q_2\}, c)) = \varepsilon\text{-CLOSURE}(\{q_2\}) = \{q_2\}$</li>
+                <li>$\delta'(q_1, a) = \emptyset, \quad \delta'(q_1, b) = \{q_1, q_2\}, \quad \delta'(q_1, c) = \{q_2\}$</li>
+                <li>$\delta'(q_2, a) = \emptyset, \quad \delta'(q_2, b) = \emptyset, \quad \delta'(q_2, c) = \{q_2\}$</li>
+              </ul>
+            </li>
+            <li><b>Determine Final States:</b> Since $\varepsilon\text{-CLOSURE}(q_0)$ and $\varepsilon\text{-CLOSURE}(q_1)$ both contain $q_2 \in F$, the new final states are $F' = \{q_0, q_1, q_2\}$.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 2.2 -->
+    <div class="qcard" id="q-nfa-2">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 8</span>
+        <span class="qtitle">NFA to DFA Conversion via Subset Construction (Fig 1 &amp; Fig 2)</span>
+        <div class="meta-row">
+          <span class="meta-chip">6. nfa-to-dfa Slides 10–28</span>
+          <span class="source-chip">Lecture 12 Walkthrough</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Given an NFA with states $Q = \{1, 2, 3, 4, 5\}$, start state 1, final state $\{5\}$, and transitions $\delta(1, a) = \{1, 2, 3, 4, 5\}, \delta(1, b) = \{4, 5\}, \delta(2, a) = \{3\}$, etc. Convert this NFA into an equivalent DFA using the subset construction method.</p>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Step-by-Step Solution</button>
+        <div class="subq-body">
+          <p>Following the slide walkthrough, we begin with the start state subset $A = [1]$ and iteratively discover reachable subsets:</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <tr><th>DFA State Subset</th><th>Input $a$</th><th>Input $b$</th><th>Final State?</th></tr>
+              <tr class="highlight"><td>$\to A = [1]$</td><td>$[1, 2, 3, 4, 5]$</td><td>$[4, 5]$</td><td>No</td></tr>
+              <tr class="highlight"><td>$B = [1, 2, 3, 4, 5]$</td><td>$[1, 2, 3, 4, 5]$</td><td>$[4, 5]$</td><td>Yes ($5 \in B$)</td></tr>
+              <tr class="highlight"><td>$C = [4, 5]$</td><td>$\delta(4, a) \cup \delta(5, a)$</td><td>$\delta(4, b) \cup \delta(5, b)$</td><td>Yes ($5 \in C$)</td></tr>
+            </table>
+          </div>
+          <p>All subsets containing state 5 are marked as final states in the resulting DFA.</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== GROUP 3: DFA MINIMIZATION ==================== -->
+    <div class="sec-heading">Group 3: DFA Minimization (Source: 07_dfa_minimize.pdf)</div>
+
+    <!-- Question 3.1 -->
+    <div class="qcard" id="q-min-1">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 9</span>
+        <span class="qtitle">Minimization of 8-State DFA via Table-Filling Method</span>
+        <div class="meta-row">
+          <span class="meta-chip">07_dfa_minimize Slides 5–18</span>
+          <span class="source-chip">Full Worked Example</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Minimize the DFA with states $Q = \{a, b, c, d, e, f, g, h\}$, start state $a$, final states $F = \{c, d\}$, and transition table:</p>
+      <div class="table-wrap">
+        <table class="data-table" style="max-width:380px;">
+          <tr><th>State</th><th>on 0</th><th>on 1</th><th>State Type</th></tr>
+          <tr><td>$\to a$</td><td>$b$</td><td>$f$</td><td>Non-final</td></tr>
+          <tr><td>$b$</td><td>$g$</td><td>$c$</td><td>Non-final</td></tr>
+          <tr class="highlight"><td>$*c$</td><td>$a$</td><td>$c$</td><td>Final</td></tr>
+          <tr class="highlight"><td>$*d$</td><td>$e$</td><td>$d$</td><td>Final</td></tr>
+          <tr><td>$e$</td><td>$h$</td><td>$f$</td><td>Non-final</td></tr>
+          <tr><td>$f$</td><td>$c$</td><td>$g$</td><td>Non-final</td></tr>
+          <tr><td>$g$</td><td>$g$</td><td>$e$</td><td>Non-final</td></tr>
+          <tr><td>$h$</td><td>$g$</td><td>$c$</td><td>Non-final</td></tr>
+        </table>
+      </div>
+
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Table-Filling Derivation</button>
+        <div class="subq-body">
+          <ol class="steps">
+            <li><b>Base Step:</b> Mark all pairs $\{p, q\}$ where one is in $F=\{c, d\}$ and the other is not. That is, mark all pairs involving $(c, \cdot)$ and $(d, \cdot)$ except $\{c, d\}$.</li>
+            <li>
+              <b>Inductive Checking of Remaining Unmarked Pairs:</b>
+              <ul class="plain">
+                <li><b>Check $\{a, e\}$:</b> on 0 $\to \{b, h\}$ (unmarked); on 1 $\to \{f, f\}$ (identical). Add $\{a, e\}$ to dependency of $\{b, h\}$.</li>
+                <li><b>Check $\{b, h\}$:</b> on 0 $\to \{g, g\}$ (identical); on 1 $\to \{c, c\}$ (identical). $\{b, h\}$ has identical transitions on both inputs! Therefore $\{b, h\}$ can never be marked.</li>
+                <li>Since $\{b, h\}$ is never marked, $\{a, e\}$ is never marked. Hence $a \equiv e$ and $b \equiv h$.</li>
+                <li><b>Check $\{c, d\}$:</b> on 0 $\to \{a, e\}$ (unmarked, equivalent); on 1 $\to \{c, d\}$ (self). Hence $c \equiv d$.</li>
+              </ul>
+            </li>
+            <li><b>Resulting Equivalence Classes:</b>
+              $$\{a, e\}, \quad \{b, h\}, \quad \{c, d\}, \quad \{f\}, \quad \{g\}$$
+            </li>
+          </ol>
+          <div class="answer-box">
+            <span class="ans-label">Conclusion</span>
+            <p>The original 8-state DFA is minimized into a canonical <b>5-state DFA</b> with states $\{ae, bh, cd, f, g\}$, start state $ae$, and single merged final state $cd$.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== GROUP 4: MOORE & MEALY MACHINES ==================== -->
+    <div class="sec-heading">Group 4: Moore &amp; Mealy Machine Problems (Source: 8_FA_out.pdf)</div>
+
+    <!-- Question 4.1 -->
+    <div class="qcard" id="q-mm-1">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 10</span>
+        <span class="qtitle">Design a Moore Machine to Generate 1's Complement</span>
+        <div class="meta-row">
+          <span class="meta-chip">8_FA_out Slide 3</span>
+          <span class="source-chip">Example 2.34</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Design a Moore machine to generate the 1's complement of a given binary number.</p>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Step-by-Step Solution</button>
+        <div class="subq-body">
+          <p>
+            To generate 1's complement, if input is 0 the output is 1, and if input is 1 the output is 0.
+            In a Moore machine, output is tied to states. Thus we use 3 states:
+          </p>
+          <ul class="plain">
+            <li>$q_0$: Start state with dummy output (or 0).</li>
+            <li>$q_1$: Entered upon reading 0, emits state output 1.</li>
+            <li>$q_2$: Entered upon reading 1, emits state output 0.</li>
+          </ul>
+          <div class="table-wrap">
+            <table class="data-table">
+              <tr><th>Current State</th><th>Input 0</th><th>Input 1</th><th>State Output $\lambda$</th></tr>
+              <tr><td>$\to q_0$</td><td>$q_1$</td><td>$q_2$</td><td>0 (or $\varepsilon$)</td></tr>
+              <tr><td>$q_1$</td><td>$q_1$</td><td>$q_2$</td><td>1</td></tr>
+              <tr><td>$q_2$</td><td>$q_1$</td><td>$q_2$</td><td>0</td></tr>
+            </table>
+          </div>
+          <p><i>Note: For input 1011, the Moore machine outputs 00100 (length 5); neglecting the initial prefix 0 yields 0100, which is the exact 1's complement.</i></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 4.2 -->
+    <div class="qcard" id="q-mm-2">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 11</span>
+        <span class="qtitle">Moore &amp; Mealy Machine for Substrings 101 and 110</span>
+        <div class="meta-row">
+          <span class="meta-chip">8_FA_out Slide 4</span>
+          <span class="source-chip">Example 2.35</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Design a Moore and Mealy machine for a binary sequence such that if it contains substring 101 it outputs A, if 110 it outputs B, otherwise it outputs C.</p>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Step-by-Step Solution</button>
+        <div class="subq-body">
+          <p>We build prefix trackers for patterns 101 and 110:</p>
+          <ul class="plain">
+            <li>$q_0$: Start / no progress (Output C).</li>
+            <li>$q_1$: Seen '1' (Output C).</li>
+            <li>$q_2$: Seen '10' (Output C).</li>
+            <li>$q_3$: Seen '101' $\implies$ emits output <b>A</b>!</li>
+            <li>$q_4$: Seen '11' (Output C).</li>
+            <li>$q_5$: Seen '110' $\implies$ emits output <b>B</b>!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 4.3 -->
+    <div class="qcard" id="q-mm-3">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 12</span>
+        <span class="qtitle">Conversion of Moore Machine to Equivalent Mealy Machine</span>
+        <div class="meta-row">
+          <span class="meta-chip">8_FA_out Slide 11</span>
+          <span class="source-chip">Example 2.41</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Convert the residue mod 3 Moore machine into an equivalent Mealy machine.</p>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Step-by-Step Solution</button>
+        <div class="subq-body">
+          <p>Using the transformation formula $\lambda'(q, a) = \lambda(\delta(q, a))$:</p>
+          <ul class="plain">
+            <li>$\lambda'(q_0, 0) = \lambda(\delta(q_0, 0)) = \lambda(q_0) = 0$</li>
+            <li>$\lambda'(q_0, 1) = \lambda(\delta(q_0, 1)) = \lambda(q_1) = 1$</li>
+            <li>$\lambda'(q_1, 0) = \lambda(\delta(q_1, 0)) = \lambda(q_2) = 2$</li>
+            <li>$\lambda'(q_1, 1) = \lambda(\delta(q_1, 1)) = \lambda(q_0) = 0$</li>
+            <li>$\lambda'(q_2, 0) = \lambda(\delta(q_2, 0)) = \lambda(q_1) = 1$</li>
+            <li>$\lambda'(q_2, 1) = \lambda(\delta(q_2, 1)) = \lambda(q_2) = 2$</li>
+          </ul>
+          <div class="table-wrap">
+            <table class="data-table">
+              <tr><th rowspan="2">State</th><th colspan="2">Input 0</th><th colspan="2">Input 1</th></tr>
+              <tr><th>Next State</th><th>Output</th><th>Next State</th><th>Output</th></tr>
+              <tr><td>$q_0$</td><td>$q_0$</td><td>0</td><td>$q_1$</td><td>1</td></tr>
+              <tr><td>$q_1$</td><td>$q_2$</td><td>2</td><td>$q_0$</td><td>0</td></tr>
+              <tr><td>$q_2$</td><td>$q_1$</td><td>1</td><td>$q_2$</td><td>2</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== GROUP 5: REGULAR EXPRESSIONS & ARDEN'S ==================== -->
+    <div class="sec-heading">Group 5: Regular Expression Proofs &amp; Arden's Theorem (Source: toc_unit-2.pdf)</div>
+
+    <!-- Question 5.1 -->
+    <div class="qcard" id="q-re-1">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 13</span>
+        <span class="qtitle">Algebraic Proof of Identity Law</span>
+        <div class="meta-row">
+          <span class="meta-chip">toc_unit-2 Slide 34</span>
+          <span class="source-chip">Slide Ex. 1</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Prove using regular expression identities:
+        $$(1 + 00^*1) + (1 + 00^*1)(0 + 10^*1)^*(0 + 10^*1) = 0^*1(0 + 10^*1)^*$$
+      </p>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Algebraic Derivation</button>
+        <div class="subq-body">
+          <ol class="steps">
+            <li><b>Factor common term $(1 + 00^*1)$ on the LHS:</b>
+              $$\text{LHS} = (1 + 00^*1)\Big[\varepsilon + (0 + 10^*1)^*(0 + 10^*1)\Big]$$
+            </li>
+            <li><b>Apply identity $\varepsilon + R^* R = R^*$ with $R = (0 + 10^*1)$:</b>
+              $$= (1 + 00^*1)(0 + 10^*1)^*$$
+            </li>
+            <li><b>Factor 1 out of $(1 + 00^*1)$:</b>
+              $$(1 + 00^*1) = (\varepsilon + 00^*)1 = 0^* 1$$
+            </li>
+            <li><b>Substitute back:</b>
+              $$= 0^* 1 (0 + 10^*1)^* = \text{RHS} \quad \blacksquare$$
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 5.2 -->
+    <div class="qcard" id="q-re-2">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 14</span>
+        <span class="qtitle">Arden’s Theorem DFA to RE Conversion (Example 1)</span>
+        <div class="meta-row">
+          <span class="meta-chip">toc_unit-2 Slides 63–65</span>
+          <span class="source-chip">Slide Example 1</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Consider the transition diagram with states $A$ (start and final) and $B$, transitions $\delta(A, 1) = A, \delta(A, 0) = B, \delta(B, 1) = A, \delta(B, 0) = B$. Find the regular expression using Arden's theorem.</p>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Step-by-Step Solution</button>
+        <div class="subq-body">
+          <ol class="steps">
+            <li><b>Write state path equations:</b>
+              $$A = A1 + B1 + \varepsilon \quad (\text{since } A \text{ is start state})$$
+              $$B = A0 + B0$$
+            </li>
+            <li><b>Solve $B$ using Arden's Theorem ($X = Q + XP \implies X = QP^*$):</b>
+              $$B = A0 + B0 \implies B = A0 \cdot 0^* = A00^*$$
+            </li>
+            <li><b>Substitute $B$ into equation for $A$:</b>
+              $$A = A1 + (A00^*)1 + \varepsilon = \varepsilon + A(1 + 00^*1)$$
+            </li>
+            <li><b>Apply Arden's Theorem to $A$:</b>
+              Here $Q = \varepsilon$ and $P = (1 + 00^*1)$. Since $\varepsilon \notin P$:
+              $$A = \varepsilon \cdot (1 + 00^*1)^* = (1 + 00^*1)^*$$
+            </li>
+          </ol>
+          <div class="answer-box">
+            <span class="ans-label">Final Regular Expression</span>
+            <p>Since $A$ is the only final state, <b>$\text{RE} = (1 + 00^*1)^*$</b>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== GROUP 6: PUMPING LEMMA EXERCISES ==================== -->
+    <div class="sec-heading">Group 6: Pumping Lemma Contradiction Proofs (Source: toc_unit-2.pdf)</div>
+
+    <!-- Question 6.1 -->
+    <div class="qcard" id="q-pl-1">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 15</span>
+        <span class="qtitle">Prove $L = \{a^n b^{2n} \mid n \ge 1\}$ is Not Regular</span>
+        <div class="meta-row">
+          <span class="meta-chip">toc_unit-2 Slides 74–75</span>
+          <span class="source-chip">Example 1</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Using the Pumping Lemma, prove that the language $L = \{a^n b^{2n} \mid n \ge 1\}$ is not regular.</p>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Proof Solution</button>
+        <div class="subq-body">
+          <ol class="steps">
+            <li><b>Assumption:</b> Assume for contradiction that $L$ is regular. Let $n$ be the pumping lemma constant.</li>
+            <li><b>Choose String:</b> Select $w = a^n b^{2n} \in L$. Notice that $|w| = 3n \ge n$.</li>
+            <li><b>Decomposition:</b> By the lemma, $w = xyz$ with $|xy| \le n$ and $|y| > 0$.
+              Because the first $n$ symbols of $w$ are all $a$'s, $y$ must consist solely of $a$'s:
+              $$y = a^k \quad \text{for some } 1 \le k \le n$$
+            </li>
+            <li><b>Pumping:</b> Pump $y$ with $i = 2$:
+              $$x y^2 z = a^{n+k} b^{2n}$$
+              For this string to be in $L$, the number of $b$'s must be exactly twice the number of $a$'s:
+              $$2(n + k) = 2n + 2k \neq 2n \quad (\text{since } k \ge 1)$$
+              Therefore, $x y^2 z \notin L$, which contradicts the pumping lemma!
+            </li>
+          </ol>
+          <div class="answer-box">
+            <span class="ans-label">Conclusion</span>
+            <p><b>$L = \{a^n b^{2n} \mid n \ge 1\}$ is not regular. $\blacksquare$</b></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 6.2 -->
+    <div class="qcard" id="q-pl-2">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">Exercise 16</span>
+        <span class="qtitle">Prove $L = \{a^n b^n \mid n \ge 0\}$ is Not Regular</span>
+        <div class="meta-row">
+          <span class="meta-chip">toc_unit-2 Slides 76–77</span>
+          <span class="source-chip">Example 2</span>
+        </div>
+      </div>
+      <p><b>Problem Statement:</b> Using the Pumping Lemma, show that $L = \{a^n b^n \mid n \ge 0\}$ is not regular.</p>
+      
+      <div class="subq open">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Complete Proof Solution</button>
+        <div class="subq-body">
+          <ol class="steps">
+            <li>Assume $L$ is regular with pumping length $n$.</li>
+            <li>Choose string $w = a^n b^n \in L$ with $|w| = 2n \ge n$.</li>
+            <li>Since $|xy| \le n$, $y$ consists only of $a$'s: $y = a^k$ where $k \ge 1$.</li>
+            <li>Pump down with $i = 0$: $x y^0 z = xz = a^{n-k} b^n$. Since $k \ge 1$, $n - k \neq n$. Thus $xz \notin L$, contradicting the lemma! $\blacksquare$</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    — End of Course Lecture Compendium · BCS 213 Theory of Computation · MMMUT Gorakhpur —
+  </footer>
+
+</div>
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+  // KaTeX Math Rendering Function
+  function renderAllMath() {
+    if (typeof renderMathInElement !== 'undefined') {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+          { left: '\\[', right: '\\]', display: true },
+          { left: '\\(', right: '\\)', display: false }
+        ],
+        throwOnError: false,
+        ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      });
+    }
+  }
+
+  // Trigger math rendering on load and ready states
+  window.addEventListener('DOMContentLoaded', renderAllMath);
+  window.addEventListener('load', renderAllMath);
+
+  // Tab Switching
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      tabPanels.forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      const targetPanel = document.getElementById(btn.getAttribute('data-tab'));
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+        renderAllMath();
+      }
+      window.scrollTo({
+        top: document.querySelector('.folder-tabs').offsetTop - 12,
+        behavior: 'smooth'
+      });
+    });
+  });
+
+  // Collapsible Sub-questions Toggle
+  document.querySelectorAll('.subq-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const parent = btn.parentElement;
+      parent.classList.toggle('open');
+      if (parent.classList.contains('open')) {
+        renderAllMath();
+      }
+    });
+  });
+
+  // Expand All / Collapse All Controls
+  const expandAllBtn = document.getElementById('expandAllBtn');
+  const collapseAllBtn = document.getElementById('collapseAllBtn');
+
+  if (expandAllBtn) {
+    expandAllBtn.addEventListener('click', () => {
+      document.querySelectorAll('.subq').forEach(subq => subq.classList.add('open'));
+      renderAllMath();
+    });
+  }
+
+  if (collapseAllBtn) {
+    collapseAllBtn.addEventListener('click', () => {
+      document.querySelectorAll('.subq').forEach(subq => subq.classList.remove('open'));
+    });
+  }
+
+  // Instant Search / Filter across sections
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase().trim();
+      if (!term) {
+        document.querySelectorAll('.qcard').forEach(card => card.style.display = '');
+        return;
+      }
+      document.querySelectorAll('.qcard').forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (text.includes(term)) {
+          card.style.display = '';
+          card.querySelectorAll('.subq').forEach(sub => sub.classList.add('open'));
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      renderAllMath();
+    });
+  }
+</script>
+
+</body>
+</html>
