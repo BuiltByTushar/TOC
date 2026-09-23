@@ -87,20 +87,58 @@
     z-index: 1;
   }
 
+  /* KaTeX Responsive & Overflow Rules */
+  .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    padding: 6px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .katex-display::-webkit-scrollbar {
+    height: 4px;
+  }
+  .katex-display::-webkit-scrollbar-thumb {
+    background: var(--paper-edge);
+    border-radius: 2px;
+  }
+  .katex {
+    max-width: 100%;
+  }
+
+  /* Universal text and formula wrapping */
+  .paper,
+  .qcard,
+  .question-text,
+  .subq-body,
+  .answer-box,
+  .margin-note,
+  .formula-box,
+  p, li {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
   /* Header & Masthead */
   .masthead {
     position: relative;
     z-index: 2;
-    padding: 36px 44px 28px 78px;
+    padding: 34px 44px 26px 78px;
     border-bottom: 2px solid var(--sepia);
     background: linear-gradient(180deg, rgba(255,255,255,0.35), transparent);
   }
+  .masthead-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
   .subcode-tag {
-    position: absolute;
-    top: 24px;
-    right: 36px;
+    position: static;
     border: 1.5px solid var(--sepia);
-    padding: 6px 14px;
+    padding: 5px 14px;
     font-family: 'Courier Prime', monospace;
     font-size: 0.85rem;
     font-weight: 700;
@@ -108,6 +146,7 @@
     transform: rotate(2deg);
     background: rgba(255, 255, 255, 0.6);
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    flex-shrink: 0;
   }
   .masthead .kicker {
     font-family: 'Courier Prime', monospace;
@@ -234,9 +273,22 @@
     display: flex;
     gap: 6px;
     padding: 24px 44px 0 78px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+    border-bottom: 2px solid var(--sepia);
+  }
+  .folder-tabs::-webkit-scrollbar {
+    height: 5px;
+  }
+  .folder-tabs::-webkit-scrollbar-thumb {
+    background: var(--sepia-soft);
+    border-radius: 2px;
   }
   .tab-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
     font-family: 'IM Fell English', Georgia, serif;
     font-size: 1.15rem;
     background: var(--parchment-deep);
@@ -370,8 +422,8 @@
     font-family: 'IM Fell English', Georgia, serif;
     font-size: 1.35rem;
     color: var(--sepia);
-    flex: 1;
-    min-width: 240px;
+    flex: 1 1 200px;
+    min-width: 0;
   }
   .meta-row {
     display: flex;
@@ -715,7 +767,7 @@
   /* Video Lectures Section Styles */
   .video-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
     gap: 16px;
     margin: 18px 0;
   }
@@ -842,24 +894,50 @@
   }
 
   /* Responsive Design */
+  @media (max-width: 992px) {
+    .masthead { padding: 28px 24px 22px 64px; }
+    .instructions-note, .manuscript-toolbar { margin: 18px 24px 0 64px; }
+    .folder-tabs { padding: 20px 20px 0 64px; }
+    .tab-panel { padding: 26px 20px 36px 64px; }
+  }
+
   @media (max-width: 768px) {
-    body { padding: 12px 6px 40px; }
-    .paper::before { left: 32px; }
-    .paper::after { left: 36px; }
-    .masthead { padding: 24px 18px 20px 48px; }
-    .instructions-note, .manuscript-toolbar { margin: 16px 18px 0 48px; }
-    .folder-tabs { padding: 18px 12px 0 48px; }
-    .tab-panel { padding: 24px 14px 34px 48px; }
-    .subcode-tag { position: static; display: inline-block; margin-bottom: 12px; transform: none; }
-    .qcard { padding: 20px 14px 20px 46px; margin: 20px 0; }
-    .qcard::before { left: 34px; }
-    .qcard::after { left: 37px; }
-    .punch-holes { left: 8px; width: 18px; }
-    .punch-holes span { width: 11px; height: 11px; }
-    .masthead h1 { font-size: 1.9rem; }
+    body { padding: 10px 6px 36px; }
+    .paper::before { left: 24px; }
+    .paper::after { left: 28px; }
+    .masthead { padding: 22px 16px 18px 40px; }
+    .masthead h1 { font-size: 1.85rem; }
+    .instructions-note, .manuscript-toolbar { margin: 14px 14px 0 40px; }
+    .folder-tabs { padding: 14px 12px 0 40px; }
+    .tab-panel { padding: 20px 14px 28px 40px; }
+    .subcode-tag { margin-bottom: 8px; transform: none; }
+    .qcard { padding: 18px 14px 20px 36px; margin: 18px 0; }
+    .qcard::before { left: 18px; width: 1.5px; }
+    .qcard::after { display: none; }
+    .punch-holes { left: 5px; width: 12px; }
+    .punch-holes span { width: 9px; height: 9px; }
     .tab-btn { font-size: 1rem; padding: 8px 14px 10px; }
     .manuscript-toolbar { flex-direction: column; align-items: stretch; }
     .search-box-wrap { width: 100%; }
+    .table-wrap table.data-table { min-width: 100%; }
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 6px 4px 24px; }
+    .paper::before { left: 10px; width: 1px; }
+    .paper::after { display: none; }
+    .masthead { padding: 18px 12px 16px 20px; }
+    .masthead h1 { font-size: 1.5rem; }
+    .instructions-note, .manuscript-toolbar { margin: 12px 8px 0 20px; }
+    .folder-tabs { padding: 12px 8px 0 20px; }
+    .tab-panel { padding: 16px 8px 24px 16px; }
+    .qcard { padding: 14px 10px 16px 14px; margin: 14px 0; }
+    .qcard::before { display: none; }
+    .punch-holes { display: none; }
+    .margin-note { padding: 10px 12px 10px 32px; font-size: 0.88rem; }
+    .margin-note::before { left: 8px; top: 9px; }
+    .tab-btn { font-size: 0.92rem; padding: 7px 12px 9px; }
+    .video-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -869,8 +947,10 @@
 
   <!-- ==================== MASTHEAD ==================== -->
   <div class="masthead">
-    <div class="subcode-tag">Sub Code: BCS 213</div>
-    <div class="kicker">B.Tech · Year 2 / Semester III · Max Marks: 30 · Time: 2 Hours</div>
+    <div class="masthead-top">
+      <div class="kicker">B.Tech · Year 2 / Semester III · Max Marks: 30 · Time: 2 Hours</div>
+      <div class="subcode-tag">Sub Code: BCS 213</div>
+    </div>
     <h1>Theory of Computation <em>— Examination Manuscript</em></h1>
     <p class="sub">Minor Test Examination 2025–26 · Comprehensive, Rigorous Academic Solutions</p>
     <div class="meta-strip">
@@ -878,7 +958,10 @@
       <span><b>Coverage:</b> Full Solutions for All Parts of Q1, Q2, and Q3</span>
       <span><b>Verification:</b> Cross-checked with Myhill–Nerode, Arden's Theorem &amp; Pumping Lemma</span>
     </div>
-    <div class="stamp">Verified &amp; Certified ✓</div>
+    <div class="masthead-actions" style="margin-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+      <div class="stamp" style="margin-top: 0;">Verified &amp; Certified ✓</div>
+      <a href="lecture_notes.html" style="font-family: 'Courier Prime', monospace; font-size: 0.82rem; font-weight: 700; text-decoration: none; padding: 6px 14px; border-radius: 3px; background: var(--teal); color: var(--parchment); display: inline-flex; align-items: center; gap: 6px; box-shadow: 1px 2px 4px rgba(0,0,0,0.15);">📖 Open Complete Course Lecture Notes &amp; PPT Compendium (lecture_notes.html) ↗</a>
+    </div>
   </div>
 
   <!-- Instructions Note -->
