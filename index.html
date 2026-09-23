@@ -712,6 +712,135 @@
     font-size: 1.05rem;
   }
 
+  /* Video Lectures Section Styles */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+    gap: 16px;
+    margin: 18px 0;
+  }
+  .video-card {
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid var(--paper-edge);
+    border-radius: 4px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 5px rgba(74, 55, 40, 0.08);
+  }
+  .video-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 14px rgba(74, 55, 40, 0.16);
+    background: rgba(255, 255, 255, 0.92);
+  }
+  .video-card.pyq-hit {
+    border-left: 5px solid var(--crimson);
+  }
+  .video-card.core-hit {
+    border-left: 5px solid var(--teal);
+  }
+  .video-card-badge-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .video-badge {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .badge-pyq {
+    background: rgba(139, 26, 26, 0.12);
+    color: var(--crimson);
+    border: 1px solid var(--crimson);
+  }
+  .badge-core {
+    background: rgba(26, 92, 92, 0.12);
+    color: var(--teal);
+    border: 1px solid var(--teal);
+  }
+  .badge-num {
+    background: var(--sepia-faint);
+    color: var(--sepia);
+    border: 1px solid var(--paper-edge);
+  }
+  .video-card-title {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 1.03rem;
+    font-weight: 600;
+    color: var(--sepia);
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+  }
+  .video-card-meta {
+    font-size: 0.88rem;
+    color: var(--sepia-soft);
+    line-height: 1.55;
+    margin-bottom: 14px;
+    flex-grow: 1;
+  }
+  .video-card-meta b {
+    color: var(--teal);
+  }
+  .video-btn {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    background: var(--blue);
+    color: var(--parchment);
+    text-decoration: none;
+    padding: 7px 12px;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background 0.2s ease;
+  }
+  .video-btn:hover {
+    background: #0d2547;
+    color: #fff;
+  }
+  .video-row-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 1px dashed var(--paper-edge);
+    background: rgba(255, 255, 255, 0.35);
+  }
+  .video-row-item:last-child {
+    border-bottom: none;
+  }
+  .video-row-item:hover {
+    background: rgba(255, 255, 255, 0.7);
+  }
+  .video-row-info {
+    flex-grow: 1;
+  }
+  .video-row-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--sepia);
+    margin-bottom: 2px;
+  }
+  .video-row-sub {
+    font-size: 0.82rem;
+    font-family: 'Courier Prime', monospace;
+    color: var(--sepia-soft);
+  }
+
   /* Responsive Design */
   @media (max-width: 768px) {
     body { padding: 12px 6px 40px; }
@@ -776,6 +905,7 @@
     <button class="tab-btn" data-tab="q2" role="tab" aria-selected="false"><span class="tabnum">Q2</span>Regular Expressions, Arden's Theorem &amp; Closure</button>
     <button class="tab-btn" data-tab="q3" role="tab" aria-selected="false"><span class="tabnum">Q3</span>Modulo 5 DFA, Moore/Mealy &amp; Pumping Lemma</button>
     <button class="tab-btn" data-tab="revision" role="tab" aria-selected="false"><span class="tabnum">§</span>Master Revision &amp; Traps Sheet</button>
+    <button class="tab-btn" data-tab="videos" role="tab" aria-selected="false"><span class="tabnum">📺</span>Curated Video Lectures</button>
   </div>
 
   <!-- ============================================================ -->
@@ -2696,6 +2826,981 @@
         <li><b>Closure &amp; Decision Properties:</b> Cartesian product construction, complementing DFAs, and testing emptiness/finiteness.</li>
         <li><b>Moore vs Mealy Conversion:</b> Comparing output delays, state counts, and transformation procedures.</li>
       </ol>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ================       VIDEOS PANEL         ================ -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="videos" role="tabpanel">
+    <h2 class="panel-title">Curated Video Lectures &amp; Exam Study Roadmap <span class="q-any">Mapped directly to BCS 213 Syllabus (Unit-I &amp; Unit-II) &amp; Minor Test PYQ</span></h2>
+
+    <div class="answer-box">
+      <span class="ans-label">Curated Video Analysis Briefing</span>
+      <p>
+        All <b>62 Theory of Computation video lectures</b> have been systematically analyzed, indexed, and cross-referenced against the <b>BCS 213 Syllabus</b> and the <b>Minor Test Examination Questions</b>. Rather than watching all 62 videos indiscriminately, use the prioritized tiers below to maximize scoring efficiency:
+      </p>
+      <ul class="plain">
+        <li><b>Tier 1 (★ Direct PYQ Hits):</b> 15 essential lectures directly solving or explaining the exact theoretical theorems and design algorithms on this paper (Arden's Theorem, Myhill–Nerode Table Filling, Pumping Lemma for $ww^R$, Moore vs. Mealy machines, and DFA modulo arithmetic).</li>
+        <li><b>Tier 2 (★ Core Syllabus Essentials):</b> 10 foundational lectures covering standard semester examination staples (NFA $\to$ DFA subset construction, $\varepsilon$-closure, DFA minimization, and Thompson's construction).</li>
+        <li><b>Tier 3 (Complete 62-Lecture Directory):</b> Fully searchable and collapsible directory of all 62 lectures grouped by syllabus unit for topic-specific drills.</li>
+      </ul>
+    </div>
+
+    <div class="sec-heading">Fast-Track 3-Hour Exam Cramming Strategy</div>
+    <ol class="priority-list">
+      <li><b>Arden's Theorem &amp; DFA to RE (Videos 48, 52, 53) [~40 mins]:</b> Master state path equations $X = QP^*$ and multi-final state unions. Guarantees 3–4 marks on Q2(b).</li>
+      <li><b>Myhill–Nerode Theorem &amp; Table Filling (Videos 25, 26) [~30 mins]:</b> Understand indistinguishability relation $\equiv_L$, equivalence classes, and minimal state derivations for Q1(d).</li>
+      <li><b>Pumping Lemma Contradiction Proofs (Videos 60, 61, 62) [~35 mins]:</b> Learn the adversary game, condition $|xy| \le p$, and the palindromic reflection proof for Q3(c) and limitations in Q3(d).</li>
+      <li><b>Moore &amp; Mealy Machine Conversions (Videos 27, 28, 31, 34, 37) [~45 mins]:</b> Understand output functions $\lambda$, delay characteristics, and state splitting algorithms for Q3(b).</li>
+      <li><b>DFA Modulo Arithmetic &amp; RE Identities (Videos 4, 6, 47, 49) [~30 mins]:</b> Practice binary modulo 5 DFA transitions (Q3 a) and algebraic simplification identities (Q1 c).</li>
+    </ol>
+
+    <!-- ---------- TIER 1 CARD ---------- -->
+    <div class="qcard" id="card-video-tier1">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">TIER 1</span>
+        <span class="qtitle">Direct PYQ Exam Hits (Top 15 High-Yield Lectures)</span>
+        <div class="meta-row">
+          <span class="meta-chip">15 Priority Lectures</span>
+          <span class="meta-chip">Direct PYQ Target</span>
+          <span class="meta-chip">Highest ROI</span>
+          <span class="meta-chip">Units I &amp; II</span>
+        </div>
+      </div>
+
+      <p style="font-size:0.95rem; color:var(--sepia); margin-bottom:12px;">
+        These 15 videos map directly to the specific questions asked on the BCS 213 Minor Test paper. Watching these provides complete visual clarity on the exact algorithms and theorems solved in the manuscript.
+      </p>
+
+      <div class="video-grid">
+
+        <!-- Card: Video 48 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 48</span>
+            </div>
+            <div class="video-card-title">Arden’s Theorem (Statement &amp; Proof Condition)</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q2 (b) · Arden's Theorem<br>
+              <b>Key Focus:</b> The uniqueness condition $\varepsilon \notin P$ for $X = Q + XP \implies X = QP^*$. Explains why $\varepsilon \in P$ yields infinitely many solutions.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=Idl_0mPzZjE" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 48</a>
+        </div>
+
+        <!-- Card: Video 52 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 52</span>
+            </div>
+            <div class="video-card-title">DFA to Regular Expression Conversion</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q2 (b) · DFA to RE using Arden<br>
+              <b>Key Focus:</b> Step-by-step construction of linear state equations from DFA state transition graphs and applying Arden's theorem by elimination.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=SmT1DXLl3f4" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 52</a>
+        </div>
+
+        <!-- Card: Video 53 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 53</span>
+            </div>
+            <div class="video-card-title">DFA to RE (Multiple Final States)</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q2 (b) · Multiple Final States<br>
+              <b>Key Focus:</b> Handling DFAs where more than one state is accepting by expressing total regular expression as $R = R_{f_1} + R_{f_2} + \dots + R_{f_k}$.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=fRVljh8y7Qw" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 53</a>
+        </div>
+
+        <!-- Card: Video 25 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 25</span>
+            </div>
+            <div class="video-card-title">Myhill–Nerode Theorem: Table Filling Method</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q1 (d) · Myhill–Nerode Theorem<br>
+              <b>Key Focus:</b> Right invariance relation $\equiv_L$, equivalence classes of $\Sigma^*$, finite index property, and constructing the minimal DFA state table.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=UiXkJUTkp44" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 25</a>
+        </div>
+
+        <!-- Card: Video 26 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 26</span>
+            </div>
+            <div class="video-card-title">Myhill–Nerode Table Filling (Solved Example)</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q1 (d) · Step-by-Step 3-State Partition<br>
+              <b>Key Focus:</b> Full tabular execution of distinguishing pairs, cross-marking incompatible states, and merging equivalent states into the minimal DFA.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=Dx2RJ2DXRYs" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 26</a>
+        </div>
+
+        <!-- Card: Video 60 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 60</span>
+            </div>
+            <div class="video-card-title">Pumping Lemma for Regular Languages</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q3 (c) &amp; Q3 (d) · Non-Regular Proofs<br>
+              <b>Key Focus:</b> The Pigeonhole Principle foundation, formal quantifier structure ($\exists p \ge 1, \forall s \in L, |s| \ge p \dots$), and memory limitations of finite automata.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=dikEDuepOtI" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 60</a>
+        </div>
+
+        <!-- Card: Video 61 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 61</span>
+            </div>
+            <div class="video-card-title">Pumping Lemma: Solved Example 1</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q3 (c) · Contradiction Framework<br>
+              <b>Key Focus:</b> Step-by-step adversary strategy on counting languages ($a^n b^n$), string choice $s$, bounding $|xy| \le p$, and pumping up ($i=2$).
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=Ty9tpikilAo" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 61</a>
+        </div>
+
+        <!-- Card: Video 62 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 62</span>
+            </div>
+            <div class="video-card-title">Pumping Lemma: Solved Example 2 (Palindromes)</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q3 (c) · Non-Regularity of $\{ww^R\}$<br>
+              <b>Key Focus:</b> Direct match to Q3(c)! Proving reflection / palindromic strings are non-regular by pumping substrings entirely inside the first prefix block.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=kZzH8E-s-9o" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 62</a>
+        </div>
+
+        <!-- Card: Video 27 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 27</span>
+            </div>
+            <div class="video-card-title">Finite Automata with Outputs (Moore &amp; Mealy)</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q3 (b) · Formal Definitions &amp; Models<br>
+              <b>Key Focus:</b> Formal 6-tuple $(Q, \Sigma, \Delta, \delta, \lambda, q_0)$ definitions, output alphabet $\Delta$, and fundamental distinctions between state and edge outputs.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=EzMWYmRkHFQ" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 27</a>
+        </div>
+
+        <!-- Card: Video 28 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 28</span>
+            </div>
+            <div class="video-card-title">Construction of Mealy Machine</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q3 (b) · Mealy Machine Design<br>
+              <b>Key Focus:</b> Transition-associated outputs $\lambda: Q \times \Sigma \to \Delta$, strict length preservation ($|y| = |x|$), and synchronous reaction to inputs.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=LioitkXDfmA" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 28</a>
+        </div>
+
+        <!-- Card: Video 31 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 31</span>
+            </div>
+            <div class="video-card-title">Construction of Moore Machine</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q3 (b) · Moore Machine Design<br>
+              <b>Key Focus:</b> State-associated outputs $\lambda: Q \to \Delta$, initial output on empty string $\varepsilon$, and output length $|y| = |x| + 1$ (1-clock cycle delay).
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=MFnRF07SoFo" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 31</a>
+        </div>
+
+        <!-- Card: Video 34 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 34</span>
+            </div>
+            <div class="video-card-title">Conversion of Moore to Mealy Machine</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q3 (b) · Moore to Mealy Equivalence<br>
+              <b>Key Focus:</b> Pushing state output $\lambda_{Moore}(q)$ onto all incoming transition edges $(\cdot, a) \to q$. Proves state count preservation: $|Q_{Mealy}| = |Q_{Moore}|$.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=HEVWx4irOx4" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 34</a>
+        </div>
+
+        <!-- Card: Video 37 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 37</span>
+            </div>
+            <div class="video-card-title">Conversion of Mealy to Moore Machine</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q3 (b) · State Splitting Algorithm<br>
+              <b>Key Focus:</b> Detecting conflicting incoming edge outputs to a single state and splitting state $q$ into sub-states $(q, y_1), (q, y_2)$ up to $|Q| \cdot |\Delta|$.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=-etILQcfgTg" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 37</a>
+        </div>
+
+        <!-- Card: Video 47 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 47</span>
+            </div>
+            <div class="video-card-title">Identities of Regular Expressions</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q1 (c) · Algebraic Laws of RE<br>
+              <b>Key Focus:</b> All 12 standard algebraic identities: idempotence ($R+R=R$), identity ($\varepsilon R = R$), annihilation ($\phi R = \phi$), and Kleene star closures.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=yp4pYgXfYD8" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 47</a>
+        </div>
+
+        <!-- Card: Video 49 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Video 49</span>
+            </div>
+            <div class="video-card-title">Proof Using Identities of Regular Expressions</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q1 (c) · Algebraic RE Proofs<br>
+              <b>Key Focus:</b> Equivalence simplification techniques using algebraic substitutions (such as proving $(a+b)^* = (a^*b^*)^*$ and factoring expressions).
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=TkqcPh0BFUw" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Watch Video 49</a>
+        </div>
+
+        <!-- Card: Video 4 & 6 -->
+        <div class="video-card pyq-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-pyq">★ DIRECT PYQ HIT</span>
+              <span class="video-badge badge-num">Videos 4 &amp; 6</span>
+            </div>
+            <div class="video-card-title">DFA Construction: Modulo Arithmetic &amp; Constraints</div>
+            <div class="video-card-meta">
+              <b>Target:</b> Q3 (a) &amp; Q1 (a) · Modulo 5 &amp; Prefix DFA<br>
+              <b>Key Focus:</b> Transition law for streaming binary digits $(2r + b) \pmod 5$ and building prefix/suffix tracking states for palindromes.
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://www.youtube.com/watch?v=40i4PKpM0cI" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 4</a>
+            <a href="https://www.youtube.com/watch?v=_2cKtLkdwnc" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 6</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ---------- TIER 2 CARD ---------- -->
+    <div class="qcard" id="card-video-tier2">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">TIER 2</span>
+        <span class="qtitle">Core Syllabus Essentials (Unit-I &amp; Unit-II Staples)</span>
+        <div class="meta-row">
+          <span class="meta-chip">10 Essential Lectures</span>
+          <span class="meta-chip">Syllabus Core</span>
+          <span class="meta-chip">End-Sem Preparation</span>
+        </div>
+      </div>
+
+      <p style="font-size:0.95rem; color:var(--sepia); margin-bottom:12px;">
+        These lectures cover fundamental syllabus topics that are guaranteed staples in university examinations (even if not all appeared on this specific minor test). Crucial for complete mastery of Units I and II.
+      </p>
+
+      <div class="video-grid">
+
+        <!-- Card: Videos 15 & 16 -->
+        <div class="video-card core-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-core">★ CORE SYLLABUS</span>
+              <span class="video-badge badge-num">Videos 15 &amp; 16</span>
+            </div>
+            <div class="video-card-title">Conversion of NFA to DFA (Subset Construction)</div>
+            <div class="video-card-meta">
+              <b>Unit-I Topic:</b> Equivalence of NFA and DFA<br>
+              <b>Concept:</b> Power set construction ($2^Q$ states), computing reachable state sets $\delta'(S, a) = \bigcup_{q \in S} \delta(q, a)$, and marking final states.
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://www.youtube.com/watch?v=--CSVsFIDng" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 15</a>
+            <a href="https://www.youtube.com/watch?v=pnyXgIXpKnc" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 16</a>
+          </div>
+        </div>
+
+        <!-- Card: Videos 20 & 21 -->
+        <div class="video-card core-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-core">★ CORE SYLLABUS</span>
+              <span class="video-badge badge-num">Videos 20 &amp; 21</span>
+            </div>
+            <div class="video-card-title">Minimization of DFA (Partitioning Algorithm)</div>
+            <div class="video-card-meta">
+              <b>Unit-I Topic:</b> Minimization of Finite Automata (Links to Q2 d)<br>
+              <b>Concept:</b> 0-equivalence ($F$ vs $Q \setminus F$), 1-equivalence, 2-equivalence, and collapsing indistinguishable states into a minimal canonical automaton.
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://www.youtube.com/watch?v=hOzc4BUIXRk" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 20</a>
+            <a href="https://www.youtube.com/watch?v=0XaGAkY09Wc" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 21</a>
+          </div>
+        </div>
+
+        <!-- Card: Videos 41 & 42 -->
+        <div class="video-card core-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-core">★ CORE SYLLABUS</span>
+              <span class="video-badge badge-num">Videos 41 &amp; 42</span>
+            </div>
+            <div class="video-card-title">Epsilon NFA &amp; Conversion of $\varepsilon$-NFA to NFA</div>
+            <div class="video-card-meta">
+              <b>Unit-I Topic:</b> NFA with Epsilon Transitions<br>
+              <b>Concept:</b> Calculating $\varepsilon$-closure of states, and computing new transition functions via $\delta'(q, a) = \varepsilon\text{-closure}(\delta(\varepsilon\text{-closure}(q), a))$.
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://www.youtube.com/watch?v=84oNUttWlN4" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 41</a>
+            <a href="https://www.youtube.com/watch?v=WSGcmaHNBFM" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 42</a>
+          </div>
+        </div>
+
+        <!-- Card: Videos 45 & 50 -->
+        <div class="video-card core-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-core">★ CORE SYLLABUS</span>
+              <span class="video-badge badge-num">Videos 45 &amp; 50</span>
+            </div>
+            <div class="video-card-title">Regular Expressions: Foundations &amp; Design</div>
+            <div class="video-card-meta">
+              <b>Unit-II Topic:</b> Definition, Operators &amp; Designing REs (Links to Q2 a)<br>
+              <b>Concept:</b> Inductive definition, precedence order ($* > \cdot > +$), and systematically translating linguistic patterns into algebraic expressions.
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://www.youtube.com/watch?v=upu_TeZImN0" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 45</a>
+            <a href="https://www.youtube.com/watch?v=FOhEmW_nMRs" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 50</a>
+          </div>
+        </div>
+
+        <!-- Card: Videos 54 & 55 -->
+        <div class="video-card core-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-core">★ CORE SYLLABUS</span>
+              <span class="video-badge badge-num">Videos 54 &amp; 55</span>
+            </div>
+            <div class="video-card-title">Conversion of Regular Expression to Finite Automata</div>
+            <div class="video-card-meta">
+              <b>Unit-II Topic:</b> Kleene's Theorem (RE to FA)<br>
+              <b>Concept:</b> Thompson's Construction: inductive templates for base symbols $\varepsilon, a$, union $R_1 + R_2$, concatenation $R_1 R_2$, and Kleene star $R^*$.
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="https://www.youtube.com/watch?v=RxfXyvfTsgQ" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 54</a>
+            <a href="https://www.youtube.com/watch?v=62JAy4oH6lU" target="_blank" rel="noopener noreferrer" class="video-btn" style="flex:1;">▶ Video 55</a>
+          </div>
+        </div>
+
+        <!-- Card: Video 9 -->
+        <div class="video-card core-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-core">★ CORE SYLLABUS</span>
+              <span class="video-badge badge-num">Video 9</span>
+            </div>
+            <div class="video-card-title">Operations &amp; Closure Properties of Regular Languages</div>
+            <div class="video-card-meta">
+              <b>Unit-II Topic:</b> Closure Properties (Links to Q1 b &amp; Q2 c)<br>
+              <b>Concept:</b> Formal proofs of closure under union, intersection, complement, difference, reversal, and homomorphism using Cartesian product DFAs.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=6aRJQNYYz4s" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Video 9</a>
+        </div>
+
+        <!-- Card: Video 58 -->
+        <div class="video-card core-hit">
+          <div>
+            <div class="video-card-badge-row">
+              <span class="video-badge badge-core">★ CORE SYLLABUS</span>
+              <span class="video-badge badge-num">Video 58</span>
+            </div>
+            <div class="video-card-title">Equivalence of Two Finite Automata</div>
+            <div class="video-card-meta">
+              <b>Unit-II Topic:</b> Decision Properties of Regular Languages<br>
+              <b>Concept:</b> Testing whether $L(M_1) = L(M_2)$ using symmetric difference $(L_1 \cap \overline{L_2}) \cup (\overline{L_1} \cap L_2) = \emptyset$ and product tables.
+            </div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=nX4JrcHgpZY" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Video 58</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ---------- TIER 3 CARD: FULL DIRECTORY ---------- -->
+    <div class="qcard" id="card-video-all">
+      <div class="punch-holes"><span></span><span></span><span></span></div>
+      <div class="qcard-head">
+        <span class="qnum">COMPLETE</span>
+        <span class="qtitle">Complete 62-Video Subject Directory (Categorized by Syllabus Topic)</span>
+        <div class="meta-row">
+          <span class="meta-chip">All 62 Lectures</span>
+          <span class="meta-chip">Collapsible Groups</span>
+          <span class="meta-chip">Searchable</span>
+        </div>
+      </div>
+
+      <p style="font-size:0.95rem; color:var(--sepia); margin-bottom:14px;">
+        Browse the complete archive of 62 Theory of Computation lectures divided into 9 conceptual categories. Click on any section header below to expand or collapse.
+      </p>
+
+      <!-- Category 1 -->
+      <div class="subq">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 1: Introduction, FSM &amp; DFA Fundamentals (Videos 1–7)</button>
+        <div class="subq-body">
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 1: Introduction to Theory of Computation</div>
+              <div class="video-row-sub">Foundations of theoretical computer science, languages, and automata hierarchy.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=58N2N7zJGrQ" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 2: Finite State Machine (Prerequisites)</div>
+              <div class="video-row-sub">Alphabets, strings, operations, prefixes, and suffixes.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=TpIBUeyOuv8" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 3: Finite State Machine (Finite Automata)</div>
+              <div class="video-row-sub">Formal 5-tuple definition of DFA $(Q, \Sigma, \delta, q_0, F)$ and state diagrams.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=Qa6csfkK7_I" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 4: Deterministic Finite Automata (Example 1) <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(a)</span></div>
+              <div class="video-row-sub">DFA construction for modulo arithmetic and length constraints.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=40i4PKpM0cI" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 5: Deterministic Finite Automata (Example 2)</div>
+              <div class="video-row-sub">DFA construction starting or ending with specific substrings.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=2KindKcLjos" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 6: Deterministic Finite Automata (Example 3) <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q1(a)</span></div>
+              <div class="video-row-sub">Substring containment and prefix tracking DFAs.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=_2cKtLkdwnc" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 7: Deterministic Finite Automata (Example 4)</div>
+              <div class="video-row-sub">Even/odd parity and counting constraints.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=Fpmr1nHqYrw" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 2 -->
+      <div class="subq">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 2: Regular Languages, Operations &amp; Closure (Videos 8–9)</button>
+        <div class="subq-body">
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 8: Regular Languages</div>
+              <div class="video-row-sub">Definition of regular languages and acceptance criteria.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=WrzaPNj9OZ4" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 9: Operations on Regular Languages <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q1(b), Q2(c)</span></div>
+              <div class="video-row-sub">Closure properties under union, intersection, complementation, reversal, and concatenation.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=6aRJQNYYz4s" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 3 -->
+      <div class="subq">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 3: Nondeterministic Finite Automata (NFA) &amp; NFA to DFA (Videos 10–19)</button>
+        <div class="subq-body">
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 10: Non-Deterministic Finite Automata</div>
+              <div class="video-row-sub">Introduction to nondeterminism, multiple choices, and branching trees.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=ehy0jGIYRtE" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 11: Formal Definition of NFA</div>
+              <div class="video-row-sub">Mathematical 5-tuple definition with power set transition $\delta: Q \times \Sigma \to 2^Q$.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=egXhe55dAIk" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 12: NFA Solved Example 1</div>
+              <div class="video-row-sub">Construction of NFA accepting strings ending in a given pattern.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=4bjqVsoy6bA" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 13: NFA Solved Example 2</div>
+              <div class="video-row-sub">NFA design for substring matching with non-deterministic guesses.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=Bcen1W_uFEU" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 14: NFA Solved Example 3</div>
+              <div class="video-row-sub">Advanced NFA problem on positional constraints ($k$-th symbol from right).</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=NGF-b3QVeJU" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 15: Conversion of NFA to DFA <span class="video-badge badge-core" style="display:inline-flex;">CORE SYLLABUS</span></div>
+              <div class="video-row-sub">The subset construction (powerset) algorithm explained theoretically.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=--CSVsFIDng" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 16: Conversion of NFA to DFA (Example 1) <span class="video-badge badge-core" style="display:inline-flex;">CORE SYLLABUS</span></div>
+              <div class="video-row-sub">Step-by-step conversion table and state diagram generation.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=pnyXgIXpKnc" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 17: Conversion of NFA to DFA (Example 2)</div>
+              <div class="video-row-sub">Conversion involving dead/trap state subsets.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=i-fk9o46oVY" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 18: Conversion of NFA to DFA (Example 3)</div>
+              <div class="video-row-sub">Conversion of 3-state NFA to minimal DFA.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=dY1bCC6syLI" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 19: Conversion of NFA to DFA (Example 4)</div>
+              <div class="video-row-sub">Complex subset construction walkthrough.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=Y92dtMnarAU" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 4 -->
+      <div class="subq">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 4: DFA Minimization &amp; Myhill–Nerode Theorem (Videos 20–26)</button>
+        <div class="subq-body">
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 20: Minimization of DFA <span class="video-badge badge-core" style="display:inline-flex;">CORE SYLLABUS</span></div>
+              <div class="video-row-sub">State equivalence, $k$-distinguishability, and partition refinement algorithm.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=hOzc4BUIXRk" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 21: Minimization of DFA (Example 1) <span class="video-badge badge-core" style="display:inline-flex;">CORE SYLLABUS</span></div>
+              <div class="video-row-sub">Solved partition minimization table on 5-state DFA.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=0XaGAkY09Wc" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 22: Minimization of DFA (Example 2)</div>
+              <div class="video-row-sub">Additional minimization example with multiple equivalent pairs.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=ex9sPLq5CRg" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 23: Minimization of DFA (Multiple Final States)</div>
+              <div class="video-row-sub">Partitioning initial group $F$ containing several distinct final states.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=DV8cZp-2VmM" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 24: Minimization of DFA (With Unreachable States)</div>
+              <div class="video-row-sub">Pruning unreachable states prior to state equivalence calculation.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=kYMqDgB2GbU" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 25: Myhill Nerode Theorem - Table Filling Method <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q1(d)</span></div>
+              <div class="video-row-sub">Theoretical foundation of right-invariant equivalence relation and table filling.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=UiXkJUTkp44" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 26: Myhill Nerode Theorem - Solved Example <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q1(d)</span></div>
+              <div class="video-row-sub">Step-by-step triangular table marking and canonical minimal state creation.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=Dx2RJ2DXRYs" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 5 -->
+      <div class="subq">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 5: FA with Output: Moore &amp; Mealy Machines (Videos 27–40)</button>
+        <div class="subq-body">
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 27: Finite Automata With Outputs <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(b)</span></div>
+              <div class="video-row-sub">Formal mathematical definitions of transducers (Moore and Mealy).</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=EzMWYmRkHFQ" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 28: Construction of Mealy Machine <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(b)</span></div>
+              <div class="video-row-sub">Edge output mapping $\lambda(q, a)$ and 1's/2's complement Mealy designs.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=LioitkXDfmA" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 29: Mealy Machine (Example 1)</div>
+              <div class="video-row-sub">Sequence detector with Mealy machine output.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=s-Ul9dIS9AE" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 30: Mealy Machine (Example 2)</div>
+              <div class="video-row-sub">Overlapping pattern detection in Mealy machines.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=fkdufhcBraw" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 31: Construction of Moore Machine <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(b)</span></div>
+              <div class="video-row-sub">State output mapping $\lambda(q)$ and initial clock output.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=MFnRF07SoFo" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 32: Moore Machine (Example 1)</div>
+              <div class="video-row-sub">Modulo counter and residue output Moore machine.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=BQPSt8dRX1Q" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 33: Moore Machine (Example 2)</div>
+              <div class="video-row-sub">Substring detection output in Moore model.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=UKTzwXSJiIk" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 34: Conversion of Moore to Mealy Machine <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(b)</span></div>
+              <div class="video-row-sub">Moving state outputs to incoming edges; preservation of state count.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=HEVWx4irOx4" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 35: Moore to Mealy Conversion (Example 1)</div>
+              <div class="video-row-sub">Worked conversion example with transition tables.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=lqvVtBdazvg" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 36: Moore to Mealy Conversion (Example 2)</div>
+              <div class="video-row-sub">Complex Moore to Mealy conversion walkthrough.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=GHStZkC080k" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 37: Conversion of Mealy to Moore Machine <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(b)</span></div>
+              <div class="video-row-sub">State splitting algorithm for handling multiple distinct output transitions.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=-etILQcfgTg" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 38: Mealy to Moore Conversion (Example 1)</div>
+              <div class="video-row-sub">Solved state-splitting problem from Mealy to Moore.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=rkgbhngdJ5Y" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 39: Mealy to Moore Conversion (Example 2)</div>
+              <div class="video-row-sub">Detailed state splitting with 3 incoming output values.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=t48LqMDqNrA" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 40: Mealy to Moore (Using Transition Table)</div>
+              <div class="video-row-sub">Direct tabular conversion method without state diagram redrawing.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=j8IkqBJNMwA" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 6 -->
+      <div class="subq">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 6: Epsilon-NFA ($\varepsilon$-NFA) &amp; Conversions (Videos 41–44)</button>
+        <div class="subq-body">
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 41: Epsilon NFA <span class="video-badge badge-core" style="display:inline-flex;">CORE SYLLABUS</span></div>
+              <div class="video-row-sub">Spontaneous transitions, null transitions, and computing $\varepsilon$-closure sets.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=84oNUttWlN4" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 42: Conversion of Epsilon NFA to NFA <span class="video-badge badge-core" style="display:inline-flex;">CORE SYLLABUS</span></div>
+              <div class="video-row-sub">Elimination of $\varepsilon$-transitions via $\delta'(q, a) = \varepsilon\text{-closure}(\delta(\varepsilon\text{-closure}(q), a))$.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=WSGcmaHNBFM" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 43: Conversion of Epsilon NFA to NFA (Part 1)</div>
+              <div class="video-row-sub">Solved example of $\varepsilon$-NFA conversion with tabular verification.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=I6GFKekMr7s" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 44: Conversion of Epsilon NFA to NFA (Part 2)</div>
+              <div class="video-row-sub">Multi-chain epsilon transitions and final state selection rules.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=Jz4YQ09nOxA" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 7 -->
+      <div class="subq">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 7: Regular Expressions, Identities &amp; Arden's Theorem (Videos 45–53)</button>
+        <div class="subq-body">
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 45: Regular Expression <span class="video-badge badge-core" style="display:inline-flex;">CORE SYLLABUS</span></div>
+              <div class="video-row-sub">Syntax, semantics, operators, and language equivalence.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=upu_TeZImN0" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 46: Regular Expression - Examples</div>
+              <div class="video-row-sub">Standard language patterns and their regular expression representations.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=paOPoZyjzdg" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 47: Identities of Regular Expression <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q1(c)</span></div>
+              <div class="video-row-sub">Algebraic laws: idempotent, distributive, identity, and star properties.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=yp4pYgXfYD8" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 48: Arden’s Theorem <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q2(b)</span></div>
+              <div class="video-row-sub">Formal statement, proof of uniqueness condition $\varepsilon \notin P$, and $X = QP^*$.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=Idl_0mPzZjE" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 49: Proof Using Identities of Regular Expressions <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q1(c)</span></div>
+              <div class="video-row-sub">Equivalence algebraic proofs using regular expression identities.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=TkqcPh0BFUw" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 50: Designing Regular Expressions <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q2(a)</span></div>
+              <div class="video-row-sub">Systematic RE design for even length, parity, and substring constraints.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=FOhEmW_nMRs" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 51: NFA to Regular Expression Conversion</div>
+              <div class="video-row-sub">State elimination method to extract regular expressions from NFAs.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=OKFrju0HB7k" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 52: DFA to Regular Expression Conversion <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q2(b)</span></div>
+              <div class="video-row-sub">Applying Arden's theorem to solve state transition systems.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=SmT1DXLl3f4" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 53: DFA to RE with Multiple Final States <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q2(b)</span></div>
+              <div class="video-row-sub">Union of expressions from all accepting states $R = \sum_{q_f \in F} R_{q_f}$.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=fRVljh8y7Qw" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 8 -->
+      <div class="subq">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 8: RE to FA &amp; Equivalence of Finite Automata (Videos 54–59)</button>
+        <div class="subq-body">
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 54: Conversion of RE to Finite Automata <span class="video-badge badge-core" style="display:inline-flex;">CORE SYLLABUS</span></div>
+              <div class="video-row-sub">Thompson's inductive construction algorithm for regular expressions.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=RxfXyvfTsgQ" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 55: Conversion of RE to FA (Part 1)</div>
+              <div class="video-row-sub">Worked example of Thompson's construction on union and concatenation.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=62JAy4oH6lU" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 56: Conversion of RE to FA (Part 2)</div>
+              <div class="video-row-sub">Thompson's construction on nested Kleene star expressions.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=RsSQPwUIR8U" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 57: Conversion of RE to FA (Part 3)</div>
+              <div class="video-row-sub">Complex RE to $\varepsilon$-NFA conversion and subsequent determinization.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=zSHS_7omxRY" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 58: Equivalence of Two Finite Automata <span class="video-badge badge-core" style="display:inline-flex;">CORE SYLLABUS</span></div>
+              <div class="video-row-sub">Product automata method and testing $L(M_1) \oplus L(M_2) = \emptyset$.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=nX4JrcHgpZY" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 59: Equivalence of Two Finite Automata (Example)</div>
+              <div class="video-row-sub">Worked example comparing two different DFAs for exact language equivalence.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=5Jg3KqRQTvM" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 9 -->
+      <div class="subq">
+        <button class="subq-toggle"><span class="subq-arrow">▶</span> Category 9: Non-Regular Languages &amp; Pumping Lemma (Videos 60–62)</button>
+        <div class="subq-body">
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 60: Pumping Lemma for Regular Languages <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(c), Q3(d)</span></div>
+              <div class="video-row-sub">Formal statement, 3 pumping conditions, and theoretical boundaries of FA.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=dikEDuepOtI" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 61: Pumping Lemma: Solved Example 1 <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(c)</span></div>
+              <div class="video-row-sub">Proving non-regularity of counting languages like $a^n b^n$ via adversary game.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=Ty9tpikilAo" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+          <div class="video-row-item">
+            <div class="video-row-info">
+              <div class="video-row-title">Video 62: Pumping Lemma: Solved Example 2 (Palindromes) <span class="video-badge badge-pyq" style="display:inline-flex;">PYQ: Q3(c)</span></div>
+              <div class="video-row-sub">Exact proof for palindromes / reflections $\{w w^R\}$ violating the pumping lemma.</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=kZzH8E-s-9o" target="_blank" rel="noopener noreferrer" class="video-btn">Watch</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
